@@ -15,7 +15,3 @@ func main() {
 		fmt.Println("Erreur :", err)
 	}
 }
-
-func Index(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "index.html")
-}
