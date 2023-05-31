@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	db, err := sql.Open("sqlite3", "ma_base_de_donnees.db")
+	db, err := sql.Open("sqlite3", "database_forum.db")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -31,7 +31,6 @@ func main() {
 	createTableSQLPosts := `
 		CREATE TABLE IF NOT EXISTS Posts (
 			id_post INTEGER PRIMARY KEY,
-			img IMAGE,
 			title TEXT,
 			description TEXT,
 			id_user INTEGER,
