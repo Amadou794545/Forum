@@ -28,7 +28,8 @@ func createUsersTable() {
             id_user INTEGER PRIMARY KEY AUTOINCREMENT,
             email TEXT,
             pseudo TEXT,
-            password TEXT
+            password TEXT,
+			imgPath TEXT
         )
     `)
 	if err != nil {
@@ -41,6 +42,7 @@ func createPostsTable() {
         CREATE TABLE IF NOT EXISTS Posts (
             id_post INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT,
+			imgPath TEXT,
             description TEXT,
 			id_user INTEGER,
 			FOREIGN KEY (id_user) REFERENCES Users(id_user)
@@ -85,20 +87,24 @@ func createLikesTable() {
 	}
 }
 
-func addUser(email string, pseudo string, password string) {
+func addUser(email string, pseudo string, password string, imgPath string) {
+	if imgPath == "" {
+		imgPath = "default.jpg"
+	}
+
 	_, err := db.Exec(`
-		INSERT INTO users (email, pseudo, password) VALUES ($1, $2, $3);
-	`, email, pseudo, password)
+		INSERT INTO users (email, pseudo, password, imgPath) VALUES ($1, $2, $3);
+	`, email, pseudo, password, imgPath)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-func addPost(title string, description string, userID int) {
+func addPost(title string, imagePath string, description string, userID int) {
 	_, err := db.Exec(`
-		INSERT INTO Posts (title, description, id_user) VALUES ($1, $2, $3);
-	`, title, description, userID)
+		INSERT INTO Posts (title, img_path, description, id_user) VALUES ($1, $2, $3);
+	`, title, imagePath, description, userID)
 
 	if err != nil {
 		log.Fatal(err)
@@ -132,4 +138,28 @@ func addLike(userID int, postID int, commentID int, isLike int) {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func getAllPosts() ([]Post, error) {
+	rows, err := db.Query("SELECT id_post, title, description, image_path, id_user FROM Posts")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	posts := []Post{}
+	for rows.Next() {
+		var post Post
+		err := rows.Scan(&post.ID, &post.Title, &post.Description, &post.ImagePath, &post.UserID)
+		if err != nil {
+			return nil, err
+		}
+		posts = append(posts, post)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return posts, nil
 }
