@@ -203,3 +203,19 @@ func countDislikesComment(commentID int) (int, error) {
 	}
 	return count, nil
 }
+
+func updateUserIMG(path string, id_user int) {
+	_, err := db.Exec(
+		"UPDATE users SET imgPath = $1 WHERE id_user = $2", path, id_user)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func updateUsername(username string, id_user int) {
+	_, err := db.Exec(
+		"UPDATE users SET pseudo = $1 WHERE id_user = $2", username, id_user)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
