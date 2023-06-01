@@ -7,6 +7,8 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+var db *sql.DB
+
 func main() {
 	db, err := sql.Open("sqlite3", "test.db")
 	if err != nil {
@@ -14,15 +16,13 @@ func main() {
 	}
 	defer db.Close()
 
-	createUsersTable(db)
-	createCommentsTable(db)
-	createLikesTable(db)
-	createPostsTable(db)
-
-	newUser(db)
+	createUsersTable()
+	createCommentsTable()
+	createLikesTable()
+	createPostsTable()
 }
 
-func createUsersTable(db *sql.DB) {
+func createUsersTable() {
 	_, err := db.Exec(`
         CREATE TABLE IF NOT EXISTS Users (
             id_user INTEGER PRIMARY KEY,
@@ -36,7 +36,7 @@ func createUsersTable(db *sql.DB) {
 	}
 }
 
-func createPostsTable(db *sql.DB) {
+func createPostsTable() {
 	_, err := db.Exec(`
         CREATE TABLE IF NOT EXISTS Posts (
             id_post INTEGER PRIMARY KEY,
@@ -51,7 +51,7 @@ func createPostsTable(db *sql.DB) {
 	}
 }
 
-func createCommentsTable(db *sql.DB) {
+func createCommentsTable() {
 	_, err := db.Exec(`
         CREATE TABLE IF NOT EXISTS Comments (
             id_comment INTEGER PRIMARY KEY,
@@ -67,7 +67,7 @@ func createCommentsTable(db *sql.DB) {
 	}
 }
 
-func createLikesTable(db *sql.DB) {
+func createLikesTable() {
 	_, err := db.Exec(`
         CREATE TABLE IF NOT EXISTS Likes (
             id_like INTEGER PRIMARY KEY,
@@ -83,10 +83,10 @@ func createLikesTable(db *sql.DB) {
 	}
 }
 
-func newUser(db *sql.DB) {
+func addUser(email string, pseudo string, password string) {
 	_, err := db.Exec(`
-		INSERT INTO users (email, pseudo, password) VALUES ('test@gmail.com', 'itsMe', 'passw0rd');
-	`)
+		INSERT INTO users (email, pseudo, password) VALUES ($1, $2, $3);
+	`, email, pseudo, password)
 
 	if err != nil {
 		log.Fatal(err)
