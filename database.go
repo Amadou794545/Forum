@@ -8,78 +8,86 @@ import (
 )
 
 func main() {
-	db, err := sql.Open("sqlite3", "database_forum.db")
+	db, err := sql.Open("sqlite3", "test.db")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer db.Close()
 
-	createTableSQLUser := `
-		CREATE TABLE IF NOT EXISTS Users (
-			id_user INTEGER PRIMARY KEY AUTOINCREMENT,
-			email TEXT,
-			pseudo TEXT,
-			password TEXT,
-		);
-	`
+	createUsersTable(db)
+	createCommentsTable(db)
+	createLikesTable(db)
+	createPostsTable(db)
 
-	_, err = db.Exec(createTableSQLUser)
+	newUser(db)
+}
+
+func createUsersTable(db *sql.DB) {
+	_, err := db.Exec(`
+        CREATE TABLE IF NOT EXISTS Users (
+            id_user INTEGER PRIMARY KEY,
+            email TEXT,
+            pseudo TEXT,
+            password TEXT
+        )
+    `)
 	if err != nil {
 		log.Fatal(err)
 	}
+}
 
-	createTableSQLPosts := `
-		CREATE TABLE IF NOT EXISTS Posts (
-			id_post INTEGER PRIMARY KEY AUTOINCREMENT,
-			title TEXT,
-			description TEXT,
+func createPostsTable(db *sql.DB) {
+	_, err := db.Exec(`
+        CREATE TABLE IF NOT EXISTS Posts (
+            id_post INTEGER PRIMARY KEY,
+            title TEXT,
+            description TEXT,
 			id_user INTEGER,
-			FOREIGN KEY (id_user) REFERENCES User(id_user)
-		);
-	`
-
-	_, err = db.Exec(createTableSQLPosts)
+			FOREIGN KEY (id_user) REFERENCES Users(id_user)
+        )
+    `)
 	if err != nil {
 		log.Fatal(err)
 	}
+}
 
-	createTableSQLComments := `
-		CREATE TABLE IF NOT EXISTS Comments (
-			id_comment INTEGER PRIMARY KEY AUTOINCREMENT,
-			description TEXT,
+func createCommentsTable(db *sql.DB) {
+	_, err := db.Exec(`
+        CREATE TABLE IF NOT EXISTS Comments (
+            id_comment INTEGER PRIMARY KEY,
+            description TEXT,
 			id_user INTEGER,
+			id_post INTEGER,
 			FOREIGN KEY (id_user) REFERENCES Users(id_user),
-			id_post INTEGER,
 			FOREIGN KEY (id_post) REFERENCES Posts(id_post)
-		);
-	`
-
-	_, err = db.Exec(createTableSQLComments)
+        )
+    `)
 	if err != nil {
 		log.Fatal(err)
 	}
+}
 
-	createTableSQLLikes := `
-		CREATE TABLE IF NOT EXISTS Likes (
-			id_like INTEGER PRIMARY KEY AUTOINCREMENT,
-			id_post INTEGER,
-			FOREIGN KEY (id_post) REFERENCES Posts(id_post) ON DELETE SET NULL,
-			id_comment INTEGER,
-			FOREIGN KEY (id_comment) REFERENCES Comments(id_comment) ON DELETE SET NULL,
-			is_like INTEGER
-		);
-	`
-
-	_, err = db.Exec(createTableSQLLikes)
+func createLikesTable(db *sql.DB) {
+	_, err := db.Exec(`
+        CREATE TABLE IF NOT EXISTS Likes (
+            id_like INTEGER PRIMARY KEY,
+            id_post INTEGER,
+            id_comment INTEGER,
+            is_like INTEGER,
+            FOREIGN KEY (id_post) REFERENCES Posts(id_post) ON DELETE CASCADE,
+            FOREIGN KEY (id_comment) REFERENCES Comments(id_comment) ON DELETE CASCADE
+        )
+    `)
 	if err != nil {
 		log.Fatal(err)
 	}
+}
 
-	insertUserSQL := `
+func newUser(db *sql.DB) {
+	_, err := db.Exec(`
 		INSERT INTO users (email, pseudo, password) VALUES ('test@gmail.com', 'itsMe', 'passw0rd');
-	`
+	`)
 
-	_, err = db.Exec(insertUserSQL)
 	if err != nil {
 		log.Fatal(err)
 	}
