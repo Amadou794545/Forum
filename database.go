@@ -3,7 +3,8 @@ package main
 import (
 	"database/sql"
 	"log"
-	//_ "github.com/mattn/go-sqlite3"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {
@@ -15,10 +16,10 @@ func main() {
 
 	createTableSQLUser := `
 		CREATE TABLE IF NOT EXISTS Users (
-			id_user INTEGER PRIMARY KEY,
+			id_user INTEGER PRIMARY KEY AUTOINCREMENT,
 			email TEXT,
 			pseudo TEXT,
-			mdp TEXT,
+			password TEXT,
 		);
 	`
 
@@ -29,7 +30,7 @@ func main() {
 
 	createTableSQLPosts := `
 		CREATE TABLE IF NOT EXISTS Posts (
-			id_post INTEGER PRIMARY KEY,
+			id_post INTEGER PRIMARY KEY AUTOINCREMENT,
 			title TEXT,
 			description TEXT,
 			id_user INTEGER,
@@ -44,7 +45,7 @@ func main() {
 
 	createTableSQLComments := `
 		CREATE TABLE IF NOT EXISTS Comments (
-			id_comment INTEGER PRIMARY KEY,
+			id_comment INTEGER PRIMARY KEY AUTOINCREMENT,
 			description TEXT,
 			id_user INTEGER,
 			FOREIGN KEY (id_user) REFERENCES Users(id_user),
@@ -60,7 +61,7 @@ func main() {
 
 	createTableSQLLikes := `
 		CREATE TABLE IF NOT EXISTS Likes (
-			id_like INTEGER PRIMARY KEY,
+			id_like INTEGER PRIMARY KEY AUTOINCREMENT,
 			id_post INTEGER,
 			FOREIGN KEY (id_post) REFERENCES Posts(id_post) ON DELETE SET NULL,
 			id_comment INTEGER,
@@ -74,12 +75,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	/*insertUserSQL := `
-		INSERT INTO utilisateurs (nom) VALUES ('John Doe');
+	insertUserSQL := `
+		INSERT INTO users (email, pseudo, password) VALUES ('test@gmail.com', 'itsMe', 'passw0rd');
 	`
 
 	_, err = db.Exec(insertUserSQL)
 	if err != nil {
 		log.Fatal(err)
-	}*/
+	}
 }
