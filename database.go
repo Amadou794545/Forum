@@ -45,7 +45,9 @@ func createPostsTable() {
 			imgPath TEXT,
             description TEXT,
 			id_user INTEGER,
-			FOREIGN KEY (id_user) REFERENCES Users(id_user)
+			FOREIGN KEY (id_user) REFERENCES Users(id_user),
+			nbrLike INTEGER,
+			nbrDislike INTEGER
         )
     `)
 	if err != nil {
@@ -61,7 +63,9 @@ func createCommentsTable() {
 			id_user INTEGER,
 			id_post INTEGER,
 			FOREIGN KEY (id_user) REFERENCES Users(id_user),
-			FOREIGN KEY (id_post) REFERENCES Posts(id_post)
+			FOREIGN KEY (id_post) REFERENCES Posts(id_post),
+			nbrLike INTEGER,
+			nbrDislike INTEGER
         )
     `)
 	if err != nil {
@@ -162,4 +166,40 @@ func getAllPosts() ([]Post, error) {
 	}
 
 	return posts, nil
+}
+
+func countLikesPost(postID int) (int, error) {
+	var count int
+	err := db.QueryRow("SELECT COUNT(*) FROM Likes WHERE id_post = $1 AND is_like = 1", postID).Scan(&count)
+	if err != nil {
+		return 0, err
+	}
+	return count, nil
+}
+
+func countDislikesPost(postID int) (int, error) {
+	var count int
+	err := db.QueryRow("SELECT COUNT(*) FROM Likes WHERE id_post = $1 AND is_like = -1", postID).Scan(&count)
+	if err != nil {
+		return 0, err
+	}
+	return count, nil
+}
+
+func countLikesComment(commentID int) (int, error) {
+	var count int
+	err := db.QueryRow("SELECT COUNT(*) FROM Likes WHERE id_comment = $1 AND is_like = 1", commentID).Scan(&count)
+	if err != nil {
+		return 0, err
+	}
+	return count, nil
+}
+
+func countDislikesComment(commentID int) (int, error) {
+	var count int
+	err := db.QueryRow("SELECT COUNT(*) FROM Likes WHERE id_comment = $1 AND is_like = -1", commentID).Scan(&count)
+	if err != nil {
+		return 0, err
+	}
+	return count, nil
 }
