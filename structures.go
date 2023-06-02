@@ -6,4 +6,5 @@ type Post struct {
 	Description string
 	ImagePath   string
 	UserID      int
+	HobbieID    int
 }
