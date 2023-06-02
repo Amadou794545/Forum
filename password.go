@@ -27,7 +27,7 @@ type params struct {
 //to generate : generateFromPassword("password") it return encoded password + err
 //to compare : comparePasswordAndHash("PassToCompare", encodedPassword) it return bool + err
 
-func generateFromPassword(password string) (encodedHash string, err error) {
+func GenerateFromPassword(password string) (encodedHash string, err error) {
 	p := &params{
 		memory:      64 * 1024,
 		iterations:  3,
@@ -95,7 +95,6 @@ func decodeHash(encodedHash string) (p *params, salt, hash []byte, err error) {
 	if err != nil {
 		return nil, nil, nil, err
 	}
-
 	salt, err = base64.RawStdEncoding.Strict().DecodeString(vals[4])
 	if err != nil {
 		return nil, nil, nil, err
