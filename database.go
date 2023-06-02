@@ -58,7 +58,9 @@ func createPostsTable() {
 			id_user INTEGER,
 			nbr_like INTEGER,
 			nbr_dislike INTEGER,
-			FOREIGN KEY (id_user) REFERENCES Users(id_user)
+			id_hobbie INTEGER,
+			FOREIGN KEY (id_user) REFERENCES Users(id_user),
+			FOREIGN KEY (id_hobbie) REFERENCES Hobbies(id_hobbie) ON DELETE SET NULL
         )
     `)
 	if err != nil {
@@ -135,10 +137,10 @@ func addUser(email string, pseudo string, password string, imgPath string) {
 	}
 }
 
-func addPost(title string, imagePath string, description string, userID int) {
+func addPost(title string, imagePath string, description string, userID int, hobbieID int) {
 	_, err := db.Exec(`
-		INSERT INTO Posts (title, img_path, description, id_user) VALUES ($1, $2, $3);
-	`, title, imagePath, description, userID)
+		INSERT INTO Posts (title, img_path, description, id_user, id_hobbie) VALUES ($1, $2, $3, $4);
+	`, title, imagePath, description, userID, hobbieID)
 
 	if err != nil {
 		log.Fatal(err)
