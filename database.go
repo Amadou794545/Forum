@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -10,7 +11,8 @@ import (
 var db *sql.DB
 
 func main() {
-	db, err := sql.Open("sqlite3", "test.db")
+	var err error
+	db, err = sql.Open("sqlite3", "test.db")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -20,6 +22,15 @@ func main() {
 	createCommentsTable()
 	createLikesTable()
 	createPostsTable()
+	createHobbiesTable()
+
+	addHobbie("../pictures/cinema.png", "Cinema")
+	addHobbie("../pictures/cuisine.png", "Cuisine")
+	addHobbie("../pictures/informatique.png", "Informatique")
+	addHobbie("../pictures/jeux.png", "Jeux")
+	addHobbie("../pictures/lecture.png", "Lecture")
+	addHobbie("../pictures/musique.png", "Musique")
+	addHobbie("../pictures/sport.png", "Sport")
 }
 
 func createUsersTable() {
@@ -45,9 +56,9 @@ func createPostsTable() {
 			imgPath TEXT,
             description TEXT,
 			id_user INTEGER,
-			FOREIGN KEY (id_user) REFERENCES Users(id_user),
-			nbrLike INTEGER,
-			nbrDislike INTEGER
+			nbr_like INTEGER,
+			nbr_dislike INTEGER,
+			FOREIGN KEY (id_user) REFERENCES Users(id_user)
         )
     `)
 	if err != nil {
@@ -62,10 +73,10 @@ func createCommentsTable() {
             description TEXT,
 			id_user INTEGER,
 			id_post INTEGER,
+			nbr_like INTEGER,
+			nbr_dislike INTEGER,
 			FOREIGN KEY (id_user) REFERENCES Users(id_user),
-			FOREIGN KEY (id_post) REFERENCES Posts(id_post),
-			nbrLike INTEGER,
-			nbrDislike INTEGER
+			FOREIGN KEY (id_post) REFERENCES Posts(id_post)
         )
     `)
 	if err != nil {
@@ -80,10 +91,23 @@ func createLikesTable() {
 			id_user INTEGER,
             id_post INTEGER,
             id_comment INTEGER,
+            is_like INTEGER,
 			FOREIGN KEY (id_user) REFERENCES Users(id_user),
             FOREIGN KEY (id_post) REFERENCES Posts(id_post) ON DELETE SET NULL,
-            FOREIGN KEY (id_comment) REFERENCES Comments(id_comment) ON DELETE SET NULL,
-            is_like INTEGER
+            FOREIGN KEY (id_comment) REFERENCES Comments(id_comment) ON DELETE SET NULL
+        )
+    `)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func createHobbiesTable() {
+	_, err := db.Exec(`
+        CREATE TABLE IF NOT EXISTS Hobbies (
+			id_hobbie INTEGER PRIMARY KEY AUTOINCREMENT,
+            img_path TEXT,
+			description TEXT
         )
     `)
 	if err != nil {
@@ -96,9 +120,15 @@ func addUser(email string, pseudo string, password string, imgPath string) {
 		imgPath = "default.jpg"
 	}
 
+	HashedPassword, error := GenerateFromPassword(password)
+
+	if error != nil {
+		fmt.Println(error)
+	}
+
 	_, err := db.Exec(`
-		INSERT INTO users (email, pseudo, password, imgPath) VALUES ($1, $2, $3);
-	`, email, pseudo, password, imgPath)
+		INSERT INTO users (email, pseudo, password, imgPath) VALUES ($1, $2, $3, $4);
+	`, email, pseudo, HashedPassword, imgPath)
 
 	if err != nil {
 		log.Fatal(err)
@@ -144,6 +174,40 @@ func addLike(userID int, postID int, commentID int, isLike int) {
 	}
 }
 
+func addHobbie(imgPath string, description string) {
+	_, err := db.Exec(`
+		INSERT INTO Hobbies (img_path, description) VALUES ($1, $2);
+	`, imgPath, description)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func deleteUser(userID int) error {
+	_, err := db.Exec("DELETE FROM Users WHERE id_user = ?", userID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func deletePost(postID int) error {
+	_, err := db.Exec("DELETE FROM Posts WHERE id_post = ?", postID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func deleteComment(commentID int) error {
+	_, err := db.Exec("DELETE FROM Comments WHERE id_comment = ?", commentID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func getAllPosts() ([]Post, error) {
 	rows, err := db.Query("SELECT id_post, title, description, image_path, id_user FROM Posts")
 	if err != nil {
@@ -170,7 +234,7 @@ func getAllPosts() ([]Post, error) {
 
 func countLikesPost(postID int) (int, error) {
 	var count int
-	err := db.QueryRow("SELECT COUNT(*) FROM Likes WHERE id_post = $1 AND is_like = 1", postID).Scan(&count)
+	err := db.QueryRow("SELECT COUNT(*) FROM Likes WHERE id_post = ? AND is_like = 1", postID).Scan(&count)
 	if err != nil {
 		return 0, err
 	}
@@ -179,7 +243,7 @@ func countLikesPost(postID int) (int, error) {
 
 func countDislikesPost(postID int) (int, error) {
 	var count int
-	err := db.QueryRow("SELECT COUNT(*) FROM Likes WHERE id_post = $1 AND is_like = -1", postID).Scan(&count)
+	err := db.QueryRow("SELECT COUNT(*) FROM Likes WHERE id_post = ? AND is_like = -1", postID).Scan(&count)
 	if err != nil {
 		return 0, err
 	}
@@ -188,7 +252,7 @@ func countDislikesPost(postID int) (int, error) {
 
 func countLikesComment(commentID int) (int, error) {
 	var count int
-	err := db.QueryRow("SELECT COUNT(*) FROM Likes WHERE id_comment = $1 AND is_like = 1", commentID).Scan(&count)
+	err := db.QueryRow("SELECT COUNT(*) FROM Likes WHERE id_comment = ? AND is_like = 1", commentID).Scan(&count)
 	if err != nil {
 		return 0, err
 	}
@@ -197,7 +261,7 @@ func countLikesComment(commentID int) (int, error) {
 
 func countDislikesComment(commentID int) (int, error) {
 	var count int
-	err := db.QueryRow("SELECT COUNT(*) FROM Likes WHERE id_comment = $1 AND is_like = -1", commentID).Scan(&count)
+	err := db.QueryRow("SELECT COUNT(*) FROM Likes WHERE id_comment = ? AND is_like = -1", commentID).Scan(&count)
 	if err != nil {
 		return 0, err
 	}
