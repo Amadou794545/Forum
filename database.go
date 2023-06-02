@@ -211,7 +211,7 @@ func deleteComment(commentID int) error {
 }
 
 func getAllPosts() ([]Post, error) {
-	rows, err := db.Query("SELECT id_post, title, description, image_path, id_user FROM Posts")
+	rows, err := db.Query("SELECT id_post, title, description, image_path, id_user FROM Posts, id_hobbie FROM Hobbies")
 	if err != nil {
 		return nil, err
 	}
@@ -220,7 +220,7 @@ func getAllPosts() ([]Post, error) {
 	posts := []Post{}
 	for rows.Next() {
 		var post Post
-		err := rows.Scan(&post.ID, &post.Title, &post.Description, &post.ImagePath, &post.UserID)
+		err := rows.Scan(&post.ID, &post.Title, &post.Description, &post.ImagePath, &post.UserID, &post.HobbieID)
 		if err != nil {
 			return nil, err
 		}
