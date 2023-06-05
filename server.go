@@ -13,9 +13,13 @@ func main() {
 	http.Handle("/java-script/", http.StripPrefix("/java-script", fs))
 
 	//css
-	//fd := http.FileServer(http.Dir("assets/"))
-	//http.Handle("/assets/", http.StripPrefix("/assets", fd))
-	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("/assets"))))
+	//http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("/assets"))))
+	fd := http.FileServer(http.Dir("assets/"))
+
+	http.HandleFunc("/assets/", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/css")
+		fd.ServeHTTP(w, r)
+	})
 	//page
 	http.HandleFunc("/login", Connexion)
 	http.HandleFunc("/inscription", Inscription)
