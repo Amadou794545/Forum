@@ -1,11 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <style>
-        .hidden {
-            display: none;
-        }
-    </style>
+    <link rel="stylesheet" href="assets/Index.css">
     <script>
         function toggleDiv() {
             var div = document.getElementById("myDiv");
@@ -22,10 +18,12 @@
 <input type="button" id="myInput" onclick="toggleDiv()" value="Publier">
 <div id="myDiv" class="hidden">
     <form action="/test" method="POST" onsubmit="post(); return false;">
+        <input type="text" id="titre" name="titre"><br>
         <input type="text" id="message" name="message"><br>
         <input type="submit" value="Soumettre">
     </form>
 </div>
+<div id="titre-container"></div>
 <div id="message-container"></div>
 
 </body>

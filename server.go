@@ -12,6 +12,10 @@ func main() {
 	fs := http.FileServer(http.Dir("java-script/"))
 	http.Handle("/java-script/", http.StripPrefix("/java-script", fs))
 
+	//css
+	//fd := http.FileServer(http.Dir("assets/"))
+	//http.Handle("/assets/", http.StripPrefix("/assets", fd))
+	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("/assets"))))
 	//page
 	http.HandleFunc("/login", Connexion)
 	http.HandleFunc("/inscription", Inscription)

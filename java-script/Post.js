@@ -1,11 +1,19 @@
 function post() {
-    var message = document.getElementById("message").value; // Récupérer la valeur du champ de texte
-    var messageContainer = document.getElementById("message-container"); // Récupérer l'élément où afficher le message
+    var message = document.getElementById("message").value;
+    var titre = document.getElementById("titre").value;
 
-    var newMessage = document.createElement("p");
+    var titreContainer = document.getElementById("titre-container");
+    var messageContainer = document.getElementById("message-container");
+
+    var newTitre = document.createElement("div");
+    var newMessage = document.createElement("div");
+
+    newTitre.textContent = "titre : " + titre;
     newMessage.textContent = "Message : " + message;
 
+    titreContainer.appendChild(newTitre);
     messageContainer.appendChild(newMessage);
 
     document.getElementById("message").value = "";
+    document.getElementById("titre").value = "";
 }
