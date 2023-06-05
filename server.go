@@ -1,28 +1,27 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"html/template"
 	"net/http"
+	"os"
 	"regexp"
 	"strings"
 )
 
 func main() {
-	http.HandleFunc("/login", Connexion)
 	http.HandleFunc("/inscription", Inscription)
-	http.HandleFunc("/", Index)
+	http.Handle("/css/", http.StripPrefix("/css", http.FileServer(http.Dir("css"))))
+	http.HandleFunc("/", LoginPageHandler)
 
-	port := ":3000"
+	port := ":3030"
 	fmt.Printf("Serveur en cours d'exécution sur le port %s\n", port)
-	fmt.Printf("http://localhost:3000/")
 	err := http.ListenAndServe(port, nil)
 	if err != nil {
 		fmt.Println("Erreur :", err)
 	}
-}
 
-func Index(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "template/index.html")
 }
 
 func Inscription(w http.ResponseWriter, r *http.Request) {
@@ -62,23 +61,66 @@ func Inscription(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func Connexion(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path == "/login" {
-		if r.Method == "GET" {
-			http.ServeFile(w, r, "template/login.html")
-		} else if r.Method == "POST" {
-			// Récupérer les données du formulaire de connexion (username, password)
-			username := r.FormValue("username")
-			password := r.FormValue("password")
-
-			// Vérifier les informations de connexion
-			if username == "john" && password == "secret" {
-				// Informations de connexion valides
-				http.Redirect(w, r, "/", http.StatusFound)
+func LoginPageHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodGet {
+		_, error := r.Cookie("session")
+		if error == nil {
+			(http.Redirect(w, r, "/", http.StatusSeeOther))
+			return
+		}
+		t, _ := template.ParseFiles("./template/LoginPage.html")
+		t.Execute(w, nil)
+	} else if r.Method == http.MethodPost {
+		if r.FormValue("register") != ("") {
+			if r.FormValue("username") != ("") && r.FormValue("password") != ("") {
+				temp := GetPassword()
+				if _, ok := temp[r.FormValue("username")]; !ok {
+					temp[r.FormValue("username")] = r.FormValue("password")
+					SetPassword(temp)
+					(http.Redirect(w, r, "/", http.StatusSeeOther))
+				} else {
+					type PageInfos struct {
+						ErrorMessage string
+					}
+					t, _ := template.ParseFiles("./template/LoginPage.html")
+					t.Execute(w, PageInfos{"This username is already in use!"})
+				}
+			}
+		}
+		if r.FormValue("login") != ("") {
+			temp := GetPassword()
+			if temp[r.FormValue("username")] == r.FormValue("password") {
+				generateSession(w, r.FormValue("username"))
+				http.Redirect(w, r, "/", http.StatusSeeOther)
 			} else {
-				// Informations de connexion invalides
-				http.ServeFile(w, r, "template/login.html")
+				type PageInfos struct {
+					ErrorMessage string
+				}
+				t, _ := template.ParseFiles("./template/LoginPage.html")
+				t.Execute(w, PageInfos{"Invalid password or username."})
 			}
 		}
 	}
+}
+
+func generateSession(w http.ResponseWriter, username string) {
+	cookie := http.Cookie{Name: "session", Value: username}
+	http.SetCookie(w, &cookie)
+}
+
+func SetPassword(data map[string]string) {
+	value, error := json.Marshal(data)
+	if error == nil {
+		os.WriteFile("./package.json", value, 0644)
+	}
+}
+
+func GetPassword() map[string]string {
+	file, error := os.ReadFile("./package.json")
+	if error == nil {
+		content := map[string]string{}
+		json.Unmarshal(file, &content)
+		return content
+	}
+	return map[string]string{}
 }
