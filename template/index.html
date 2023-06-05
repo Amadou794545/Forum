@@ -1,10 +1,33 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+    <script>
+        function toggleDiv() {
+            var div = document.getElementById("myDiv");
+            if (div.style.display === "block") {
+                div.style.display = "none";
+            } else {
+                div.style.display = "block";
+            }
+        }
+
+    </script>
 </head>
 <body>
-<h2>tkt mec</h2>
+<input type="button" id="myInput" onclick="toggleDiv()" value="Publier">
+<div id="myDiv" class="hidden">
+    <form action="/test" method="POST" onsubmit="post(); return false;">
+        <input type="text" id="message" name="message"><br>
+        <input type="submit" value="Soumettre">
+    </form>
+</div>
+<div id="message-container"></div>
+
 </body>
+<script src="java-script/Post.js" ></script>
 </html>

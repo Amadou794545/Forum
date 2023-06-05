@@ -8,10 +8,16 @@ import (
 )
 
 func main() {
+	//js
+	fs := http.FileServer(http.Dir("java-script/"))
+	http.Handle("/java-script/", http.StripPrefix("/java-script", fs))
+
+	//page
 	http.HandleFunc("/login", Connexion)
 	http.HandleFunc("/inscription", Inscription)
 	http.HandleFunc("/", Index)
 
+	//server
 	port := ":3000"
 	fmt.Printf("Serveur en cours d'exécution sur le port %s\n", port)
 	err := http.ListenAndServe(port, nil)
