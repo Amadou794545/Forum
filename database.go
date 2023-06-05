@@ -287,7 +287,7 @@ func updateUsername(username string, id_user int) {
 }
 
 func checkUsername(pseudo string) bool {
-	rows, err := db.Query("SELECT pseudo FROM Posts WHERE pseudo = $1", pseudo)
+	rows, err := db.Query("SELECT pseudo FROM Users WHERE pseudo = $1", pseudo)
 	if err != nil {
 		return false
 	}
@@ -300,7 +300,7 @@ func checkUsername(pseudo string) bool {
 }
 
 func checkEmail(email string) bool {
-	rows, err := db.Query("SELECT email FROM Posts WHERE email = $1", email)
+	rows, err := db.Query("SELECT email FROM Users WHERE email = $1", email)
 	if err != nil {
 		return false
 	}
