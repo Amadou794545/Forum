@@ -8,24 +8,19 @@ import (
 )
 
 func main() {
-	//js
+	// Serve les fichiers JavaScript
 	fs := http.FileServer(http.Dir("java-script/"))
 	http.Handle("/java-script/", http.StripPrefix("/java-script", fs))
 
-	//css
-	//http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("/assets"))))
-	fd := http.FileServer(http.Dir("assets/"))
+	// Serve les fichiers CSS
+	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("./assets"))))
 
-	http.HandleFunc("/assets/", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "text/css")
-		fd.ServeHTTP(w, r)
-	})
-	//page
+	// Définit les routes pour les pages
 	http.HandleFunc("/login", Connexion)
 	http.HandleFunc("/inscription", Inscription)
 	http.HandleFunc("/", Index)
 
-	//server
+	// Lance le serveur
 	port := ":3000"
 	fmt.Printf("Serveur en cours d'exécution sur le port %s\n", port)
 	err := http.ListenAndServe(port, nil)

@@ -1,7 +1,32 @@
 .hidden {
     display: none;
 }
+.description{
+    width: 300px;
+    height: 100px;
+    cursor: text;
+}
+.titre-style {
+    font-weight: bold;
+    font-size: 5vh;
+    color: blue;
+}
 
-body{
-    background-color: blue;
+.div-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+
+.div-item {
+    width: 90vh;
+    height: 30vh;
+    margin: 0 auto;
+    padding: 10px;
+    border: 1px solid black;
+    border: 1px solid black;
+    word-wrap: break-word;
+    overflow: auto;
 }
