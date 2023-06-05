@@ -31,13 +31,3 @@ func main() {
 	AddHobbie("../pictures/musique.png", "Musique")
 	AddHobbie("../pictures/sport.png", "Sport")
 }
-
-func checkLogin(identifier string, password string) bool {
-	var count int
-	err := db.QueryRow("SELECT COUNT(*) FROM Users WHERE (email = ? OR pseudo = ?) AND password = ?", identifier, identifier, password).Scan(&count)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	return count > 0
-}
