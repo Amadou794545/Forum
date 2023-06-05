@@ -14,6 +14,7 @@ func main() {
 
 	port := ":3000"
 	fmt.Printf("Serveur en cours d'exécution sur le port %s\n", port)
+	fmt.Printf("http://localhost:3000/")
 	err := http.ListenAndServe(port, nil)
 	if err != nil {
 		fmt.Println("Erreur :", err)
@@ -79,6 +80,5 @@ func Connexion(w http.ResponseWriter, r *http.Request) {
 				http.ServeFile(w, r, "template/login.html")
 			}
 		}
-
 	}
 }
