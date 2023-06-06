@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"net/http"
+	"os"
 	"regexp"
 	"strings"
 )
@@ -19,9 +21,10 @@ func main() {
 	http.HandleFunc("/login", Connexion)
 	http.HandleFunc("/inscription", Inscription)
 	http.HandleFunc("/", Index)
+	http.HandleFunc("/upload", Upload)
 
 	// Lance le serveur
-	port := ":3000"
+	port := ":3030"
 	fmt.Printf("Serveur en cours d'exécution sur le port %s\n", port)
 	err := http.ListenAndServe(port, nil)
 	if err != nil {
@@ -31,6 +34,38 @@ func main() {
 
 func Index(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "template/index.html")
+}
+
+func Upload(w http.ResponseWriter, r *http.Request) {
+	// Récupérer le fichier image uploadé
+	file, handler, err := r.FormFile("image")
+	if err != nil {
+		http.Error(w, "Erreur lors de la récupération du fichier", http.StatusBadRequest)
+		return
+	}
+	defer file.Close()
+
+	// Ouvrir un nouveau fichier pour écrire l'image
+	f, err := os.OpenFile("assets/"+handler.Filename, os.O_WRONLY|os.O_CREATE, 0666)
+	if err != nil {
+		http.Error(w, "Erreur lors de l'ouverture du fichier", http.StatusInternalServerError)
+		return
+	}
+	defer f.Close()
+
+	// Copier le contenu du fichier uploadé dans le fichier de destination
+	_, err = io.Copy(f, file)
+	if err != nil {
+		http.Error(w, "Erreur lors de l'enregistrement du fichier", http.StatusInternalServerError)
+		return
+	}
+
+	// L'image a été enregistrée avec succès
+	// Vous pouvez effectuer d'autres actions, comme enregistrer le chemin de l'image dans une base de données, etc.
+
+	// Répondre avec une confirmation
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("L'image a été enregistrée avec succès"))
 }
 
 func Inscription(w http.ResponseWriter, r *http.Request) {
@@ -88,6 +123,5 @@ func Connexion(w http.ResponseWriter, r *http.Request) {
 				http.ServeFile(w, r, "template/login.html")
 			}
 		}
-
 	}
 }

@@ -7,16 +7,26 @@
 <body>
 <input type="button" id="myInput" onclick="toggleDiv()" value="Publier">
 <div id="myDiv" class="hidden">
-    <form action="/" method="POST" onsubmit="post(); return false;">
+    <form action="/upload" method="POST" onsubmit="post(); return false;" enctype="multipart/form-data">
         <label for="titre">Titre:</label><br>
         <input type="text" id="titre" name="titre"><br><br>
         <label for="Description">Description:</label><br>
         <textarea class="description" id="description" name="description" autofocus></textarea><br><br>
+        <label for="image">Image:</label><br>
+        <input type="file" id="image" name="image"><br><br>
         <input type="submit" value="Soumettre">
+
     </form>
 </div>
-<div class="container" id="container"></div>
+
+<form action="/login" method="post">
+    <input type="submit" value="Se connecter">
+</form>
+
+<div class="container" id="container">
+</div>
+
 
 </body>
-<script src="../java-script/post.js" ></script>
+<script src="../java-script/post.js"></script>
 </html>
