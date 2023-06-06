@@ -1,4 +1,4 @@
-package main
+package Database
 
 import (
 	"database/sql"
@@ -9,7 +9,7 @@ import (
 
 var db *sql.DB
 
-func main() {
+func init() {
 	var err error
 	db, err = sql.Open("sqlite3", "test.db")
 	if err != nil {
@@ -31,16 +31,3 @@ func main() {
 	AddHobbie("../pictures/musique.png", "Musique")
 	AddHobbie("../pictures/sport.png", "Sport")
 }
-<<<<<<< HEAD
-
-func checkLogin(identifier string, password string) bool {
-	var count int
-	err := db.QueryRow("SELECT COUNT(*) FROM Users WHERE (email = ? OR pseudo = ?) AND password = ?", identifier, identifier, password).Scan(&count)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	return count > 0
-}
-=======
->>>>>>> d268e56c0de0b8f517d6de41b061e8f2f75f56e1
