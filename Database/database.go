@@ -31,6 +31,7 @@ func main() {
 	AddHobbie("../pictures/musique.png", "Musique")
 	AddHobbie("../pictures/sport.png", "Sport")
 }
+<<<<<<< HEAD
 
 func checkLogin(identifier string, password string) bool {
 	var count int
@@ -41,3 +42,5 @@ func checkLogin(identifier string, password string) bool {
 
 	return count > 0
 }
+=======
+>>>>>>> d268e56c0de0b8f517d6de41b061e8f2f75f56e1
