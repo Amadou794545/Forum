@@ -8,21 +8,45 @@ import (
 )
 
 func main() {
+	//page
 	http.HandleFunc("/login", Connexion)
 	http.HandleFunc("/inscription", Inscription)
 	http.HandleFunc("/", Index)
 
-	port := ":3000"
+	//css
+	http.Handle("/css/", http.StripPrefix("/css", http.FileServer(http.Dir("css"))))
+
+	//server
+	port := ":3030"
 	fmt.Printf("Serveur en cours d'exécution sur le port %s\n", port)
-	fmt.Printf("http://localhost:3000/")
 	err := http.ListenAndServe(port, nil)
 	if err != nil {
 		fmt.Println("Erreur :", err)
 	}
+
 }
 
-func Index(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "template/index.html")
+func Connexion(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path == "/login" {
+		if r.Method == "GET" {
+			http.ServeFile(w, r, "template/login.html")
+		} else if r.Method == "POST" {
+			// Récupérer les données du formulaire de connexion (username, password)
+			username := r.FormValue("username")
+			password := r.FormValue("password")
+
+			// Vérifier les informations de connexion
+			if username == "amadou" && password == "amadou" {
+				// Informations de connexion valides
+				http.Redirect(w, r, "/", http.StatusFound)
+
+			} else {
+				// Informations de connexion invalides
+				http.ServeFile(w, r, "template/login.html")
+			}
+		}
+
+	}
 }
 
 func Inscription(w http.ResponseWriter, r *http.Request) {
@@ -62,23 +86,6 @@ func Inscription(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func Connexion(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path == "/login" {
-		if r.Method == "GET" {
-			http.ServeFile(w, r, "template/login.html")
-		} else if r.Method == "POST" {
-			// Récupérer les données du formulaire de connexion (username, password)
-			username := r.FormValue("username")
-			password := r.FormValue("password")
-
-			// Vérifier les informations de connexion
-			if username == "john" && password == "secret" {
-				// Informations de connexion valides
-				http.Redirect(w, r, "/", http.StatusFound)
-			} else {
-				// Informations de connexion invalides
-				http.ServeFile(w, r, "template/login.html")
-			}
-		}
-	}
+func Index(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "template/index.html")
 }
