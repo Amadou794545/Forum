@@ -1,4 +1,4 @@
-package main
+package Database
 
 type Post struct {
 	ID          int

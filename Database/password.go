@@ -1,4 +1,4 @@
-package main
+package Database
 
 import (
 	"crypto/rand"
@@ -61,7 +61,7 @@ func generateRandomBytes(n uint32) ([]byte, error) {
 	return b, nil
 }
 
-func comparePasswordAndHash(password, encodedHash string) (match bool, err error) {
+func ComparePasswordAndHash(password, encodedHash string) (match bool, err error) {
 	p, salt, hash, err := decodeHash(encodedHash)
 	if err != nil {
 		return false, err

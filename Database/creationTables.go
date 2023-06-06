@@ -1,9 +1,20 @@
-package main
+package Database
 
-import "log"
+import (
+	"database/sql"
+	"log"
+)
 
 func CreateUsersTable() {
-	_, err := db.Exec(`
+	var db *sql.DB
+
+	var err error
+	db, err = sql.Open("sqlite3", "./test.db")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	_, err = db.Exec(`
         CREATE TABLE IF NOT EXISTS Users (
             id_user INTEGER PRIMARY KEY AUTOINCREMENT,
             email TEXT,
@@ -15,10 +26,20 @@ func CreateUsersTable() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	db.Close()
 }
 
 func CreatePostsTable() {
-	_, err := db.Exec(`
+	var db *sql.DB
+
+	var err error
+	db, err = sql.Open("sqlite3", "./test.db")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	_, err = db.Exec(`
         CREATE TABLE IF NOT EXISTS Posts (
             id_post INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT,
@@ -35,10 +56,20 @@ func CreatePostsTable() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	db.Close()
 }
 
 func CreateCommentsTable() {
-	_, err := db.Exec(`
+	var db *sql.DB
+
+	var err error
+	db, err = sql.Open("sqlite3", "./test.db")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	_, err = db.Exec(`
         CREATE TABLE IF NOT EXISTS Comments (
             id_comment INTEGER PRIMARY KEY AUTOINCREMENT,
             description TEXT,
@@ -53,10 +84,20 @@ func CreateCommentsTable() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	db.Close()
 }
 
 func CreateLikesTable() {
-	_, err := db.Exec(`
+	var db *sql.DB
+
+	var err error
+	db, err = sql.Open("sqlite3", "./test.db")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	_, err = db.Exec(`
         CREATE TABLE IF NOT EXISTS Likes (
             id_like INTEGER PRIMARY KEY AUTOINCREMENT,
 			id_user INTEGER,
@@ -71,10 +112,20 @@ func CreateLikesTable() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	db.Close()
 }
 
 func CreateHobbiesTable() {
-	_, err := db.Exec(`
+	var db *sql.DB
+
+	var err error
+	db, err = sql.Open("sqlite3", "./test.db")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	_, err = db.Exec(`
         CREATE TABLE IF NOT EXISTS Hobbies (
 			id_hobbie INTEGER PRIMARY KEY AUTOINCREMENT,
             img_path TEXT,
@@ -84,4 +135,6 @@ func CreateHobbiesTable() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	db.Close()
 }

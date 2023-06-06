@@ -5,6 +5,10 @@ import (
 	"net/http"
 	"regexp"
 	"strings"
+
+	"forum/Database"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {
@@ -27,6 +31,7 @@ func main() {
 }
 
 func Connexion(w http.ResponseWriter, r *http.Request) {
+
 	if r.URL.Path == "/login" {
 		if r.Method == "GET" {
 			http.ServeFile(w, r, "template/login.html")
@@ -37,9 +42,11 @@ func Connexion(w http.ResponseWriter, r *http.Request) {
 
 			// Vérifier les informations de connexion
 
-			if CheckLogin(username, password) {
+			if Database.CheckLogin(username, password) {
+				println("ok log")
 				http.Redirect(w, r, "/", http.StatusFound)
 			} else {
+				println("ko")
 				http.ServeFile(w, r, "template/login.html")
 			}
 		}
@@ -66,7 +73,7 @@ func Inscription(w http.ResponseWriter, r *http.Request) {
 				http.ServeFile(w, r, "template/inscription.html")
 				return
 			} else {
-				AddUser(email, username, password, "test")
+				Database.AddUser(email, username, password, "test")
 				http.Redirect(w, r, "/", http.StatusFound)
 			}
 
