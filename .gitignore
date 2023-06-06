@@ -12,3 +12,10 @@
 .Spotlight-V100
 .TemporaryItems/
 .fseventsd/
+
+
+*.DS_Store
+*.dll
+*.exe
+*.war
+*.jar
