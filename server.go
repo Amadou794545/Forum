@@ -11,7 +11,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func main() {
+/*func main() {
 	//page
 	http.HandleFunc("/login", Connexion)
 	http.HandleFunc("/inscription", Inscription)
@@ -27,8 +27,7 @@ func main() {
 	if err != nil {
 		fmt.Println("Erreur :", err)
 	}
-
-}
+}*/
 
 func Connexion(w http.ResponseWriter, r *http.Request) {
 
