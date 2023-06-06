@@ -36,16 +36,13 @@ func Connexion(w http.ResponseWriter, r *http.Request) {
 			password := r.FormValue("password")
 
 			// Vérifier les informations de connexion
-			if username == "amadou" && password == "amadou" {
-				// Informations de connexion valides
-				http.Redirect(w, r, "/", http.StatusFound)
 
+			if CheckLogin(username, password) {
+				http.Redirect(w, r, "/", http.StatusFound)
 			} else {
-				// Informations de connexion invalides
 				http.ServeFile(w, r, "template/login.html")
 			}
 		}
-
 	}
 }
 
@@ -69,6 +66,7 @@ func Inscription(w http.ResponseWriter, r *http.Request) {
 				http.ServeFile(w, r, "template/inscription.html")
 				return
 			} else {
+				AddUser(email, username, password, "test")
 				http.Redirect(w, r, "/", http.StatusFound)
 			}
 
