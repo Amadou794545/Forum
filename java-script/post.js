@@ -85,3 +85,28 @@ function toggleDiv() {
         document.getElementById("Description").focus(); // Placer le focus sur le champ de saisie "message"
     }
 }
+
+$(document).ready(function() {
+    // Écouteur d'événement pour les modifications des cases à cocher
+    $('#filters input[type="checkbox"]').on('change', function() {
+        var selectedFilters = [];
+
+        // Parcourir les cases à cocher et récupérer les filtres sélectionnés
+        $('#filters input[type="checkbox"]:checked').each(function() {
+            selectedFilters.push($(this).val());
+        });
+
+        // Afficher ou masquer les éléments en fonction des filtres sélectionnés
+        if (selectedFilters.length > 0) {
+            $('#container .post').hide(); // Masquer tous les éléments
+
+            // Afficher les éléments correspondant aux filtres sélectionnés
+            for (var i = 0; i < selectedFilters.length; i++) {
+                var filter = selectedFilters[i];
+                $('#container .post.' + filter).show();
+            }
+        } else {
+            $('#container .post').show(); // Afficher tous les éléments si aucun filtre n'est sélectionné
+        }
+    });
+});
