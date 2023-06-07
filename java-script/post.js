@@ -23,6 +23,11 @@ function post() {
     Container.appendChild(newDiv);
     Container.insertAdjacentHTML("beforeend", "<br>");
 
+
+
+
+
+
     // Redimensionner et afficher l'image
     if (image) {
         var reader = new FileReader();

@@ -36,7 +36,6 @@ document.forms['register-form'].onsubmit = function(event) {
         event.preventDefault();
         return false;
     }
-    // Check password requirements
     if (!/\d/.test(password)) {
         document.querySelector(".password-error").innerHTML = "Le mot de passe doit contenir au moins un chiffre";
         document.querySelector(".password-error").style.display = "block";
@@ -55,6 +54,6 @@ document.forms['register-form'].onsubmit = function(event) {
         event.preventDefault();
         return false;
     }
-    // All data is valid, allow form submission
+
     return true;
 };
