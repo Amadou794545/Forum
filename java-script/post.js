@@ -9,6 +9,7 @@ function post() {
     var newTitre = document.createElement("div");
     var newDescription = document.createElement("div");
     var newImage = document.createElement("img"); // Créer un élément <img>
+    var newButton = document.createElement("button"); // Créer un élément <button>
 
     newTitre.textContent = "Titre : " + titre;
     newDescription.textContent = "Description : " + description;
@@ -23,9 +24,10 @@ function post() {
     Container.appendChild(newDiv);
     Container.insertAdjacentHTML("beforeend", "<br>");
 
-
-
-
+    // Ajouter le bouton "Commentaire"
+    newButton.textContent = "Commentaire";
+    newButton.classList.add("comment-button");
+    newDiv.appendChild(newButton);
 
 
     // Redimensionner et afficher l'image
@@ -45,13 +47,13 @@ function post() {
     document.getElementById("image").value = "";
 }
 
+
 function toggleDiv() {
     var div = document.getElementById("myDiv");
     if (div.style.display === "block") {
         div.style.display = "none";
     } else {
         div.style.display = "block";
-        document.getElementById("Description").focus(); // Placer le focus sur le champ de saisie "message"
     }
 }
 
