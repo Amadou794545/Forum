@@ -15,6 +15,12 @@ type LoginData struct {
 	ErrorMessage string
 }
 
+type InscriptionData struct {
+	Username     string
+	Email        string
+	ErrorMessage string
+}
+
 func main() {
 	//page
 	http.HandleFunc("/login", Connexion)
@@ -63,28 +69,40 @@ func Connexion(w http.ResponseWriter, r *http.Request) {
 }
 
 func Inscription(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "GET" {
-		http.ServeFile(w, r, "template/inscription.html")
-	} else if r.Method == "POST" {
-		// Récupérer les données du formulaire d'inscription (username, email, password)
-		username := r.FormValue("username")
-		email := r.FormValue("email")
-		password := r.FormValue("password")
-
-		Database.AddUser(email, username, password, "test")
-		http.Redirect(w, r, "/", http.StatusFound)
-
-		// Afficher les données d'inscription dans la console
-		fmt.Println("Nouvel utilisateur enregistré :")
-		fmt.Println("Username :", username)
-		fmt.Println("Email :", email)
-		fmt.Println("Password :", password)
-
-		// Enregistrer l'utilisateur dans la base de données
-
-		// Rediriger vers la page de connexion ou afficher un message de succès
+	tmpl := template.Must(template.ParseFiles("./template/inscription.html"))
+	InscriptionData := InscriptionData{
+		Username:     "",
+		Email:        "",
+		ErrorMessage: "",
 	}
 
+	username := r.FormValue("username")
+	email := r.FormValue("email")
+	password := r.FormValue("password")
+	errorMessage := ""
+
+	if username == "" || email == "" || password == "" {
+		tmpl.Execute(w, InscriptionData)
+	} else {
+
+		if Database.CheckUsername(username) {
+			errorMessage = "Username deja utilisé"
+		}
+		if Database.CheckEmail(email) {
+			errorMessage += " Email deja utilisé"
+		}
+
+		if !Database.CheckUsername(username) && !Database.CheckEmail(email) {
+			Database.AddUser(email, username, password, "test")
+			http.Redirect(w, r, "/", http.StatusFound)
+		} else {
+			InscriptionData.Username = username
+			InscriptionData.Email = email
+			InscriptionData.ErrorMessage = errorMessage
+		}
+
+		tmpl.Execute(w, InscriptionData)
+	}
 }
 
 func Index(w http.ResponseWriter, r *http.Request) {
