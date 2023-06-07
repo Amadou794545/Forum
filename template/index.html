@@ -2,7 +2,6 @@
 <html>
 <head>
     <link rel="stylesheet" href="../assets/index.css">
-    <link rel="stylesheet" href="../assets/trois_point.css">
 
 </head>
 <body>
@@ -17,11 +16,21 @@
         <label for="imageInput">image</label>
 
 
+        <label for="image">Image:</label><br>
+        <input type="file" id="image" name="image"><br><br>
         <input type="submit" value="Soumettre">
+
     </form>
 </div>
-<div class="container" id="container"></div>
+
+<form action="/login" method="post">
+    <input type="submit" value="Se connecter">
+</form>
+
+<div class="container" id="container">
+</div>
+
 
 </body>
-<script src="../java-script/post.js" ></script>
+<script src="../java-script/post.js"></script>
 </html>
