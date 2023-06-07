@@ -9,3 +9,10 @@
 .TemporaryItems/
 .fseventsd/
 
+
+*.DS_Store
+*.dll
+*.exe
+*.war
+*.jar
+*.db
