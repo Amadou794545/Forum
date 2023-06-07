@@ -2,9 +2,8 @@ package main
 
 import (
 	"fmt"
-	"io"
+	"io/ioutil"
 	"net/http"
-	"os"
 	"regexp"
 	"strings"
 )
@@ -21,7 +20,7 @@ func main() {
 	http.HandleFunc("/login", Connexion)
 	http.HandleFunc("/inscription", Inscription)
 	http.HandleFunc("/", Index)
-	http.HandleFunc("/upload", Upload)
+	http.HandleFunc("/upload", uploadFile)
 
 	// Lance le serveur
 	port := ":3030"
@@ -36,36 +35,37 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "template/index.html")
 }
 
-func Upload(w http.ResponseWriter, r *http.Request) {
-	// Récupérer le fichier image uploadé
+func uploadFile(w http.ResponseWriter, r *http.Request) {
+	// Parse the multipart form data
+	err := r.ParseMultipartForm(2 << 20) // 10 MB max file size
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	// Get the file from the form data
 	file, handler, err := r.FormFile("image")
 	if err != nil {
-		http.Error(w, "Erreur lors de la récupération du fichier", http.StatusBadRequest)
+		http.Error(w, "Error retrieving the file", http.StatusBadRequest)
 		return
 	}
 	defer file.Close()
 
-	// Ouvrir un nouveau fichier pour écrire l'image
-	f, err := os.OpenFile("assets/"+handler.Filename, os.O_WRONLY|os.O_CREATE, 0666)
+	// Read the file content
+	fileBytes, err := ioutil.ReadAll(file)
 	if err != nil {
-		http.Error(w, "Erreur lors de l'ouverture du fichier", http.StatusInternalServerError)
-		return
-	}
-	defer f.Close()
-
-	// Copier le contenu du fichier uploadé dans le fichier de destination
-	_, err = io.Copy(f, file)
-	if err != nil {
-		http.Error(w, "Erreur lors de l'enregistrement du fichier", http.StatusInternalServerError)
+		http.Error(w, "Error reading the file", http.StatusInternalServerError)
 		return
 	}
 
-	// L'image a été enregistrée avec succès
-	// Vous pouvez effectuer d'autres actions, comme enregistrer le chemin de l'image dans une base de données, etc.
-
-	// Répondre avec une confirmation
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("L'image a été enregistrée avec succès"))
+	// Save the file on the server (you can change the path as per your requirement)
+	filepath := "./uploads/" + handler.Filename
+	err = ioutil.WriteFile(filepath, fileBytes, 0644)
+	if err != nil {
+		http.Error(w, "Error saving the file", http.StatusInternalServerError)
+		return
+	}
+	http.Redirect(w, r, "/", http.StatusFound)
 }
 
 func Inscription(w http.ResponseWriter, r *http.Request) {
