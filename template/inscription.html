@@ -6,14 +6,18 @@
 </head>
 <body>
 <h2>Page d'inscription</h2>
-<form action="/inscription" method="POST">
+<form action="/inscription" method="POST" name="register-form" onsubmit="return validatePassword(event)">
   <label for="username">Nom d'utilisateur:</label>
   <input type="text" id="username" name="username"><br>
+  <p class="error username-error"></p>
   <label for="email">Email:</label>
-  <input type="email" id="email" name="email"><br>
+  <input type="text" id="email" name="email"><br>
+  <p class="error email-error"></p>
   <label for="password">Mot de passe:</label>
   <input type="password" id="password" name="password"><br>
+  <p class="error password-error"></p>
   <input type="submit" value="S'inscrire">
 </form>
 </body>
+<script src="../java-script/erreurMDP.js"></script>
 </html>
