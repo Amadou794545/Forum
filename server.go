@@ -103,20 +103,6 @@ func handlerInscription(w http.ResponseWriter, r *http.Request) {
 
 				tmpl.Execute(w, InscriptionData)
 			}
-
-			/*hasDigit := regexp.MustCompile(`\d`).MatchString(password)
-			hasUpper := strings.ToUpper(password) != password
-			hasSpecial := regexp.MustCompile(`[^a-zA-Z0-9]`).MatchString(password)
-
-			if !hasDigit || !hasUpper || !hasSpecial {
-				errorMessage := "Le mot de passe doit contenir au moins un chiffre, une majuscule et un caractère spécial"
-				http.Error(w, errorMessage, http.StatusBadRequest)
-				http.ServeFile(w, r, "template/inscription.html")
-				return
-			} else {
-				Database.AddUser(email, username, password, "test")
-				http.Redirect(w, r, "/", http.StatusFound)
-			}*/
 		}
 	}
 }
