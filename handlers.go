@@ -13,7 +13,6 @@ func handlerIndex(w http.ResponseWriter, r *http.Request) {
 		if CheckSessionCookie(r) {
 			cookie, err := r.Cookie("session")
 			if err != nil {
-				// Handle the error if needed
 				fmt.Println("Error retrieving session cookie:", err)
 				return
 			}
@@ -21,7 +20,6 @@ func handlerIndex(w http.ResponseWriter, r *http.Request) {
 			userID := cookie.Value
 			username, err := Database.GetUserUsername(userID)
 			if err != nil {
-				// Handle the error if needed
 				fmt.Println("Error retrieving username:", err)
 				return
 			}
@@ -38,10 +36,12 @@ func handlerInscription(w http.ResponseWriter, r *http.Request) {
 		if r.Method == "GET" {
 			http.ServeFile(w, r, "template/inscription.html")
 		} else if r.Method == "POST" {
+
 			// Récupérer les données du formulaire d'inscription (username, email, password)
 			username := r.FormValue("username")
 			email := r.FormValue("email")
 			password := r.FormValue("password")
+
 			// Vérifier si le mot de passe contient au moins un chiffre, une majuscule et un caractère spécial
 			hasDigit := regexp.MustCompile(`\d`).MatchString(password)
 			hasUpper := strings.ToUpper(password) != password
@@ -81,7 +81,7 @@ func handlerConnexion(w http.ResponseWriter, r *http.Request) {
 			username := r.FormValue("username")
 			password := r.FormValue("password")
 
-			if username == "Harry" && password == "passw0rd." {
+			if Database.CheckLogin(username, password) {
 				fmt.Println("ok log")
 				userID, err := Database.GetUserID(username)
 				if err != nil {
@@ -90,8 +90,8 @@ func handlerConnexion(w http.ResponseWriter, r *http.Request) {
 					http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 					return
 				}
-				HandlerCookie(w, r, userID) // Ajout du cookie de session
-				//UpdateSessionExpiration(w, r) // Mise à jour de sa durée
+				HandlerCookie(w, r, userID)   // Ajout du cookie de session
+				UpdateSessionExpiration(w, r) // Mise à jour de sa durée
 				http.Redirect(w, r, "/", http.StatusFound)
 				return
 			}
