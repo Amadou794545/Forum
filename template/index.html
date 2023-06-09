@@ -28,7 +28,19 @@
                 event.preventDefault(); // Prevent the default form submission
 
                 // Create a new FormData object
-                var formData = new FormData(this);
+                var formData = new FormData();
+
+                // Get the form data
+                var titre = $('#titre').val();
+                var description = $('#description').val();
+                var image = $('#image').prop('files')[0];
+
+                // Add form data to FormData object
+                formData.append('titre', titre);
+                formData.append('description', description);
+                if (image) {
+                    formData.append('image', image);
+                }
 
                 // Send the form data to the server using AJAX
                 $.ajax({
@@ -49,6 +61,6 @@
                 });
             });
         });
-</script>
+    </script>
 </body>
 </html>
