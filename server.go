@@ -30,19 +30,6 @@ func main() {
 
 func Index(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "template/index.html")
-	if r.Method == "POST" {
-		titre := r.FormValue("titre")
-		description := r.FormValue("description")
-		//image, _, err := r.FormFile("image")
-		//if err != nil {
-		//	fmt.Println("Erreur lors de la récupération du fichier d'image :", err)
-		//} else {
-		//defer image.Close()
-		fmt.Println("Titre :", titre)
-		fmt.Println("Description :", description)
-		//fmt.Println("Chemin de l'image :", image.Filename)
-
-	}
 }
 
 func uploadFile(w http.ResponseWriter, r *http.Request) {
