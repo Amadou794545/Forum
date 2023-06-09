@@ -7,27 +7,39 @@
 </head>
 <body>
     <div id="filters">
-        <label><input type="checkbox" value="Sport">Cuisine</label>
-        <label><input type="checkbox" value="Informatique">Musique</label>
-        <label><input type="checkbox" value="Cuisine">Art</label>
-        <label><input type="checkbox" value="Cinéma">Cuisine</label>
-        <label><input type="checkbox" value="Lecture">Musique</label>
-        <label><input type="checkbox" value="Jeux">Art</label>
-        <label><input type="checkbox" value="Musique">Cuisine</label>
-        <label><input type="checkbox" value="Voyage">Musique</label>
-        <label><input type="checkbox" value="Animaux">Art</label>
+        <label><input type="checkbox" value="Sport">Sport</label>
+        <label><input type="checkbox" value="Informatique">Informatique</label>
+        <label><input type="checkbox" value="Cuisine">Cuisine</label>
+        <label><input type="checkbox" value="Cinéma">Cinéma</label>
+        <label><input type="checkbox" value="Lecture">Lecture</label>
+        <label><input type="checkbox" value="Jeux">Jeux</label>
+        <label><input type="checkbox" value="Musique">Musique</label>
     </div>
-    <div class="container" id="container">
-        <button class="post Sport">...</button>
-        <button class="post Informatique">...</button>
-        <button class="post Cuisine">...</button>
-        <button class="post Cinéma">...</button>
-        <button class="post Lecture">...</button>
-        <button class="post Jeux">...</button>
-        <button class="post Musique">...</button>
-        <button class="post Voyage">...</button>
-        <button class="post Animaux">...</button>
-    </div>
+    <div id="filters">
+        <button class="filter-button" data-filter="Sport">
+          <img src="/assets/Sport.png" alt="Sport">
+        </button>
+        <button class="filter-button" data-filter="Informatique">
+          <img src="/assets/Informatique.png" alt="Informatique">
+        </button>
+        <button class="filter-button" data-filter="Cuisine">
+          <img src="/assets/Cuisine.png" alt="Cuisine">
+        </button>
+        <button class="filter-button" data-filter="Cinéma">
+            <img src="/assets/Cinema.png" alt="Cinéma">
+          </button>
+          <button class="filter-button" data-filter="Lecture">
+            <img src="/assets/Lecture.png" alt="Lecture">
+          </button>
+          <button class="filter-button" data-filter="Jeux">
+            <img src="/assets/Jeux.png" alt="Jeux">
+          </button>
+          <button class="filter-button" data-filter="Musique">
+            <img src="/assets/Musique.png" alt="Musique">
+          </button>
+        <!-- Ajoutez d'autres boutons de filtre avec des images ici -->
+      </div>
+      
     
 <input type="button" id="myInput" onclick="toggleDiv()" value="Publier">
 <div id="myDiv" class="hidden">

@@ -103,3 +103,17 @@ form input[type="submit"] {
     word-wrap: break-word;
     overflow: auto;
 }
+
+.filter-button {
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+  
+  .filter-button img {
+    width: 24px; /* Ajustez la largeur de l'image selon vos besoins */
+    height: 24px; /* Ajustez la hauteur de l'image selon vos besoins */
+  }
+  
+  
+  
