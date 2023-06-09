@@ -48,7 +48,7 @@ func AddPost(title string, imagePath string, description string, userID int, hob
 	}
 
 	_, err = db.Exec(`
-		INSERT INTO Posts (title, img_path, description, id_user, id_hobbie) VALUES ($1, $2, $3, $4);
+		INSERT INTO Posts (title, imgPath, description, id_user, id_hobbie) VALUES ($1, $2, $3, $4);
 	`, title, imagePath, description, userID, hobbieID)
 
 	if err != nil {

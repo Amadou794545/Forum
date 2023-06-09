@@ -2,6 +2,7 @@ package Database
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 )
 
@@ -90,6 +91,41 @@ func GetPostByUser(userID int) {
 	//TODO
 
 	db.Close()
+}
+
+func GetPosts(offset, limit int) ([]Post, error) {
+	db, err := sql.Open("sqlite3", "./test.db")
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	// Construct the SQL query with pagination
+	query := fmt.Sprintf("SELECT id_post, title, description, imgPath, id_user, id_hobbie FROM Posts LIMIT %d OFFSET %d", limit, offset)
+
+	rows, err := db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	posts := []Post{}
+
+	// Iterate through the rows and create Post objects
+	for rows.Next() {
+		var post Post
+		err := rows.Scan(&post.ID, &post.Title, &post.Description, &post.ImagePath, &post.UserID, &post.HobbieID)
+		if err != nil {
+			return nil, err
+		}
+		posts = append(posts, post)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return posts, nil
 }
 
 func GetPostLikedByUser(userID int) {
