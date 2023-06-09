@@ -5,6 +5,45 @@ import (
 	"log"
 )
 
+func GetUserID(identifier string) (string, error) {
+	db, err := sql.Open("sqlite3", "./test.db")
+	if err != nil {
+		return "", err
+	}
+
+	query := "SELECT id_user FROM Users WHERE (pseudo = ? OR email = ?)"
+	row := db.QueryRow(query, identifier, identifier)
+
+	var userID string
+	err = row.Scan(&userID)
+	if err != nil {
+		return "", err
+	}
+
+	db.Close()
+
+	return userID, nil
+}
+
+func GetUserUsername(userID string) (string, error) {
+	var db *sql.DB
+	var err error
+
+	db, err = sql.Open("sqlite3", "./test.db")
+	if err != nil {
+		return "", err
+	}
+	defer db.Close()
+
+	var username string
+	err = db.QueryRow("SELECT pseudo FROM Users WHERE id_user=?", userID).Scan(&username)
+	if err != nil {
+		return "", err
+	}
+
+	return username, nil
+}
+
 func GetAllPosts() ([]Post, error) {
 	var db *sql.DB
 
