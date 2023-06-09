@@ -10,8 +10,7 @@ import (
 
 func main() {
 	// Serve les fichiers JavaScript
-	fs := http.FileServer(http.Dir("java-script/"))
-	http.Handle("/java-script/", http.StripPrefix("/java-script", fs))
+	http.Handle("/java-script/", http.StripPrefix("/java-script", http.FileServer(http.Dir("java-script"))))
 
 	// Serve les fichiers CSS
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("./assets"))))
@@ -42,7 +41,6 @@ func uploadFile(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-
 	// Get the file from the form data
 	file, handler, err := r.FormFile("image")
 	if err != nil {
@@ -50,14 +48,12 @@ func uploadFile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer file.Close()
-
 	// Read the file content
 	fileBytes, err := ioutil.ReadAll(file)
 	if err != nil {
 		http.Error(w, "Error reading the file", http.StatusInternalServerError)
 		return
 	}
-
 	// Save the file on the server (you can change the path as per your requirement)
 	filepath := "./uploads/" + handler.Filename
 	err = ioutil.WriteFile(filepath, fileBytes, 0644)
@@ -65,7 +61,8 @@ func uploadFile(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Error saving the file", http.StatusInternalServerError)
 		return
 	}
-	http.Redirect(w, r, "/", http.StatusFound)
+	// Handle the successful file upload here (e.g., show a success message)
+	fmt.Fprintln(w, "File uploaded successfully!")
 }
 
 func Inscription(w http.ResponseWriter, r *http.Request) {
