@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"regexp"
-	"strings"
 )
 
 func main() {
@@ -32,6 +30,19 @@ func main() {
 
 func Index(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "template/index.html")
+	if r.Method == "POST" {
+		titre := r.FormValue("titre")
+		description := r.FormValue("description")
+		//image, _, err := r.FormFile("image")
+		//if err != nil {
+		//	fmt.Println("Erreur lors de la récupération du fichier d'image :", err)
+		//} else {
+		//defer image.Close()
+		fmt.Println("Titre :", titre)
+		fmt.Println("Description :", description)
+		//fmt.Println("Chemin de l'image :", image.Filename)
+
+	}
 }
 
 func uploadFile(w http.ResponseWriter, r *http.Request) {
@@ -83,40 +94,27 @@ func uploadFile(w http.ResponseWriter, r *http.Request) {
 }
 
 func Inscription(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path == "/inscription" {
-		if r.Method == "GET" {
-			http.ServeFile(w, r, "template/inscription.html")
-		} else if r.Method == "POST" {
-			// Récupérer les données du formulaire d'inscription (username, email, password)
-			username := r.FormValue("username")
-			email := r.FormValue("email")
-			password := r.FormValue("password")
-			// Vérifier si le mot de passe contient au moins un chiffre, une majuscule et un caractère spécial
-			hasDigit := regexp.MustCompile(`\d`).MatchString(password)
-			hasUpper := strings.ToUpper(password) != password
-			hasSpecial := regexp.MustCompile(`[^a-zA-Z0-9]`).MatchString(password)
+	if r.Method == "GET" {
+		http.ServeFile(w, r, "template/inscription.html")
+	} else if r.Method == "POST" {
+		// Récupérer les données du formulaire d'inscription (username, email, password)
+		username := r.FormValue("username")
+		email := r.FormValue("email")
+		password := r.FormValue("password")
 
-			if !hasDigit || !hasUpper || !hasSpecial {
-				errorMessage := "Le mot de passe doit contenir au moins un chiffre, une majuscule et un caractère spécial"
-				http.Error(w, errorMessage, http.StatusBadRequest)
-				http.ServeFile(w, r, "template/inscription.html")
-				return
-			} else {
-				http.Redirect(w, r, "/", http.StatusFound)
-			}
+		http.Redirect(w, r, "/", http.StatusFound)
 
-			// Afficher les données d'inscription dans la console
-			fmt.Println("Nouvel utilisateur enregistré :")
-			fmt.Println("Username :", username)
-			fmt.Println("Email :", email)
-			fmt.Println("Password :", password)
+		// Afficher les données d'inscription dans la console
+		fmt.Println("Nouvel utilisateur enregistré :")
+		fmt.Println("Username :", username)
+		fmt.Println("Email :", email)
+		fmt.Println("Password :", password)
 
-			// Enregistrer l'utilisateur dans la base de données
+		// Enregistrer l'utilisateur dans la base de données
 
-			// Rediriger vers la page de connexion ou afficher un message de succès
-		}
-
+		// Rediriger vers la page de connexion ou afficher un message de succès
 	}
+
 }
 
 func Connexion(w http.ResponseWriter, r *http.Request) {
