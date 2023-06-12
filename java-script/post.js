@@ -9,15 +9,16 @@ function toggleDiv() {
 }
 
 
+
 function post() {
   var description = document.getElementById("description").value;
   var titre = document.getElementById("titre").value;
-  var image = document.getElementById("image").files[0]; // Récupérer le fichier d'image sélectionné
+  var image = document.getElementById("image").files[0];
   var Container = document.getElementById("postContainer");
   var newDiv = document.createElement("div");
-  var newTitre = document.createElement("div");
-  var newDescription = document.createElement("div");
-  var newImage = document.createElement("img"); // Créer un élément <img>
+  var newTitre = document.createElement("h1");
+  var newDescription = document.createElement("p");
+  var newImage = document.createElement("img");
   newTitre.textContent = "Titre : " + titre;
   newDescription.textContent = "Description : " + description;
   // Ajouter des classes CSS
@@ -32,42 +33,43 @@ function post() {
       </div>
   `;
   newDiv.innerHTML = postContent;
-  Container.appendChild(newDiv);
+  newDiv.appendChild(newTitre);
+  newDiv.appendChild(newDescription);
+
+  // Redimensionner et afficher l'image
+  if (image) {
+    var reader = new FileReader();
+    reader.onload = function (event) {
+      newImage.src = event.target.result; // Définir la source de l'image
+      newImage.classList.add("image-style"); // Ajouter une classe CSS pour styliser l'image
+      newDiv.appendChild(newImage); // Ajouter l'élément <img> à la div nouvellement créée
+    };
+    reader.readAsDataURL(image); // Lire le fichier d'image en tant qu'URL de données
+  }
+
+  var firstDiv = Container.firstChild;
+  Container.insertBefore(newDiv, firstDiv); // Insérer la nouvelle div avant le premier enfant existant
+
   Container.insertAdjacentHTML("beforeend", "<br>");
+
   // Gestionnaire d'événement pour le bouton "Like"
   var likeButton = newDiv.querySelector("#likeButton");
   var likeCount = newDiv.querySelector("#likeCount");
   var likeValue = 0;
   likeButton.addEventListener("click", function () {
-      likeValue++;
-      likeCount.textContent = likeValue;
+    likeValue++;
+    likeCount.textContent = likeValue;
   });
+
   // Gestionnaire d'événement pour le bouton "Dislike"
   var dislikeButton = newDiv.querySelector("#dislikeButton");
   var dislikeCount = newDiv.querySelector("#dislikeCount");
   var dislikeValue = 0;
   dislikeButton.addEventListener("click", function () {
-      dislikeValue++;
-      dislikeCount.textContent = dislikeValue;
+    dislikeValue++;
+    dislikeCount.textContent = dislikeValue;
   });
-  newDiv.appendChild(newTitre);
-  newDiv.appendChild(newDescription);
-  Container.appendChild(newDiv);
-  Container.insertAdjacentHTML("beforeend", "<br>");
 
-  var firstDiv = Container.firstChild; 
-
-    Container.insertBefore(newDiv, firstDiv);
-  // Redimensionner et afficher l'image
-  if (image) {
-      var reader = new FileReader();
-      reader.onload = function (event) {
-          newImage.src = event.target.result; // Définir la source de l'image
-          newImage.classList.add("image-style"); // Ajouter une classe CSS pour styliser l'image
-          Container.appendChild(newImage);
-      };
-      reader.readAsDataURL(image); // Lire le fichier d'image en tant qu'URL de données
-  }
   // Vider les champs du formulaire
   document.getElementById("description").value = "";
   document.getElementById("titre").value = "";
@@ -82,7 +84,6 @@ const postsPerPage = 25;
 
 // Function to fetch posts from the server
 function fetchPosts() {
-  // Send a GET request to the server to retrieve the posts
   fetch(`/api/posts?page=${currentPage}&limit=${postsPerPage}`)
     .then(response => response.json())
     .then(data => {
@@ -93,7 +94,7 @@ function fetchPosts() {
       const postContainer = document.getElementById('postContainer');
       data.forEach(post => {
         const postElement = document.createElement('div');
-        postElement.className = 'post';
+        postElement.className = 'div-item';
         postElement.innerHTML = `
           <h3 class="Post-Title">${post.Title}</h3>
           <p class="Post-Desc">${post.Description}</p>
