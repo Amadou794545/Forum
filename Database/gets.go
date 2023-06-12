@@ -122,6 +122,7 @@ func GetPosts(offset, limit int) ([]Post, error) {
 	}
 
 	if err = rows.Err(); err != nil {
+		fmt.Println("test ko")
 		return nil, err
 	}
 

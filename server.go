@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"html/template"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
@@ -31,6 +32,8 @@ func main() {
 	http.HandleFunc("/", handlerIndex)
 	http.HandleFunc("/inscription", handlerInscription)
 	http.HandleFunc("/login", handlerConnexion)
+
+	http.HandleFunc("/upload", uploadFile)
 
 	http.Handle("/css/", http.StripPrefix("/css", http.FileServer(http.Dir("css"))))
 
@@ -72,6 +75,50 @@ func GetPostsAPI(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(jsonData)
+}
+
+func uploadFile(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("test")
+	// Parse the multipart form data
+	titre := r.FormValue("titre")
+	description := r.FormValue("description")
+
+	fmt.Println(titre + " " + description)
+	// Set the maximum file size to 10 MB
+	maxFileSize := int64(10 * 1024 * 1024)
+	err := r.ParseMultipartForm(maxFileSize)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	// Check if an image file is present
+	file, handler, err := r.FormFile("image")
+	if err != nil {
+		if err == http.ErrMissingFile {
+			// No image file provided, handle accordingly
+			fmt.Fprintln(w, "No image file provided.")
+			return
+		}
+		// Other error occurred while retrieving the file, handle accordingly
+		http.Error(w, "Error retrieving the file", http.StatusBadRequest)
+		return
+	}
+	defer file.Close()
+	// Read the file content
+	fileBytes, err := ioutil.ReadAll(file)
+	if err != nil {
+		http.Error(w, "Error reading the file", http.StatusInternalServerError)
+		return
+	}
+	// Save the file on the server (you can change the path as per your requirement)
+	filepath := "./uploads/" + handler.Filename
+	err = ioutil.WriteFile(filepath, fileBytes, 0644)
+	if err != nil {
+		http.Error(w, "Error saving the file", http.StatusInternalServerError)
+		return
+	}
+	// Handle the successful file upload here (e.g., show a success message)
+	fmt.Fprintln(w, "File uploaded successfully!")
 }
 
 func handlerIndex(w http.ResponseWriter, r *http.Request) {

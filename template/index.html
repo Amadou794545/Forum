@@ -1,11 +1,62 @@
 <!DOCTYPE html>
-<html lang="fr">
-    <head>
-        <meta charset="UTF-8">
-        <title>Title</title>
-    </head>
-    
-    <body>
-        <h2>tkt mec</h2>
-    </body>
+<html>
+<head>
+    <link rel="stylesheet" href="../assets/indexs.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <input type="button" id="myInput" value="Publier" onclick="toggleDiv()">
+    <div id="myDiv" class="hidden">
+        <form id="uploadForm">
+            <label for="titre">Titre:</label><br>
+            <input type="text" id="titre" name="titre"><br><br>
+            <label for="Description">Description:</label><br>
+            <textarea class="description" id="description" name="description" autofocus></textarea><br><br>
+            <label for="imageInput">Image:</label><br>
+            <input type="file" id="image" name="image" accept="image/png, image/jpeg"><br><br>
+            <input type="submit" value="Soumettre" >
+        </form>
+    </div>
+    <form action="/login" method="post">
+        <input type="submit" value="Se connecter">
+    </form>
+    <div class="postContainer" id="postContainer"></div>
+    <script src="../java-script/post.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#uploadForm').submit(function(event) {
+                event.preventDefault(); // Prevent the default form submission
+                // Create a new FormData object
+                var formData = new FormData();
+                // Get the form data
+                var titre = $('#titre').val();
+                var description = $('#description').val();
+                var image = $('#image').prop('files')[0];
+                // Add form data to FormData object
+                formData.append('titre', titre);
+                formData.append('description', description);
+                if (image) {
+                    formData.append('image', image);
+                }
+                // Send the form data to the server using AJAX
+                $.ajax({
+                    url: '/upload', // Update the URL to your server endpoint
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        // Handle the response from the server
+                        console.log(response); // You can do further processing or display a success message
+                        post(); // Call the post() function to display the new post
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle the error
+                        console.log(error); // You can display an error message or perform other error handling
+                    }
+                });
+            });
+        });
+    </script>
+</body>
 </html>
