@@ -30,6 +30,8 @@ func main() {
 
 	http.HandleFunc("/", handlerIndex)
 	http.HandleFunc("/inscription", handlerInscription)
+	http.HandleFunc("/inscriptionPicture", handlerInscriptionPicture)
+	http.HandleFunc("/inscriptionDada", handlerInscriptionDada)
 	http.HandleFunc("/login", handlerConnexion)
 
 	http.Handle("/css/", http.StripPrefix("/css", http.FileServer(http.Dir("css"))))
@@ -126,7 +128,7 @@ func handlerInscription(w http.ResponseWriter, r *http.Request) {
 
 		if !Database.CheckUsername(username) && !Database.CheckEmail(email) {
 			Database.AddUser(email, username, password, "test")
-			http.Redirect(w, r, "/", http.StatusFound)
+			http.Redirect(w, r, "/inscriptionPicture", http.StatusFound)
 		} else {
 			InscriptionData.Username = username
 			InscriptionData.Email = email
@@ -135,6 +137,20 @@ func handlerInscription(w http.ResponseWriter, r *http.Request) {
 
 		tmpl.Execute(w, InscriptionData)
 	}
+}
+
+func handlerInscriptionPicture(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "template/inscription_picture.html")
+	if r.Method == "POST" {
+		imgPath := r.FormValue("photo_profil")
+		username := //TODO
+		userID := Database.GetUserID(username)
+		Database.UpdateImgProfile(imgPath, userID)
+	}
+}
+
+func handlerInscriptionDada(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "template/inscription_dada.html")
 }
 
 func handlerConnexion(w http.ResponseWriter, r *http.Request) {

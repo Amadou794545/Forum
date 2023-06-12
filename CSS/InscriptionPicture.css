@@ -1,0 +1,16 @@
+#picture_choices {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.defaultProfilPicture {
+    width: 20vw;
+    height: auto;
+    text-align: center;
+    margin: auto;
+}
+
+.defaultProfilPicture:hover {
+    background-color: sandybrown;
+}
