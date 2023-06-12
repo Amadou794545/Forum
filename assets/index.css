@@ -1,7 +1,6 @@
 html, body {
     height: 100%;
 }
-
 body {
     display: flex;
     flex-direction: column;
@@ -10,11 +9,10 @@ body {
     margin: 0;
     padding: 0;
     font-family: sans-serif;
-    background: mediumturquoise;
+    background: #EBE4DA;
 }
-
 #myInput {
-    background-color: #141e30;
+    background-color: #D2B48C;
     color: #fff;
     padding: 10px 20px;
     border: none;
@@ -23,11 +21,9 @@ body {
     border-radius: 5px;
     margin-bottom: 20px;
 }
-
 .hidden {
     display: none;
 }
-
 form {
     display: flex;
     flex-direction: column;
@@ -35,12 +31,10 @@ form {
     padding: 20px;
     border-radius: 5px;
 }
-
 form label {
     font-weight: bold;
     margin-bottom: 10px;
 }
-
 form input[type="text"],
 form textarea,
 form input[type="file"] {
@@ -49,13 +43,12 @@ form input[type="file"] {
     font-size: 16px;
     margin-bottom: 10px;
     border: none;
-    border-bottom: 1px solid #03e9f4;
+    border-bottom: 1px solid #EBE4DA;
     outline: none;
     background: transparent;
 }
-
 form input[type="submit"] {
-    background-color: #141e30;
+    background-color: #D2B48C;
     color: #fff;
     padding: 10px 20px;
     border: none;
@@ -63,37 +56,31 @@ form input[type="submit"] {
     font-size: 16px;
     border-radius: 5px;
 }
-
 .container {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-top: 20px;
 }
-
 .container .post {
     background-color: #fff;
     padding: 20px;
     border-radius: 5px;
-    box-shadow: 0 2px 5px #141e30;
+    box-shadow: 0 2px 5px #D2B48C;
     margin-bottom: 10px;
 }
-
 .container .post .title {
     font-weight: bold;
     margin-bottom: 10px;
 }
-
 .container .post .description {
     margin-bottom: 10px;
 }
-
 .container .post .image {
     max-width: 100%;
     height: auto;
     margin-bottom: 10px;
 }
-
 .div-item {
     width: 90vh;
     height: 30vh;
@@ -103,7 +90,6 @@ form input[type="submit"] {
     word-wrap: break-word;
     overflow: auto;
 }
-
 .filter-button {
     border: none;
     background: none;
@@ -111,9 +97,8 @@ form input[type="submit"] {
   }
   
   .filter-button img {
-    width: 24px; /* Ajustez la largeur de l'image selon vos besoins */
-    height: 24px; /* Ajustez la hauteur de l'image selon vos besoins */
+    width: 24px; 
+    height: 24px; 
   }
-  
   
   
