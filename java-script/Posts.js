@@ -9,7 +9,6 @@ function post() {
     var newTitre = document.createElement("div");
     var newDescription = document.createElement("div");
     var newImage = document.createElement("img"); // Créer un élément <img>
-    var newButton = document.createElement("button"); // Créer un élément <button>
 
     newTitre.textContent = "Titre : " + titre;
     newDescription.textContent = "Description : " + description;
@@ -18,17 +17,45 @@ function post() {
     newTitre.classList.add("titre-style");
     newDiv.classList.add("div-item");
 
+    var postContent = `
+        <div id="post">
+            <button id="likeButton">Like</button>
+            <span id="likeCount">0</span>
+            <button id="dislikeButton">Dislike</button>
+            <span id="dislikeCount">0</span>
+        </div>
+    `;
+
+    newDiv.innerHTML = postContent;
+
+    Container.appendChild(newDiv);
+    Container.insertAdjacentHTML("beforeend", "<br>");
+
+    // Gestionnaire d'événement pour le bouton "Like"
+    var likeButton = newDiv.querySelector("#likeButton");
+    var likeCount = newDiv.querySelector("#likeCount");
+    var likeValue = 0;
+
+    likeButton.addEventListener("click", function () {
+        likeValue++;
+        likeCount.textContent = likeValue;
+    });
+
+    // Gestionnaire d'événement pour le bouton "Dislike"
+    var dislikeButton = newDiv.querySelector("#dislikeButton");
+    var dislikeCount = newDiv.querySelector("#dislikeCount");
+    var dislikeValue = 0;
+
+    dislikeButton.addEventListener("click", function () {
+        dislikeValue++;
+        dislikeCount.textContent = dislikeValue;
+    });
+
     newDiv.appendChild(newTitre);
     newDiv.appendChild(newDescription);
 
     Container.appendChild(newDiv);
     Container.insertAdjacentHTML("beforeend", "<br>");
-
-    // Ajouter le bouton "Commentaire"
-    newButton.textContent = "Commentaire";
-    newButton.classList.add("comment-button");
-    newDiv.appendChild(newButton);
-
 
     // Redimensionner et afficher l'image
     if (image) {
@@ -54,6 +81,7 @@ function toggleDiv() {
         div.style.display = "none";
     } else {
         div.style.display = "block";
+        document.getElementById("Description"); // Placer le focus sur le champ de saisie "message"
     }
 }
 
