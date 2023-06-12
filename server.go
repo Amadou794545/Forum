@@ -2,11 +2,8 @@ package main
 
 import (
 	"fmt"
-	"io"
+	"io/ioutil"
 	"net/http"
-	"os"
-	"regexp"
-	"strings"
 )
 
 func main() {
@@ -105,7 +102,6 @@ func Inscription(w http.ResponseWriter, r *http.Request) {
 		// Rediriger vers la page de connexion ou afficher un message de succès
 	}
 
-	}
 }
 
 func Connexion(w http.ResponseWriter, r *http.Request) {
