@@ -1,5 +1,5 @@
 // Sélection de la photo de profil
-var selectElement = document.getElementById('photo_profil_select')
+var selectElement = document.getElementById('profile_picture_select')
 selectElement.addEventListener('change', function() {
     var selectedPhoto = selectElement.value
     
@@ -9,6 +9,7 @@ selectElement.addEventListener('change', function() {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({ photo_profil: selectedPhoto })
+
     })
 
     .then(function(response) {
@@ -16,28 +17,28 @@ selectElement.addEventListener('change', function() {
             //récupérer path img
             return fetch('/getCurrentPhoto')
         } else {
-            throw new Error('Échec de la requête de mise à jour du profil.')
+            throw new Error('Échec de la requête de mise à jour du profil')
         }
     })
 
     .then(function(response) {
         if (response.ok) {
-            // optenir données JSON du path de pdp actuelle
+            // optenir données JSON du path de photo de profil actuelle
             return response.json()
         } else {
-            throw new Error('Échec de la récupération du chemin de la photo de profil actuelle.')
+            throw new Error('Échec de la récupération du chemin de la photo de profil')
         }
     })
 
     .then(function(data) {
         // Mettre à jour le chemin de la photo de profil dans le code HTML
         var imgPath = data.PhotoProfil
-        var imgElement = document.getElementById('photo_profil')
+        var imgElement = document.getElementById('profile_picture')
         imgElement.src = imgPath
-        imgElement.alt = "Photo de profil"
+        imgElement.alt = "Profile picture"
     })
     
     .catch(function(error) {
-        console.error('Une erreur s\'est produite:', error)
+        console.error('Error :', error)
     })
 })

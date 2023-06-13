@@ -2,13 +2,14 @@ package cookies
 
 import (
 	"net/http"
+	"strconv"
 	"time"
 )
 
-func HandlerCookie(w http.ResponseWriter, r *http.Request, userID string) {
+func HandlerCookie(w http.ResponseWriter, r *http.Request, userID int) {
 	cookie := &http.Cookie{
 		Name:    "session",
-		Value:   userID,
+		Value:   strconv.Itoa(userID),
 		Expires: time.Now().Add(24 * time.Hour), //24h
 		Path:    "/",
 	}

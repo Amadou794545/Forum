@@ -18,7 +18,7 @@ func AddUser(email string, pseudo string, password string, imgPath string) {
 	}
 
 	if imgPath == "" {
-		imgPath = "default.jpg"
+		imgPath = "../Pictures/Profil/anonyme.jpg"
 	}
 
 	HashedPassword, error := GenerateFromPassword(password)

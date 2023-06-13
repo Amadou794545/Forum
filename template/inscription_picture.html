@@ -9,10 +9,11 @@
     <body>
         <h1>Choisissez votre photo de profil</h1>
 
-        <img id="photo_profil" src="" alt="Photo de profil actuelle">
+        <p>Photo de profil actuelle</p>
+        <img id="photo_profil" src="anonyme.jpg" alt="Current profile picture">
   
         <form id="profileForm" action="/inscriptionPicture" method="POST">
-            <select id="photo_profil_select">
+            <select id="profile_picture_select">
                 <option value="../Pictures/Profil/woman1.png">Femme 1</option>
                 <option value="../Pictures/Profil/woman2.png">Femme 2</option>
                 <option value="../Pictures/Profil/woman3.png">Femme 3</option>
@@ -28,5 +29,6 @@
             <button type="submit">Send</button>
         </form>
         
-        <script src="../java-script/getImgProfile.js"></script>
+        <script src="../java-script/updateChoicePicture.js"></script>
+    </body>
 </html>

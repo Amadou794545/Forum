@@ -2,26 +2,29 @@ package Database
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"log"
 )
 
-func GetUserID(identifier string) (string, error) {
+func GetUserID(identifier string) (int, error) {
 	db, err := sql.Open("sqlite3", "./test.db")
 	if err != nil {
-		return "", err
+		return 0, err
 	}
+	defer db.Close()
 
 	query := "SELECT id_user FROM Users WHERE (pseudo = ? OR email = ?)"
 	row := db.QueryRow(query, identifier, identifier)
 
-	var userID string
+	var userID int
 	err = row.Scan(&userID)
 	if err != nil {
-		return "", err
+		if errors.Is(err, sql.ErrNoRows) {
+			return 0, nil // Aucune ligne trouvée: userID = 0 sans erreur
+		}
+		return 0, err
 	}
-
-	db.Close()
 
 	return userID, nil
 }

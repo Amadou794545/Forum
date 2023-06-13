@@ -81,7 +81,6 @@ func handlerIndex(w http.ResponseWriter, r *http.Request) {
 		if cookies.CheckSessionCookie(r) {
 			cookie, err := r.Cookie("session")
 			if err != nil {
-				// Handle the error if needed
 				fmt.Println("Error retrieving session cookie:", err)
 				return
 			}
@@ -89,7 +88,6 @@ func handlerIndex(w http.ResponseWriter, r *http.Request) {
 			userID := cookie.Value
 			username, err := Database.GetUserUsername(userID)
 			if err != nil {
-				// Handle the error if needed
 				fmt.Println("Error retrieving username:", err)
 				return
 			}
@@ -127,7 +125,12 @@ func handlerInscription(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if !Database.CheckUsername(username) && !Database.CheckEmail(email) {
-			Database.AddUser(email, username, password, "test")
+			cookie := http.Cookie{
+				Name:  "username",
+				Value: username,
+			}
+			http.SetCookie(w, &cookie)
+			Database.AddUser(email, username, password, "")
 			http.Redirect(w, r, "/inscriptionPicture", http.StatusFound)
 		} else {
 			InscriptionData.Username = username
@@ -143,9 +146,23 @@ func handlerInscriptionPicture(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "template/inscription_picture.html")
 	if r.Method == "POST" {
 		imgPath := r.FormValue("photo_profil")
-		username := //TODO
-		userID := Database.GetUserID(username)
-		Database.UpdateImgProfile(imgPath, userID)
+		cookie, err := r.Cookie("username")
+		if err == nil {
+			username := cookie.Value
+			userID, err := Database.GetUserID(username)
+			if err != nil {
+				fmt.Println("Error getting user ID:", err)
+			} else {
+				Database.UpdateImgProfile(imgPath, userID)
+				jsonResponse := struct {
+					PhotoProfil string `json:"PhotoProfil"`
+				}{
+					PhotoProfil: imgPath,
+				}
+				w.Header().Set("Content-Type", "application/json")
+				json.NewEncoder(w).Encode(jsonResponse)
+			}
+		}
 	}
 }
 
