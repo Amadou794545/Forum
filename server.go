@@ -4,10 +4,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"html/template"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strconv"
+	"time"
 
 	"forum/Database"
 	"forum/cookies"
@@ -38,6 +41,8 @@ func main() {
 	http.Handle("/css/", http.StripPrefix("/css", http.FileServer(http.Dir("css"))))
 
 	http.Handle("/java-script/", http.StripPrefix("/java-script", http.FileServer(http.Dir("java-script"))))
+
+	http.Handle("/images/", http.StripPrefix("/images", http.FileServer(http.Dir("uploads"))))
 
 	port := ":3030"
 	fmt.Printf("Serveur en cours d'exécution sur le port %s\n", port)
@@ -79,11 +84,7 @@ func GetPostsAPI(w http.ResponseWriter, r *http.Request) {
 
 func uploadFile(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("test")
-	// Parse the multipart form data
-	titre := r.FormValue("titre")
-	description := r.FormValue("description")
 
-	fmt.Println(titre + " " + description)
 	// Set the maximum file size to 10 MB
 	maxFileSize := int64(10 * 1024 * 1024)
 	err := r.ParseMultipartForm(maxFileSize)
@@ -91,6 +92,12 @@ func uploadFile(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+
+	// Access the form values after parsing the multipart form data
+	titre := r.FormValue("titre")
+	description := r.FormValue("description")
+	hobbies, err := strconv.Atoi(r.FormValue("dada"))
+
 	// Check if an image file is present
 	file, handler, err := r.FormFile("image")
 	if err != nil {
@@ -104,20 +111,46 @@ func uploadFile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer file.Close()
-	// Read the file content
-	fileBytes, err := ioutil.ReadAll(file)
-	if err != nil {
-		http.Error(w, "Error reading the file", http.StatusInternalServerError)
-		return
-	}
-	// Save the file on the server (you can change the path as per your requirement)
-	filepath := "./uploads/" + handler.Filename
-	err = ioutil.WriteFile(filepath, fileBytes, 0644)
+
+	// Generate a unique number or timestamp to append to the filename
+	uniqueNumber := time.Now().UnixNano()
+
+	// Get the file extension
+	extension := filepath.Ext(handler.Filename)
+
+	// Generate the new filename
+	newFilename := fmt.Sprintf("Post-%d%s", uniqueNumber, extension)
+
+	// Save the file on the server with the new filename
+	filePath := filepath.Join("./uploads", newFilename)
+	outFile, err := os.Create(filePath)
 	if err != nil {
 		http.Error(w, "Error saving the file", http.StatusInternalServerError)
 		return
 	}
-	// Handle the successful file upload here (e.g., show a success message)
+	defer outFile.Close()
+
+	_, err = io.Copy(outFile, file)
+	if err != nil {
+		http.Error(w, "Error saving the file", http.StatusInternalServerError)
+		return
+	}
+
+	cookie, err := r.Cookie("session")
+	if err != nil {
+		// Handle the error if needed
+		fmt.Println("Error retrieving session cookie:", err)
+		return
+	}
+
+	userId, err := strconv.Atoi(cookie.Value)
+	if err != nil {
+		// Handle the error if needed
+		fmt.Println("Error retrieving cookie value:", err)
+		return
+	}
+
+	Database.AddPost(titre, "images/"+newFilename, description, userId, hobbies)
 	fmt.Fprintln(w, "File uploaded successfully!")
 }
 

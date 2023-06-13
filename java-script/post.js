@@ -4,7 +4,7 @@ function toggleDiv() {
       div.style.display = "none";
   } else {
       div.style.display = "block";
-      document.getElementById("Description"); // Placer le focus sur le champ de saisie "message"
+      document.getElementById("Description").focus(); // Placer le focus sur le champ de saisie "message"
   }
 }
 
@@ -17,7 +17,9 @@ function post() {
   var Container = document.getElementById("postContainer");
   var newDiv = document.createElement("div");
   var newTitre = document.createElement("h1");
+  newTitre.className = 'Post-Title';
   var newDescription = document.createElement("p");
+  newDescription.className = 'Post-Desc';
   var newImage = document.createElement("img");
   newTitre.textContent = "Titre : " + titre;
   newDescription.textContent = "Description : " + description;
@@ -70,25 +72,21 @@ function post() {
     dislikeCount.textContent = dislikeValue;
   });
 
-  // Vider les champs du formulaire
+  
   document.getElementById("description").value = "";
   document.getElementById("titre").value = "";
   document.getElementById("image").value = "";
 }
 
-
-
-// Variables to track the current page and number of posts to load
 let currentPage = 1;
 const postsPerPage = 25;
 
-// Function to fetch posts from the server
 function fetchPosts() {
   fetch(`/api/posts?page=${currentPage}&limit=${postsPerPage}`)
     .then(response => response.json())
     .then(data => {
-      // Process the retrieved post data
-      console.log(data); // Print the data to the console as an example
+
+      console.log(data);
 
       // Update the UI to display the posts
       const postContainer = document.getElementById('postContainer');

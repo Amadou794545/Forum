@@ -40,7 +40,7 @@ func AddUser(email string, pseudo string, password string, imgPath string) {
 
 func AddPost(title string, imagePath string, description string, userID int, hobbieID int) {
 	var db *sql.DB
-
+	fmt.Println("testdb")
 	var err error
 	db, err = sql.Open("sqlite3", "./test.db")
 	if err != nil {
@@ -48,7 +48,7 @@ func AddPost(title string, imagePath string, description string, userID int, hob
 	}
 
 	_, err = db.Exec(`
-		INSERT INTO Posts (title, imgPath, description, id_user, id_hobbie) VALUES ($1, $2, $3, $4);
+		INSERT INTO Posts (title, imgPath, description, id_user, id_hobbie) VALUES ($1, $2, $3, $4, $5);
 	`, title, imagePath, description, userID, hobbieID)
 
 	if err != nil {

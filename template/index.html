@@ -12,6 +12,23 @@
             <input type="text" id="titre" name="titre"><br><br>
             <label for="Description">Description:</label><br>
             <textarea class="description" id="description" name="description" autofocus></textarea><br><br>
+            <div>
+                <input type="radio" id="sport" name="dada" value="1" checked>
+                <label for="sport">Sport</label>
+                <input type="radio" id="informatique" name="dada" value="2">
+                <label for="informatique">Informatique</label>
+                <input type="radio" id="Cuisine" name="dada" value="3">
+                <label for="Cuisine">Cuisine</label>
+                <input type="radio" id="Cinema" name="dada" value="4">
+                <label for="Cinema">Cinema</label>
+                <input type="radio" id="Lecture" name="dada" value="5">
+                <label for="Lecture">Lecture</label>
+                <input type="radio" id="Jeux" name="dada" value="6">
+                <label for="Jeux">Jeux</label>
+                <input type="radio" id="Musique" name="dada" value="7">
+                <label for="Musique">Musique</label>
+
+            </div>
             <label for="imageInput">Image:</label><br>
             <input type="file" id="image" name="image" accept="image/png, image/jpeg"><br><br>
             <input type="submit" value="Soumettre" >
@@ -31,10 +48,12 @@
                 // Get the form data
                 var titre = $('#titre').val();
                 var description = $('#description').val();
+                var dada = $('input[name=dada]:checked').val();
                 var image = $('#image').prop('files')[0];
                 // Add form data to FormData object
                 formData.append('titre', titre);
                 formData.append('description', description);
+                formData.append('dada', dada);
                 if (image) {
                     formData.append('image', image);
                 }
