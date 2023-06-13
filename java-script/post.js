@@ -1,4 +1,4 @@
-function post() {
+function ajouterPost() {
     var description = document.getElementById("description").value;
     var titre = document.getElementById("titre").value;
     var image = document.getElementById("image").files[0]; // Récupérer le fichier d'image sélectionné
@@ -12,38 +12,69 @@ function post() {
     // Ajouter des classes CSS
     newTitre.classList.add("titre-style");
     newDiv.classList.add("div-item");
-    
+
+    var titre = document.getElementById("titre").value;
+    var contenu = document.getElementById("description").value;
+
+    var filter = document.getElementById('filter');
+    var categorie = filter.value;
+
+    if (categorie === 'all') {
+        alert("Veuillez sélectionner un filtre avant de publier le post.");
+        return; // Arrête l'exécution de la fonction si aucun filtre n'est sélectionné
+    }
+
+    var nouveauPost = {
+        titre: titre,
+        contenu: contenu,
+        categorie: categorie
+    };
+
+    posts.push(nouveauPost);
+
+    generatePosts(filter.value);
+
+    // Vider les champs du formulaire
+    document.getElementById("description").value = "";
+    document.getElementById("titre").value = "";
+    document.getElementById("image").value = "";
+
     var postContent = `
-    <div id="post">
-        <button id="likeButton">Like</button>
-        <span id="likeCount">0</span>
-        <button id="dislikeButton">Dislike</button>
-        <span id="dislikeCount">0</span>
-    </div>
-`;
-newDiv.innerHTML = postContent;
-Container.appendChild(newDiv);
-Container.insertAdjacentHTML("beforeend", "<br>");
-// Gestionnaire d'événement pour le bouton "Like"
-var likeButton = newDiv.querySelector("#likeButton");
-var likeCount = newDiv.querySelector("#likeCount");
-var likeValue = 0;
-likeButton.addEventListener("click", function() {
-    likeValue++;
-    likeCount.textContent = likeValue;
-});
-// Gestionnaire d'événement pour le bouton "Dislike"
-var dislikeButton = newDiv.querySelector("#dislikeButton");
-var dislikeCount = newDiv.querySelector("#dislikeCount");
-var dislikeValue = 0;
-dislikeButton.addEventListener("click", function() {
-    dislikeValue++;
-    dislikeCount.textContent = dislikeValue;
-});
+        <div id="post">
+            <button id="likeButton">Like</button>
+            <span id="likeCount">0</span>
+            <button id="dislikeButton">Dislike</button>
+            <span id="dislikeCount">0</span>
+        </div>
+    `;
+
+    newDiv.innerHTML = postContent;
+    Container.appendChild(newDiv);
+    Container.insertAdjacentHTML("beforeend", "<br>");
+
+    // Gestionnaire d'événement pour le bouton "Like"
+    var likeButton = newDiv.querySelector("#likeButton");
+    var likeCount = newDiv.querySelector("#likeCount");
+    var likeValue = 0;
+    likeButton.addEventListener("click", function() {
+        likeValue++;
+        likeCount.textContent = likeValue;
+    });
+
+    // Gestionnaire d'événement pour le bouton "Dislike"
+    var dislikeButton = newDiv.querySelector("#dislikeButton");
+    var dislikeCount = newDiv.querySelector("#dislikeCount");
+    var dislikeValue = 0;
+    dislikeButton.addEventListener("click", function() {
+        dislikeValue++;
+        dislikeCount.textContent = dislikeValue;
+    });
+
     newDiv.appendChild(newTitre);
     newDiv.appendChild(newDescription);
     Container.appendChild(newDiv);
     Container.insertAdjacentHTML("beforeend", "<br>");
+
     // Redimensionner et afficher l'image
     if (image) {
         var reader = new FileReader();
@@ -54,20 +85,23 @@ dislikeButton.addEventListener("click", function() {
         };
         reader.readAsDataURL(image); // Lire le fichier d'image en tant qu'URL de données
     }
+
     // Vider les champs du formulaire
     document.getElementById("description").value = "";
     document.getElementById("titre").value = "";
     document.getElementById("image").value = "";
 }
+
 function toggleDiv() {
     var div = document.getElementById("myDiv");
     if (div.style.display === "block") {
         div.style.display = "none";
     } else {
         div.style.display = "block";
-        document.getElementById("Description").focus(); // Placer le focus sur le champ de saisie "message"
+        document.getElementById("description").focus(); // Placer le focus sur le champ de saisie "description"
     }
 }
+
 $(document).ready(function() {
     // Écouteur d'événement pour les modifications des cases à cocher
     $('#filters input[type="checkbox"]').on('change', function() {
@@ -76,16 +110,18 @@ $(document).ready(function() {
         $('#filters input[type="checkbox"]:checked').each(function() {
             selectedFilters.push($(this).val());
         });
-        // Afficher ou masquer les éléments en fonction des filtres sélectionnés
+        // Cacher tous les éléments de post par défaut
+        $('#container .post').hide();
+        // Afficher les éléments correspondant aux filtres sélectionnés
         if (selectedFilters.length > 0) {
-            $('#container .post').hide(); // Masquer tous les éléments
             // Afficher les éléments correspondant aux filtres sélectionnés
             for (var i = 0; i < selectedFilters.length; i++) {
                 var filter = selectedFilters[i];
                 $('#container .post.' + filter).show();
             }
         } else {
-            $('#container .post').show(); // Afficher tous les éléments si aucun filtre n'est sélectionné
+            // Afficher tous les éléments si aucun filtre n'est sélectionné
+            $('#container .post').show();
         }
     });
 });

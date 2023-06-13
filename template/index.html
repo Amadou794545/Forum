@@ -1,59 +1,78 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="../assets/index.css">
+    <style>
+        .post {
+            display: inline-block;
+            margin: 5px;
+        }
+    
+        .post img {
+            width: 50px; /* Ajustez la taille des icônes en fonction de vos besoins */
+            height: 50px;
+        }
+    </style>
+    
 </head>
 <body>
     <div id="filters">
-        <label><input type="checkbox" value="Sport">Sport</label>
-        <label><input type="checkbox" value="Informatique">Informatique</label>
-        <label><input type="checkbox" value="Cuisine">Cuisine</label>
-        <label><input type="checkbox" value="Cinéma">Cinéma</label>
-        <label><input type="checkbox" value="Lecture">Lecture</label>
-        <label><input type="checkbox" value="Jeux">Jeux</label>
-        <label><input type="checkbox" value="Musique">Musique</label>
-    </div>
-    <div id="filters">
-        <button class="filter-button" data-filter="Sport">
-          <img src="/assets/Sport.png" alt="Sport">
+        <button class="post Sport" data-filter="Sport">
+            <img src="/assets/Sport.png" alt="Sport">
         </button>
-        <button class="filter-button" data-filter="Informatique">
+        
+        <button class="post Informatique" data-filter="Informatique">
           <img src="/assets/Informatique.png" alt="Informatique">
         </button>
-        <button class="filter-button" data-filter="Cuisine">
+        <button class="post Cuisine" data-filter="Cuisine">
           <img src="/assets/Cuisine.png" alt="Cuisine">
         </button>
-        <button class="filter-button" data-filter="Cinéma">
+        <button class="post Cinéma" data-filter="Cinéma">
             <img src="/assets/Cinema.png" alt="Cinéma">
           </button>
-          <button class="filter-button" data-filter="Lecture">
+          <button class="post Lecture" data-filter="Lecture">
             <img src="/assets/Lecture.png" alt="Lecture">
           </button>
-          <button class="filter-button" data-filter="Jeux">
+          <button class="post Jeux" data-filter="Jeux">
             <img src="/assets/Jeux.png" alt="Jeux">
           </button>
-          <button class="filter-button" data-filter="Musique">
+          <button class="post Musique" data-filter="Musique">
             <img src="/assets/Musique.png" alt="Musique">
           </button>
-        <!-- Ajoutez d'autres boutons de filtre avec des images ici -->
       </div>
-      
+
+      <div>
+          <label for="filter">Filtrer par catégorie :</label>
+          <select id="filter">
+              <option value="all">Toutes les catégories</option>
+              <option value="Sport">Sport</option>
+              <option value="Informatique">Informatique</option>
+              <option value="Cuisine">Cuisine</option>
+              <option value="Cinéma">Cinéma</option>
+              <option value="Lecture">Lecture</option>
+              <option value="Jeux">Jeux</option>
+              <option value="Musique">Musique</option>
+          </select>
+      </div>
+      <ul id="postList"> </ul>
+      <div id="container">
+    </div>
+    
     
 <input type="button" id="myInput" onclick="toggleDiv()" value="Publier">
 <div id="myDiv" class="hidden">
-    <form action="/" method="POST" onsubmit="post(); return false;">
+    <form method="POST" onsubmit="ajouterPost(); return false;">
         <label for="titre">Titre:</label><br>
         <input type="text" id="titre" name="titre"><br><br>
         <label for="Description">Description:</label><br>
         <textarea class="description" id="description" name="description" autofocus></textarea><br><br>
         <input type="file" id="imageInput" accept="image/*" style="display: none">
-        <label for="imageInput">image</label>
         <label for="image">Image:</label><br>
         <input type="file" id="image" name="image"><br><br>
         <input type="submit" value="Soumettre">
     </form>
 </div>
+
   
 <form action="/login" method="post">
     <input type="submit" value="Se connecter">
