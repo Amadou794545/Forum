@@ -35,6 +35,7 @@ func main() {
 	http.HandleFunc("/login", handlerConnexion)
 
 	http.Handle("/css/", http.StripPrefix("/css", http.FileServer(http.Dir("css"))))
+	http.Handle("/pictures/", http.StripPrefix("/pictures", http.FileServer(http.Dir("Pictures"))))
 
 	http.Handle("/java-script/", http.StripPrefix("/java-script", http.FileServer(http.Dir("java-script"))))
 
@@ -144,24 +145,23 @@ func handlerInscription(w http.ResponseWriter, r *http.Request) {
 
 func handlerInscriptionPicture(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "template/inscription_picture.html")
-	if r.Method == "POST" {
-		imgPath := r.FormValue("photo_profil")
-		cookie, err := r.Cookie("username")
-		if err == nil {
-			username := cookie.Value
-			userID, err := Database.GetUserID(username)
-			if err != nil {
-				fmt.Println("Error getting user ID:", err)
-			} else {
-				Database.UpdateImgProfile(imgPath, userID)
-				jsonResponse := struct {
-					PhotoProfil string `json:"PhotoProfil"`
-				}{
-					PhotoProfil: imgPath,
-				}
-				w.Header().Set("Content-Type", "application/json")
-				json.NewEncoder(w).Encode(jsonResponse)
+	imgPath := r.FormValue("selectedPicture")
+	fmt.Printf("imgPath : " + imgPath)
+	cookie, err := r.Cookie("username")
+	if err == nil {
+		username := cookie.Value
+		userID, err := Database.GetUserID(username)
+		if err != nil {
+			fmt.Println("Error getting user ID:", err)
+		} else {
+			Database.UpdateImgProfile(imgPath, userID)
+			jsonResponse := struct {
+				PhotoProfil string `json:"PhotoProfil"`
+			}{
+				PhotoProfil: imgPath,
 			}
+			w.Header().Set("Content-Type", "application/json")
+			json.NewEncoder(w).Encode(jsonResponse)
 		}
 	}
 }

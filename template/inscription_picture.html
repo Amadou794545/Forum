@@ -2,7 +2,7 @@
 <html lang="fr">
     <head>
         <meta charset="UTF-8">
-        <link rel="stylesheet" href="css/InscriptionPicture.css">
+        <link rel="stylesheet" href="css/inscriptionPicture.css">
         <title>Inscription</title>
     </head>
 
@@ -10,23 +10,26 @@
         <h1>Choisissez votre photo de profil</h1>
 
         <p>Photo de profil actuelle</p>
-        <img id="photo_profil" src="anonyme.jpg" alt="Current profile picture">
+        <img id="profile_picture" src="pictures/Profil/anonyme.jpg" alt="Current profile picture">
   
         <form id="profileForm" action="/inscriptionPicture" method="POST">
-            <select id="profile_picture_select">
-                <option value="../Pictures/Profil/woman1.png">Femme 1</option>
-                <option value="../Pictures/Profil/woman2.png">Femme 2</option>
-                <option value="../Pictures/Profil/woman3.png">Femme 3</option>
-                <option value="../Pictures/Profil/woman4.png">Femme 4</option>
-                <option value="../Pictures/Profil/woman5.png">Femme 5</option>
-                <option value="../Pictures/Profil/man1.png">Homme 1</option>
-                <option value="../Pictures/Profil/man2.png">Homme 2</option>
-                <option value="../Pictures/Profil/man3.png">Homme 3</option>
-                <option value="../Pictures/Profil/man4.png">Homme 4</option>
-                <option value="../Pictures/Profil/man5.png">Homme 5</option>
-            </select>
-            <br><br>
-            <button type="submit">Send</button>
+            <div id="profile_picture_choices">
+                <img class="picture_choice" src="pictures/Profil/woman1.png" alt="Femme 1" onclick="selectProfilePicture(this)">
+                <img class="picture_choice" src="pictures/Profil/woman2.png" alt="Femme 2" onclick="selectProfilePicture(this)">
+                <img class="picture_choice" src="pictures/Profil/woman3.png" alt="Femme 3" onclick="selectProfilePicture(this)">
+                <img class="picture_choice" src="pictures/Profil/woman4.png" alt="Femme 4" onclick="selectProfilePicture(this)">
+                <img class="picture_choice" src="pictures/Profil/woman5.png" alt="Femme 5" onclick="selectProfilePicture(this)">
+                <img class="picture_choice" src="pictures/Profil/man1.png" alt="Homme 1" onclick="selectProfilePicture(this)">
+                <img class="picture_choice" src="pictures/Profil/man2.png" alt="Homme 2" onclick="selectProfilePicture(this)">
+                <img class="picture_choice" src="pictures/Profil/man3.png" alt="Homme 3" onclick="selectProfilePicture(this)">
+                <img class="picture_choice" src="pictures/Profil/man4.png" alt="Homme 4" onclick="selectProfilePicture(this)">
+                <img class="picture_choice" src="pictures/Profil/man5.png" alt="Homme 5" onclick="selectProfilePicture(this)">
+            </div>
+
+            <input type="hidden" id="selectedPicture" name="selectedPicture" value="">
+        
+            <button id="sendButton" type="submit">Send</button>
+
         </form>
         
         <script src="../java-script/updateChoicePicture.js"></script>
