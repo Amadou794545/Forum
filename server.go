@@ -100,40 +100,42 @@ func uploadFile(w http.ResponseWriter, r *http.Request) {
 
 	// Check if an image file is present
 	file, handler, err := r.FormFile("image")
-	if err != nil {
-		if err == http.ErrMissingFile {
-			// No image file provided, handle accordingly
-			fmt.Fprintln(w, "No image file provided.")
-			return
-		}
+	if err != nil && err != http.ErrMissingFile {
 		// Other error occurred while retrieving the file, handle accordingly
 		http.Error(w, "Error retrieving the file", http.StatusBadRequest)
 		return
 	}
-	defer file.Close()
 
-	// Generate a unique number or timestamp to append to the filename
-	uniqueNumber := time.Now().UnixNano()
+	// If an image file is provided, handle it
+	var imagePath string
+	if file != nil {
+		defer file.Close()
 
-	// Get the file extension
-	extension := filepath.Ext(handler.Filename)
+		// Generate a unique number or timestamp to append to the filename
+		uniqueNumber := time.Now().UnixNano()
 
-	// Generate the new filename
-	newFilename := fmt.Sprintf("Post-%d%s", uniqueNumber, extension)
+		// Get the file extension
+		extension := filepath.Ext(handler.Filename)
 
-	// Save the file on the server with the new filename
-	filePath := filepath.Join("./uploads", newFilename)
-	outFile, err := os.Create(filePath)
-	if err != nil {
-		http.Error(w, "Error saving the file", http.StatusInternalServerError)
-		return
-	}
-	defer outFile.Close()
+		// Generate the new filename
+		newFilename := fmt.Sprintf("Post-%d%s", uniqueNumber, extension)
 
-	_, err = io.Copy(outFile, file)
-	if err != nil {
-		http.Error(w, "Error saving the file", http.StatusInternalServerError)
-		return
+		// Save the file on the server with the new filename
+		filePath := filepath.Join("./uploads", newFilename)
+		outFile, err := os.Create(filePath)
+		if err != nil {
+			http.Error(w, "Error saving the file", http.StatusInternalServerError)
+			return
+		}
+		defer outFile.Close()
+
+		_, err = io.Copy(outFile, file)
+		if err != nil {
+			http.Error(w, "Error saving the file", http.StatusInternalServerError)
+			return
+		}
+
+		imagePath = "images/" + newFilename
 	}
 
 	cookie, err := r.Cookie("session")
@@ -150,7 +152,7 @@ func uploadFile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	Database.AddPost(titre, "images/"+newFilename, description, userId, hobbies)
+	Database.AddPost(titre, imagePath, description, userId, hobbies)
 	fmt.Fprintln(w, "File uploaded successfully!")
 }
 
