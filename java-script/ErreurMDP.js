@@ -13,6 +13,13 @@ document.forms['register-form'].onsubmit = function(event) {
       event.preventDefault();
       return false;
     }
+
+    if (!this.email.value.includes("@") || !this.email.value.includes(".")) {
+        document.querySelector(".email-error").innerHTML = "Veuillez saisir une adresse e-mail valide";
+        document.querySelector(".email-error").style.display = "block";
+        event.preventDefault();
+        return false;
+    }
     // password
     var password = this.password.value.trim();
     if (password === "") {
