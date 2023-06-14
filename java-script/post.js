@@ -52,23 +52,28 @@ function ajouterPost() {
     Container.appendChild(newDiv);
     Container.insertAdjacentHTML("beforeend", "<br>");
 
-    // Gestionnaire d'événement pour le bouton "Like"
-    var likeButton = newDiv.querySelector("#likeButton");
-    var likeCount = newDiv.querySelector("#likeCount");
+    var likeButton = document.querySelector("#likeButton");
+    var likeCount = document.querySelector("#likeCount");
     var likeValue = 0;
+    
     likeButton.addEventListener("click", function() {
         likeValue++;
         likeCount.textContent = likeValue;
+        likeButton.classList.toggle("liked");
+        dislikeButton.classList.remove("disliked");
     });
-
-    // Gestionnaire d'événement pour le bouton "Dislike"
-    var dislikeButton = newDiv.querySelector("#dislikeButton");
-    var dislikeCount = newDiv.querySelector("#dislikeCount");
+    
+    var dislikeButton = document.querySelector("#dislikeButton");
+    var dislikeCount = document.querySelector("#dislikeCount");
     var dislikeValue = 0;
+    
     dislikeButton.addEventListener("click", function() {
         dislikeValue++;
         dislikeCount.textContent = dislikeValue;
+        dislikeButton.classList.toggle("disliked");
+        likeButton.classList.remove("liked");
     });
+    
 
     newDiv.appendChild(newTitre);
     newDiv.appendChild(newDescription);
@@ -101,27 +106,3 @@ function toggleDiv() {
         document.getElementById("description").focus(); // Placer le focus sur le champ de saisie "description"
     }
 }
-
-$(document).ready(function() {
-    // Écouteur d'événement pour les modifications des cases à cocher
-    $('#filters input[type="checkbox"]').on('change', function() {
-        var selectedFilters = [];
-        // Parcourir les cases à cocher et récupérer les filtres sélectionnés
-        $('#filters input[type="checkbox"]:checked').each(function() {
-            selectedFilters.push($(this).val());
-        });
-        // Cacher tous les éléments de post par défaut
-        $('#container .post').hide();
-        // Afficher les éléments correspondant aux filtres sélectionnés
-        if (selectedFilters.length > 0) {
-            // Afficher les éléments correspondant aux filtres sélectionnés
-            for (var i = 0; i < selectedFilters.length; i++) {
-                var filter = selectedFilters[i];
-                $('#container .post.' + filter).show();
-            }
-        } else {
-            // Afficher tous les éléments si aucun filtre n'est sélectionné
-            $('#container .post').show();
-        }
-    });
-});

@@ -2,6 +2,7 @@
 <html>
 <head>
     <link rel="stylesheet" href="../assets/index.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js%22%3E"> </script>
     <style>
         .post {
             display: inline-block;
@@ -20,7 +21,6 @@
         <button class="post Sport" data-filter="Sport">
             <img src="/assets/Sport.png" alt="Sport">
         </button>
-        
         <button class="post Informatique" data-filter="Informatique">
           <img src="/assets/Informatique.png" alt="Informatique">
         </button>
@@ -60,8 +60,7 @@
     
     
 <input type="button" id="myInput" onclick="toggleDiv()" value="Publier">
-<div id="myDiv" class="hidden">
-    <form method="POST" onsubmit="ajouterPost(); return false;">
+<div  id="myDiv" class="hidden">
         <label for="titre">Titre:</label><br>
         <input type="text" id="titre" name="titre"><br><br>
         <label for="Description">Description:</label><br>
@@ -85,5 +84,6 @@
         $('h1').css('color', 'blue');
     });
 </script>
+<script src="../java-script/filtres.js"></script>
 <script src="../java-script/post.js"></script>
 </html>
