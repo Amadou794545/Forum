@@ -48,7 +48,7 @@ document.forms['register-form'].onsubmit = function(event) {
         event.preventDefault();
         return false;
     }
-    if (!/[!@#$%^&*]/.test(password)) {
+    if (!/[!@#$%^&*.]/.test(password)) {
         document.querySelector(".password-error").innerHTML = "Le mot de passe doit contenir au moins un caractère spécial";
         document.querySelector(".password-error").style.display = "block";
         event.preventDefault();
