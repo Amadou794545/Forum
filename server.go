@@ -131,7 +131,8 @@ func handlerInscription(w http.ResponseWriter, r *http.Request) {
 				Value: username,
 			}
 			http.SetCookie(w, &cookie)
-			Database.AddUser(email, username, password, "")
+			imgPath := "pictures/Profil/anonyme.jpg"
+			Database.AddUser(email, username, password, imgPath)
 			http.Redirect(w, r, "/inscriptionPicture", http.StatusFound)
 		} else {
 			InscriptionData.Username = username
