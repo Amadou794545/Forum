@@ -4,9 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"html/template"
+	"io"
 	"log"
 	"net/http"
-	"path"
+	"os"
 	"strconv"
 
 	"forum/Database"
@@ -27,18 +28,16 @@ type InscriptionData struct {
 }
 
 func main() {
-	//testPost()
-
 	http.HandleFunc("/api/posts", GetPostsAPI)
 
 	http.HandleFunc("/", handlerIndex)
 	http.HandleFunc("/inscription", handlerInscription)
 	http.HandleFunc("/inscriptionPicture", handlerInscriptionPicture)
-	http.HandleFunc("/inscriptionDada", handlerInscriptionDada)
 	http.HandleFunc("/login", handlerConnexion)
 
 	http.Handle("/css/", http.StripPrefix("/css", http.FileServer(http.Dir("css"))))
 	http.Handle("/pictures/", http.StripPrefix("/pictures", http.FileServer(http.Dir("Pictures"))))
+
 	http.Handle("/java-script/", http.StripPrefix("/java-script", http.FileServer(http.Dir("java-script"))))
 
 	port := ":3030"
@@ -46,32 +45,6 @@ func main() {
 	err := http.ListenAndServe(port, nil)
 	if err != nil {
 		fmt.Println("Erreur :", err)
-	}
-}
-
-func testPost() {
-	for i := 0; i < 150; i++ {
-		if i < 10 {
-			Database.AddPost("test"+strconv.Itoa(i), "", "test", 2, 1)
-		}
-		if i < 25 && i > 9 {
-			Database.AddPost("test2"+strconv.Itoa(i), "", "test", 2, 2)
-		}
-		if i > 24 && i < 50 {
-			Database.AddPost("test3"+strconv.Itoa(i), "", "test", 2, 3)
-		}
-		if i > 49 && i < 75 {
-			Database.AddPost("test4"+strconv.Itoa(i), "", "test", 2, 4)
-		}
-		if i > 74 && i < 100 {
-			Database.AddPost("test5"+strconv.Itoa(i), "", "test", 2, 5)
-		}
-		if i > 99 && i < 125 {
-			Database.AddPost("test6"+strconv.Itoa(i), "", "test", 2, 6)
-		}
-		if i > 124 && i < 150 {
-			Database.AddPost("test7"+strconv.Itoa(i), "", "test", 2, 7)
-		}
 	}
 }
 
@@ -173,47 +146,52 @@ func handlerInscription(w http.ResponseWriter, r *http.Request) {
 }
 
 func handlerInscriptionPicture(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "POST" {
-		err := r.ParseForm()
+	http.ServeFile(w, r, "template/inscription_picture.html")
+
+	imgPath := r.FormValue("selectedPicture")
+	cookie, err := r.Cookie("username")
+
+	if err == nil {
+		username := cookie.Value
+		userID, err := Database.GetUserID(username)
 		if err != nil {
-			http.Error(w, "Failed to parse form data", http.StatusBadRequest)
-			return
-		}
+			fmt.Println("Error getting user ID:", err)
+		} else {
+			// Télécharger file de l'utilisateur
+			fmt.Println("test1")
+			file, fileHeader, err := r.FormFile("uploadInput")
+			if err == http.ErrMissingFile {
+				// Si aucun file à télécharger
+				Database.UpdateImgProfile(imgPath, userID)
+				fmt.Println("test2")
+				// Redirection vers index
+				http.Redirect(w, r, "/", http.StatusFound)
+			} else if err != nil {
+				fmt.Println(err)
+				return
+			}
+			defer file.Close()
 
-		imgPath := r.Form.Get("selectedPicture")
-		filename := "Pictures/Profil/" + path.Base(imgPath)
-
-		cookie, err := r.Cookie("username")
-		if err == nil {
-			username := cookie.Value
-			userID, err := Database.GetUserID(username)
+			newFilePath := "pictures/Profil/" + fileHeader.Filename
+			newFile, err := os.Create(newFilePath)
 			if err != nil {
-				fmt.Println("Error getting user ID:", err)
-				http.Error(w, "Failed to get user ID", http.StatusInternalServerError)
+				fmt.Println(err)
+				return
+			}
+			defer newFile.Close()
+
+			_, err = io.Copy(newFile, file)
+			if err != nil {
+				fmt.Println(err)
 				return
 			}
 
-			Database.UpdateImgProfile(filename, userID)
-			jsonResponse := struct {
-				PhotoProfil string `json:"PhotoProfil"`
-			}{
-				PhotoProfil: filename,
-			}
-			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(jsonResponse)
-			return
+			Database.UpdateImgProfile(newFilePath, userID)
+
+			// Redirection vers index
+			http.Redirect(w, r, "/", http.StatusFound)
 		}
-
-		http.Error(w, "User not found", http.StatusUnauthorized)
-		return
 	}
-
-	// Serve the HTML file for GET request
-	http.ServeFile(w, r, "template/inscription_picture.html")
-}
-
-func handlerInscriptionDada(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "template/inscription_dada.html")
 }
 
 func handlerConnexion(w http.ResponseWriter, r *http.Request) {
