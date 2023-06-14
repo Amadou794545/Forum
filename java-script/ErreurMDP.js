@@ -13,6 +13,13 @@ document.forms['register-form'].onsubmit = function(event) {
       event.preventDefault();
       return false;
     }
+
+    if (!this.email.value.includes("@") || !this.email.value.includes(".")) {
+        document.querySelector(".email-error").innerHTML = "Veuillez saisir une adresse e-mail valide";
+        document.querySelector(".email-error").style.display = "block";
+        event.preventDefault();
+        return false;
+    }
     // password
     var password = this.password.value.trim();
     if (password === "") {
@@ -40,6 +47,22 @@ document.forms['register-form'].onsubmit = function(event) {
       event.preventDefault();
       return false;
     }
+    // confirm password
+    var confirmPassword = this['confirm-password'].value.trim();
+    if (confirmPassword === "") {
+      document.querySelector(".confirm-password-error").innerHTML = "Veuillez réécrire le mot de passe";
+      document.querySelector(".confirm-password-error").style.display = "block";
+      event.preventDefault();
+      return false;
+    }
+    
+    if (password !== confirmPassword) {
+      document.querySelector(".confirm-password-error").innerHTML = "Les mots de passe ne correspondent pas";
+      document.querySelector(".confirm-password-error").style.display = "block";
+      event.preventDefault();
+      return false;
+    }
+
     // All data is valid, allow form submission
     return true;
   };
