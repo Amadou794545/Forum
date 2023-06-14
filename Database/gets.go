@@ -101,7 +101,7 @@ func GetPosts(offset, limit int) ([]Post, error) {
 	defer db.Close()
 
 	// Construct the SQL query with pagination
-	query := fmt.Sprintf("SELECT id_post, title, description, imgPath, id_user, id_hobbie FROM Posts LIMIT %d OFFSET %d", limit, offset)
+	query := fmt.Sprintf("SELECT id_post, title, description, imgPath, id_user, id_hobbie FROM Posts ORDER BY id_post DESC LIMIT %d OFFSET %d", limit, offset)
 
 	rows, err := db.Query(query)
 	if err != nil {
