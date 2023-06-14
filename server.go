@@ -27,6 +27,8 @@ type InscriptionData struct {
 }
 
 func main() {
+	//testPost()
+
 	http.HandleFunc("/api/posts", GetPostsAPI)
 
 	http.HandleFunc("/", handlerIndex)
@@ -37,7 +39,6 @@ func main() {
 
 	http.Handle("/css/", http.StripPrefix("/css", http.FileServer(http.Dir("css"))))
 	http.Handle("/pictures/", http.StripPrefix("/pictures", http.FileServer(http.Dir("Pictures"))))
-
 	http.Handle("/java-script/", http.StripPrefix("/java-script", http.FileServer(http.Dir("java-script"))))
 
 	port := ":3030"
@@ -45,6 +46,32 @@ func main() {
 	err := http.ListenAndServe(port, nil)
 	if err != nil {
 		fmt.Println("Erreur :", err)
+	}
+}
+
+func testPost() {
+	for i := 0; i < 150; i++ {
+		if i < 10 {
+			Database.AddPost("test"+strconv.Itoa(i), "", "test", 2, 1)
+		}
+		if i < 25 && i > 9 {
+			Database.AddPost("test2"+strconv.Itoa(i), "", "test", 2, 2)
+		}
+		if i > 24 && i < 50 {
+			Database.AddPost("test3"+strconv.Itoa(i), "", "test", 2, 3)
+		}
+		if i > 49 && i < 75 {
+			Database.AddPost("test4"+strconv.Itoa(i), "", "test", 2, 4)
+		}
+		if i > 74 && i < 100 {
+			Database.AddPost("test5"+strconv.Itoa(i), "", "test", 2, 5)
+		}
+		if i > 99 && i < 125 {
+			Database.AddPost("test6"+strconv.Itoa(i), "", "test", 2, 6)
+		}
+		if i > 124 && i < 150 {
+			Database.AddPost("test7"+strconv.Itoa(i), "", "test", 2, 7)
+		}
 	}
 }
 
