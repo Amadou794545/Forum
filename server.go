@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"path"
 	"strconv"
 
 	"forum/Database"
@@ -145,26 +146,43 @@ func handlerInscription(w http.ResponseWriter, r *http.Request) {
 }
 
 func handlerInscriptionPicture(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "template/inscription_picture.html")
-	imgPath := r.FormValue("selectedPicture")
-	fmt.Printf("imgPath : " + imgPath)
-	cookie, err := r.Cookie("username")
-	if err == nil {
-		username := cookie.Value
-		userID, err := Database.GetUserID(username)
+	if r.Method == "POST" {
+		err := r.ParseForm()
 		if err != nil {
-			fmt.Println("Error getting user ID:", err)
-		} else {
-			Database.UpdateImgProfile(imgPath, userID)
+			http.Error(w, "Failed to parse form data", http.StatusBadRequest)
+			return
+		}
+
+		imgPath := r.Form.Get("selectedPicture")
+		filename := "Pictures/Profil/" + path.Base(imgPath)
+
+		cookie, err := r.Cookie("username")
+		if err == nil {
+			username := cookie.Value
+			userID, err := Database.GetUserID(username)
+			if err != nil {
+				fmt.Println("Error getting user ID:", err)
+				http.Error(w, "Failed to get user ID", http.StatusInternalServerError)
+				return
+			}
+
+			Database.UpdateImgProfile(filename, userID)
 			jsonResponse := struct {
 				PhotoProfil string `json:"PhotoProfil"`
 			}{
-				PhotoProfil: imgPath,
+				PhotoProfil: filename,
 			}
 			w.Header().Set("Content-Type", "application/json")
 			json.NewEncoder(w).Encode(jsonResponse)
+			return
 		}
+
+		http.Error(w, "User not found", http.StatusUnauthorized)
+		return
 	}
+
+	// Serve the HTML file for GET request
+	http.ServeFile(w, r, "template/inscription_picture.html")
 }
 
 func handlerInscriptionDada(w http.ResponseWriter, r *http.Request) {
