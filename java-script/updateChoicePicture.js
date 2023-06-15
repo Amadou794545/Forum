@@ -17,10 +17,35 @@ function selectDefaultPicture(element) {
     // Prevent the default form submission
     e.preventDefault();
   
-    // Submit the form
+    /* Submit the form
     var profileForm = document.getElementById('profileForm');
-    profileForm.submit();
-  });
+    profileForm.submit();*/
+
+  // Get the form element
+  var profileForm = document.getElementById('profileForm');
+
+  // Create a new FormData object
+  var formData = new FormData(profileForm);
+
+  // Send the form data using fetch
+  fetch('/inscriptionPicture', {
+    method: 'POST',
+    body: formData,
+  })
+    .then(function (response) {
+      // Handle the response here
+      if (response.ok) {
+        // Redirect to the home page or handle the response as needed
+        window.location.href = '/';
+      } else {
+        // Handle the error
+        console.log('Error:', response.status);
+      }
+    })
+    .catch(function (error) {
+      console.log('Error:', error);
+    });
+});
 
 function fileUpload(input) {
   var file = input.files[0];

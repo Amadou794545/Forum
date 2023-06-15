@@ -141,12 +141,24 @@ func handlerInscription(w http.ResponseWriter, r *http.Request) {
 			InscriptionData.ErrorMessage = errorMessage
 		}
 
+		userID, err := Database.GetUserID(username)
+		if err != nil {
+			fmt.Println("Error getting user ID:", err)
+			return
+		}
+		cookies.HandlerCookie(w, r, userID) // Ajout du cookie de session
 		tmpl.Execute(w, InscriptionData)
 	}
 }
 
 func handlerInscriptionPicture(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "template/inscription_picture.html")
+
+	err := r.ParseMultipartForm(32 << 20)
+	if err != nil {
+		fmt.Println("Erreur lors de l'analyse du formulaire multipart :", err)
+		return
+	}
 
 	imgPath := r.FormValue("selectedPicture")
 	cookie, err := r.Cookie("username")
@@ -156,40 +168,39 @@ func handlerInscriptionPicture(w http.ResponseWriter, r *http.Request) {
 		userID, err := Database.GetUserID(username)
 		if err != nil {
 			fmt.Println("Error getting user ID:", err)
-		} else {
-			// Télécharger file de l'utilisateur
-			file, fileHeader, err := r.FormFile("uploadInput")
-			if err == http.ErrMissingFile {
-				// Si aucun file à télécharger
-				Database.UpdateImgProfile(imgPath, userID)
-
-				cookies.HandlerCookie(w, r, userID) // Ajout du cookie de session
-				http.Redirect(w, r, "/", http.StatusFound)
-			} else if err != nil {
-				fmt.Println(err)
-				return
-			}
-			defer file.Close()
-
-			newFilePath := "pictures/Profil/" + fileHeader.Filename
-			newFile, err := os.Create(newFilePath)
-			if err != nil {
-				fmt.Println(err)
-				return
-			}
-			defer newFile.Close()
-
-			_, err = io.Copy(newFile, file)
-			if err != nil {
-				fmt.Println(err)
-				return
-			}
-
-			Database.UpdateImgProfile(newFilePath, userID)
-
-			cookies.HandlerCookie(w, r, userID) // Ajout du cookie de session
-			http.Redirect(w, r, "/", http.StatusFound)
+			return
 		}
+
+		// Récupérer le fichier uploadé
+		file, fileHeader, err := r.FormFile("uploadInput")
+		if err == http.ErrMissingFile {
+			// Si aucun fichier à télécharger
+			Database.UpdateImgProfile(imgPath, userID)
+
+			http.Redirect(w, r, "/", http.StatusFound)
+		} else if err != nil {
+			fmt.Println(err)
+			return
+		}
+		defer file.Close()
+
+		newFilePath := "pictures/Profil/" + fileHeader.Filename
+		newFile, err := os.Create(newFilePath)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		defer newFile.Close()
+
+		_, err = io.Copy(newFile, file)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		Database.UpdateImgProfile(newFilePath, userID)
+
+		http.Redirect(w, r, "/", http.StatusFound)
 	}
 }
 

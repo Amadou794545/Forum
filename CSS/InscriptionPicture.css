@@ -14,9 +14,9 @@
 }
 
 .picture_choice:hover {
-    border: 10px green solid;
+    border: 5px green solid;
 }
 
 .picture_choice:active {
-    border: 10px rgb(69, 173, 69) solid;
+    border: 5px rgb(69, 173, 69) solid;
 }
