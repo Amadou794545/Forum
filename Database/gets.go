@@ -79,18 +79,34 @@ func GetAllPosts() ([]Post, error) {
 	return posts, nil
 }
 
-func GetPostByUser(userID int) {
-	var db *sql.DB
-
-	var err error
-	db, err = sql.Open("sqlite3", "./test.db")
+func GetUserPosts(user_id int) ([]Post, error) {
+	posts := make([]Post, 0)
+	db, err := sql.Open("sqlite3", "./test.db")
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
+	}
+	defer db.Close()
+
+	rows, err := db.Query("SELECT id_post, title, description, imgPath, id_user, id_hobbie FROM posts WHERE id_user = $1", user_id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var post Post
+		err := rows.Scan(&post.ID, &post.Title, &post.Description, &post.ImagePath, &post.UserID, &post.HobbieID)
+		if err != nil {
+			return nil, err
+		}
+		posts = append(posts, post)
 	}
 
-	//TODO
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
 
-	db.Close()
+	return posts, nil
 }
 
 func GetPosts(offset, limit int) ([]Post, error) {
