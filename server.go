@@ -6,8 +6,10 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"os"
 	"path/filepath"
 	"strconv"
+	"time"
 
 	"forum/Database"
 	"forum/cookies"
@@ -157,35 +159,67 @@ func handlerInscription(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func handlerUserPicture(w http.ResponseWriter, r *http.Request) {
-	path := r.FormValue("selectedPicture")
-	filename := filepath.Base(path)
-	fmt.Println(filename)
-	cookie, err := r.Cookie("session")
-	fmt.Println(cookie.Value)
-	if err != nil {
-		fmt.Println("Error retrieving session cookie:", err)
-		return
-	}
-	fmt.Println("test")
-	userID, err := strconv.Atoi(cookie.Value)
-	if err != nil {
-		fmt.Println("Error retrieving userID:", err)
-		return
-	}
-	fmt.Println("test2")
-	fmt.Println(userID)
-	Database.UpdateImgProfile("pictures/Profil/"+filename, userID)
-	http.Redirect(w, r, "/", http.StatusFound)
-}
-
-func uploadUserIMG() {
-
-}
-
 func handlerInscriptionPicture(w http.ResponseWriter, r *http.Request) {
-
 	http.ServeFile(w, r, "template/inscription_picture.html")
+}
+
+func handlerUserPicture(w http.ResponseWriter, r *http.Request) {
+	file, handler, err := r.FormFile("uploadInput")
+	if err != nil && err != http.ErrMissingFile {
+		http.Error(w, "Error retrieving the file", http.StatusBadRequest)
+		return
+	}
+
+	if file != nil { //img uplodée
+		defer file.Close()
+		// Unique nbr
+		uniqueNumber := time.Now().UnixNano()
+		// Get file extension
+		extension := filepath.Ext(handler.Filename)
+		// Generate the new filename
+		newFilename := fmt.Sprintf("Post-%d%s", uniqueNumber, extension)
+		// Get new path
+		filePath := filepath.Join("./Pictures/uploads", newFilename)
+		// Save the file on the server with the new filename
+		outFile, err := os.Create(filePath)
+		if err != nil {
+			http.Error(w, "Error saving the file", http.StatusInternalServerError)
+			return
+		}
+		defer outFile.Close()
+
+		imgPath := "Pictures/uploads/" + newFilename
+		cookie, err := r.Cookie("session")
+		if err != nil {
+			fmt.Println("Error retrieving session cookie:", err)
+			return
+		}
+		userID, err := strconv.Atoi(cookie.Value)
+		if err != nil {
+			fmt.Println("Error retrieving userID:", err)
+			return
+		}
+		Database.UpdateImgProfile(imgPath, userID)
+
+		fmt.Println(imgPath)
+
+	} else { //img par défault
+		path := r.FormValue("selectedPicture")
+		filename := filepath.Base(path)
+		cookie, err := r.Cookie("session")
+		if err != nil {
+			fmt.Println("Error retrieving session cookie:", err)
+			return
+		}
+		userID, err := strconv.Atoi(cookie.Value)
+		if err != nil {
+			fmt.Println("Error retrieving userID:", err)
+			return
+		}
+		Database.UpdateImgProfile("pictures/Profil/"+filename, userID)
+	}
+
+	http.Redirect(w, r, "/", http.StatusFound)
 }
 
 func handlerConnexion(w http.ResponseWriter, r *http.Request) {

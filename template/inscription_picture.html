@@ -27,7 +27,7 @@
                 <img class="picture_choice" src="pictures/Profil/man5.png" alt="Homme 5" onclick="selectDefaultPicture('man5.png')">
             </div>
 
-            <input type="file" id="uploadInput" accept="image/*" onchange="fileUpload(this)">
+            <input type="file" id="uploadInput" name="uploadInput" accept="image/*" onchange="fileUpload(this)">
 
             <input type="hidden" id="selectedPicture" name="selectedPicture" value="">
         
@@ -37,7 +37,11 @@
         
         <script>
             function selectDefaultPicture(filename) {
-                // Set the selected image source as the value of the hidden input field
+                // Update 'profile picture'
+                var profilePicture = document.getElementById('profile_picture');
+                profilePicture.src = newPictureSrc;
+
+                // Update 'uploadInput'
                 document.getElementById("selectedPicture").value = filename;
             }
     </script>

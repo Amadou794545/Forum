@@ -2,11 +2,10 @@ package Database
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 )
 
-func UpdateUserIMG(path string, id_user int) {
+func UpdateImgProfile(imgPath string, userID int) {
 	var db *sql.DB
 
 	var err error
@@ -14,9 +13,7 @@ func UpdateUserIMG(path string, id_user int) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(path)
-	_, err = db.Exec(
-		"UPDATE users SET imgPath = $1 WHERE id_user = $2", path, id_user)
+	_, err = db.Exec("UPDATE Users SET imgPath = $1 WHERE id_user = $2", imgPath, userID)
 	if err != nil {
 		log.Fatal(err)
 	}
