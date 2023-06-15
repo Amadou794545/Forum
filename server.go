@@ -38,6 +38,9 @@ func main() {
 
 	http.HandleFunc("/upload", uploadFile)
 
+	http.HandleFunc("/created", handlerCreated)
+	http.HandleFunc("/api/user/posts", GetUserPostsAPI)
+
 	http.Handle("/css/", http.StripPrefix("/css", http.FileServer(http.Dir("css"))))
 
 	http.Handle("/java-script/", http.StripPrefix("/java-script", http.FileServer(http.Dir("java-script"))))
@@ -154,6 +157,52 @@ func uploadFile(w http.ResponseWriter, r *http.Request) {
 
 	Database.AddPost(titre, imagePath, description, userId, hobbies)
 	fmt.Fprintln(w, "File uploaded successfully!")
+}
+
+func handlerCreated(w http.ResponseWriter, r *http.Request) {
+	if cookies.CheckSessionCookie(r) {
+		_, err := r.Cookie("session")
+		if err != nil {
+			// Handle the error if needed
+			fmt.Println("Error retrieving session cookie:", err)
+			http.Redirect(w, r, "/", http.StatusFound)
+		}
+	}
+	http.ServeFile(w, r, "template/userPage.html")
+}
+
+func GetUserPostsAPI(w http.ResponseWriter, r *http.Request) {
+	cookie, err := r.Cookie("session")
+	if err != nil {
+		// Handle the error if needed
+		fmt.Println("Error retrieving session cookie:", err)
+		http.Redirect(w, r, "/", http.StatusFound)
+	}
+
+	UserID, err := strconv.Atoi(cookie.Value)
+	if err != nil {
+		// Handle the error if needed
+		fmt.Println("Error retrieving cookie value:", err)
+		return
+	}
+
+	// Fetch posts by user ID from the database
+	posts, err := Database.GetUserPosts(UserID)
+	if err != nil {
+		log.Println("Error retrieving user posts:", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	jsonData, err := json.Marshal(posts)
+	if err != nil {
+		log.Println("Error converting to JSON:", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(jsonData)
 }
 
 func handlerIndex(w http.ResponseWriter, r *http.Request) {
