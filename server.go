@@ -158,13 +158,12 @@ func handlerInscriptionPicture(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("Error getting user ID:", err)
 		} else {
 			// Télécharger file de l'utilisateur
-			fmt.Println("test1")
 			file, fileHeader, err := r.FormFile("uploadInput")
 			if err == http.ErrMissingFile {
 				// Si aucun file à télécharger
 				Database.UpdateImgProfile(imgPath, userID)
-				fmt.Println("test2")
-				// Redirection vers index
+
+				cookies.HandlerCookie(w, r, userID) // Ajout du cookie de session
 				http.Redirect(w, r, "/", http.StatusFound)
 			} else if err != nil {
 				fmt.Println(err)
@@ -188,7 +187,7 @@ func handlerInscriptionPicture(w http.ResponseWriter, r *http.Request) {
 
 			Database.UpdateImgProfile(newFilePath, userID)
 
-			// Redirection vers index
+			cookies.HandlerCookie(w, r, userID) // Ajout du cookie de session
 			http.Redirect(w, r, "/", http.StatusFound)
 		}
 	}
