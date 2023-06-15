@@ -32,18 +32,10 @@
             <input type="hidden" id="selectedPicture" name="selectedPicture" value="">
         
             <button id="sendButton" type="submit">Send</button>
+            <a href="/" id="skipButton">Skip</a>
 
         </form>        
         
-        <script>
-            function selectDefaultPicture(filename) {
-                // Update 'profile picture'
-                var profilePicture = document.getElementById('profile_picture');
-                profilePicture.src = newPictureSrc;
-
-                // Update 'uploadInput'
-                document.getElementById("selectedPicture").value = filename;
-            }
-    </script>
+        <script src="updateChoicePicture.js"></script>
     </body>
 </html>

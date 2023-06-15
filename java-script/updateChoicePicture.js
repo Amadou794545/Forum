@@ -1,69 +1,24 @@
-function selectDefaultPicture(element) {
-    // Get the source of the clicked picture
-    var newPictureSrc = element.src;
-  
-    // Update the profile picture
-    var profilePicture = document.getElementById('profile_picture');
-    profilePicture.src = newPictureSrc;
-  
-    // Update the selected picture value in the hidden input field
-    var selectedPictureInput = document.querySelector('input[name="selectedPicture"]');
-    selectedPictureInput.value = newPictureSrc;
-  }
-  
-  // Add event listener to the form submit button
-  var sendButton = document.getElementById('sendButton');
-  sendButton.addEventListener('click', function(e) {
-    // Prevent the default form submission
-    e.preventDefault();
-  
-    /* Submit the form
-    var profileForm = document.getElementById('profileForm');
-    profileForm.submit();*/
+function selectDefaultPicture(filename) {
+  var newPictureSrc = "pictures/Profil/" + filename;
+  // Update 'profile picture'
+  var profilePicture = document.getElementById('profile_picture');
+  profilePicture.src = newPictureSrc;
 
-  // Get the form element
-  var profileForm = document.getElementById('profileForm');
-
-  // Create a new FormData object
-  var formData = new FormData(profileForm);
-
-  // Send the form data using fetch
-  fetch('/inscriptionPicture', {
-    method: 'POST',
-    body: formData,
-  })
-    .then(function (response) {
-      // Handle the response here
-      if (response.ok) {
-        // Redirect to the home page or handle the response as needed
-        window.location.href = '/';
-      } else {
-        // Handle the error
-        console.log('Error:', response.status);
-      }
-    })
-    .catch(function (error) {
-      console.log('Error:', error);
-    });
-});
+  // Update 'uploadInput'
+  document.getElementById("selectedPicture").value = filename;
+}
 
 function fileUpload(input) {
-  var file = input.files[0];
-  var reader = new FileReader();
+  if (input.files && input.files[0]) {
+      var reader = new FileReader();
 
-  reader.onload = function(e) {
-    // Get the data URL of the uploaded image
-    var newPictureSrc = e.target.result;
+      reader.onload = function(e) {
+      // MAJ source de img de profil
+      document.getElementById('profile_picture').src = e.target.result;
+      // Update 'selectedPicture' -> indique que img perso uploadée
+      document.getElementById("selectedPicture").value = "";
+      };
 
-    // Update the profile picture
-    var profilePicture = document.getElementById('profile_picture');
-    profilePicture.src = newPictureSrc;
-
-    // Update the selected picture value in the hidden input field
-    var selectedPictureInput = document.querySelector('input[name="selectedPicture"]');
-    selectedPictureInput.value = newPictureSrc;
-  };
-
-  reader.readAsDataURL(file);
+      reader.readAsDataURL(input.files[0]);
+  }
 }
-  

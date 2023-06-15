@@ -164,6 +164,13 @@ func handlerInscriptionPicture(w http.ResponseWriter, r *http.Request) {
 }
 
 func handlerUserPicture(w http.ResponseWriter, r *http.Request) {
+	maxFileSize := int64(10 * 1024 * 1024)
+	err := r.ParseMultipartForm(maxFileSize)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
 	file, handler, err := r.FormFile("uploadInput")
 	if err != nil && err != http.ErrMissingFile {
 		http.Error(w, "Error retrieving the file", http.StatusBadRequest)
@@ -200,8 +207,6 @@ func handlerUserPicture(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		Database.UpdateImgProfile(imgPath, userID)
-
-		fmt.Println(imgPath)
 
 	} else { //img par défault
 		path := r.FormValue("selectedPicture")
