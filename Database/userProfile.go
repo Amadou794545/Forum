@@ -2,6 +2,7 @@ package Database
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -15,8 +16,8 @@ func UpdateImgProfile(imgPath string, userID int) {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	_, err = db.Exec("UPDATE Users SET imgPath = ? WHERE id_user = ?", imgPath, userID)
+	fmt.Println(imgPath)
+	_, err = db.Exec("UPDATE Users SET imgPath = $1 WHERE id_user = $2", imgPath, userID)
 	if err != nil {
 		log.Fatal(err)
 	}

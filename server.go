@@ -4,10 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"html/template"
-	"io"
 	"log"
 	"net/http"
-	"os"
+	"path/filepath"
 	"strconv"
 
 	"forum/Database"
@@ -34,6 +33,7 @@ func main() {
 	http.HandleFunc("/inscription", handlerInscription)
 	http.HandleFunc("/inscriptionPicture", handlerInscriptionPicture)
 	http.HandleFunc("/login", handlerConnexion)
+	http.HandleFunc("/userPicture", handlerUserPicture)
 
 	http.Handle("/css/", http.StripPrefix("/css", http.FileServer(http.Dir("css"))))
 	http.Handle("/pictures/", http.StripPrefix("/pictures", http.FileServer(http.Dir("Pictures"))))
@@ -134,6 +134,12 @@ func handlerInscription(w http.ResponseWriter, r *http.Request) {
 			http.SetCookie(w, &cookie)
 			imgPath := "pictures/Profil/anonyme.jpg"
 			Database.AddUser(email, username, password, imgPath)
+			userID, err := Database.GetUserID(username)
+			if err != nil {
+				fmt.Println("Error getting user ID:", err)
+				return
+			}
+			cookies.HandlerCookie(w, r, userID)
 			http.Redirect(w, r, "/inscriptionPicture", http.StatusFound)
 		} else {
 			InscriptionData.Username = username
@@ -151,57 +157,35 @@ func handlerInscription(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func handlerInscriptionPicture(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "template/inscription_picture.html")
-
-	err := r.ParseMultipartForm(32 << 20)
+func handlerUserPicture(w http.ResponseWriter, r *http.Request) {
+	path := r.FormValue("selectedPicture")
+	filename := filepath.Base(path)
+	fmt.Println(filename)
+	cookie, err := r.Cookie("session")
+	fmt.Println(cookie.Value)
 	if err != nil {
-		fmt.Println("Erreur lors de l'analyse du formulaire multipart :", err)
+		fmt.Println("Error retrieving session cookie:", err)
 		return
 	}
-
-	imgPath := r.FormValue("selectedPicture")
-	cookie, err := r.Cookie("username")
-
-	if err == nil {
-		username := cookie.Value
-		userID, err := Database.GetUserID(username)
-		if err != nil {
-			fmt.Println("Error getting user ID:", err)
-			return
-		}
-
-		// Récupérer le fichier uploadé
-		file, fileHeader, err := r.FormFile("uploadInput")
-		if err == http.ErrMissingFile {
-			// Si aucun fichier à télécharger
-			Database.UpdateImgProfile(imgPath, userID)
-
-			http.Redirect(w, r, "/", http.StatusFound)
-		} else if err != nil {
-			fmt.Println(err)
-			return
-		}
-		defer file.Close()
-
-		newFilePath := "pictures/Profil/" + fileHeader.Filename
-		newFile, err := os.Create(newFilePath)
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		defer newFile.Close()
-
-		_, err = io.Copy(newFile, file)
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-
-		Database.UpdateImgProfile(newFilePath, userID)
-
-		http.Redirect(w, r, "/", http.StatusFound)
+	fmt.Println("test")
+	userID, err := strconv.Atoi(cookie.Value)
+	if err != nil {
+		fmt.Println("Error retrieving userID:", err)
+		return
 	}
+	fmt.Println("test2")
+	fmt.Println(userID)
+	Database.UpdateImgProfile("pictures/Profil/"+filename, userID)
+	http.Redirect(w, r, "/", http.StatusFound)
+}
+
+func uploadUserIMG() {
+
+}
+
+func handlerInscriptionPicture(w http.ResponseWriter, r *http.Request) {
+
+	http.ServeFile(w, r, "template/inscription_picture.html")
 }
 
 func handlerConnexion(w http.ResponseWriter, r *http.Request) {
