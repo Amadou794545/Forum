@@ -36,6 +36,10 @@ func main() {
 	http.HandleFunc("/inscriptionPicture", handlerInscriptionPicture)
 	http.HandleFunc("/login", handlerConnexion)
 	http.HandleFunc("/userPicture", handlerUserPicture)
+	http.HandleFunc("/deconnect", handlerDeconnect)
+	http.HandleFunc("/wall", handlerWall)
+	http.HandleFunc("/liked", handlerLiked)
+	http.HandleFunc("/settings", handlerSettings)
 
 	http.Handle("/css/", http.StripPrefix("/css", http.FileServer(http.Dir("css"))))
 	http.Handle("/pictures/", http.StripPrefix("/pictures", http.FileServer(http.Dir("Pictures"))))
@@ -141,7 +145,7 @@ func handlerInscription(w http.ResponseWriter, r *http.Request) {
 				fmt.Println("Error getting user ID:", err)
 				return
 			}
-			cookies.HandlerCookie(w, r, userID)
+			cookies.HandlerSessionCookie(w, r, userID)
 			http.Redirect(w, r, "/inscriptionPicture", http.StatusFound)
 		} else {
 			InscriptionData.Username = username
@@ -154,7 +158,7 @@ func handlerInscription(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("Error getting user ID:", err)
 			return
 		}
-		cookies.HandlerCookie(w, r, userID) // Ajout du cookie de session
+		cookies.HandlerSessionCookie(w, r, userID) // Ajout du cookie de session
 		tmpl.Execute(w, InscriptionData)
 	}
 }
@@ -184,7 +188,7 @@ func handlerUserPicture(w http.ResponseWriter, r *http.Request) {
 		// Get file extension
 		extension := filepath.Ext(handler.Filename)
 		// Generate the new filename
-		newFilename := fmt.Sprintf("Post-%d%s", uniqueNumber, extension)
+		newFilename := fmt.Sprintf("Img-%d%s", uniqueNumber, extension)
 		// Get new path
 		filePath := filepath.Join("./Pictures/uploads", newFilename)
 		// Save the file on the server with the new filename
@@ -247,7 +251,7 @@ func handlerConnexion(w http.ResponseWriter, r *http.Request) {
 				http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 				return
 			}
-			cookies.HandlerCookie(w, r, userID) // Ajout du cookie de session
+			cookies.HandlerSessionCookie(w, r, userID) // Ajout du cookie de session
 			http.Redirect(w, r, "/", http.StatusFound)
 			return
 		} else {
@@ -257,4 +261,21 @@ func handlerConnexion(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	tmpl.Execute(w, loginData)
+}
+
+func handlerDeconnect(w http.ResponseWriter, r *http.Request) {
+	cookies.DeleteAllCookies(w, r)
+	http.Redirect(w, r, "/", http.StatusFound)
+}
+
+func handlerWall(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "template/wall.html")
+}
+
+func handlerLiked(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "template/liked.html")
+}
+
+func handlerSettings(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "template/settings.html")
 }

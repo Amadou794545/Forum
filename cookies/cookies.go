@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func HandlerCookie(w http.ResponseWriter, r *http.Request, userID int) {
+func HandlerSessionCookie(w http.ResponseWriter, r *http.Request, userID int) {
 	cookie := &http.Cookie{
 		Name:    "session",
 		Value:   strconv.Itoa(userID),
@@ -39,4 +39,12 @@ func UpdateSessionExpiration(w http.ResponseWriter, r *http.Request) {
 
 	// Réécriture du cookie dans la réponse HTTP
 	http.SetCookie(w, cookie)
+}
+
+func DeleteAllCookies(w http.ResponseWriter, r *http.Request) {
+	cookies := r.Cookies()
+	for _, cookie := range cookies {
+		cookie.MaxAge = -1
+		http.SetCookie(w, cookie)
+	}
 }
