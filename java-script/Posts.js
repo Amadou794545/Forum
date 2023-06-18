@@ -80,8 +80,7 @@ function post() {
 
     var comContent = `
     <div id="myDivCom" style="display: none;">
-        <!-- Contenu de la div des commentaires -->
-        <input type="text" id="Description" placeholder="Saisissez votre commentaire...">
+        <input type="text" id="Comments" placeholder="Saisissez votre commentaire...">
         <button onclick="displayComment()">Envoyer</button>
     </div>
   `;
@@ -94,6 +93,8 @@ function post() {
     commentButton.setAttribute("id", "commentButton");
     commentButton.textContent = "Commentaire";
     commentButton.addEventListener("click", toggleDivCom);
+
+
 
     newDivComm.appendChild(commentButton);
 
@@ -145,7 +146,7 @@ function toggleDivCom() {
         }
     } else {
         div.style.display = "block";
-        document.getElementById("Description").focus(); // Placer le focus sur le champ de saisie "message"
+        document.getElementById("Comments"); // Placer le focus sur le champ de saisie "message"
 
         // Afficher toutes les div des commentaires précédemment créées
         for (var i = 0; i < commentDivs.length; i++) {
@@ -154,8 +155,42 @@ function toggleDivCom() {
     }
 }
 
+// function displayComment() {
+//     var commentInput = document.getElementById("Comments");
+//     var comment =  commentInput.value;
+//
+//     if (comment) {
+//         var commentContainer = document.createElement("div");
+//         commentContainer.classList.add("comment-container"); // Ajouter la classe CSS
+//
+//         var commentText = document.createElement("p");
+//         commentText.textContent = comment;
+//
+//         commentContainer.appendChild(commentText);
+//
+//         var postContainer = document.getElementById("div-Comm");
+//         postContainer.appendChild(commentContainer);
+//
+//         commentInput.value = "";
+//     }
+// }
+
 function displayComment() {
-    var commentInput = document.getElementById("Description");
+    var commentInput = document.getElementById("Comments").value;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/submit", true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            console.log(xhr.responseText);
+        }
+    };
+    var data = JSON.stringify({ comment: commentInput });
+    xhr.send(data);
+
+
+    var commentInput = document.getElementById("Comments");
     var comment =  commentInput.value;
 
     if (comment) {

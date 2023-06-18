@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -18,7 +19,7 @@ func main() {
 	http.HandleFunc("/inscription", Inscription)
 	http.HandleFunc("/", Index)
 	http.HandleFunc("/upload", uploadFile)
-
+	http.HandleFunc("/submit", handleCommentSubmit)
 	// Lance le serveur
 	port := ":3030"
 	fmt.Printf("Serveur en cours d'exécution sur le port %s\n", port)
@@ -26,6 +27,34 @@ func main() {
 	if err != nil {
 		fmt.Println("Erreur :", err)
 	}
+}
+func handleCommentSubmit(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, "Error reading request body", http.StatusInternalServerError)
+		return
+	}
+
+	// Parse the JSON data
+	type Comment struct {
+		Text string `json:"comment"`
+	}
+	var comment Comment
+	err = json.Unmarshal(body, &comment)
+	if err != nil {
+		http.Error(w, "Error parsing JSON data", http.StatusBadRequest)
+		return
+	}
+
+	fmt.Println("Comment:", comment)
+
+	// Send a response to the browser
+	fmt.Fprint(w, "Comment submitted successfully!")
 }
 
 func Index(w http.ResponseWriter, r *http.Request) {
