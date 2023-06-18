@@ -10,6 +10,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"time"
 
 	"forum/Database"
@@ -47,6 +48,8 @@ func main() {
 
 	http.Handle("/images/", http.StripPrefix("/images", http.FileServer(http.Dir("uploads"))))
 
+	http.Handle("/Pictures/", http.StripPrefix("/Pictures", http.FileServer(http.Dir("Pictures"))))
+
 	port := ":3030"
 	fmt.Printf("Serveur en cours d'exécution sur le port %s\n", port)
 	err := http.ListenAndServe(port, nil)
@@ -58,6 +61,21 @@ func main() {
 func GetPostsAPI(w http.ResponseWriter, r *http.Request) {
 	page := r.URL.Query().Get("page")
 	limit := r.URL.Query().Get("limit")
+	filterValues := r.URL.Query().Get("filters")
+	fmt.Println("servertest")
+	fmt.Println(filterValues)
+	fmt.Println("servertest")
+
+	var filters []int
+	if filterValues != "" {
+		filterStrings := strings.Split(filterValues, ",")
+		for _, filterString := range filterStrings {
+			filterInt, err := strconv.Atoi(filterString)
+			if err == nil {
+				filters = append(filters, filterInt)
+			}
+		}
+	}
 
 	// Convert page and limit values to integers
 	pageNum, _ := strconv.Atoi(page)
@@ -67,7 +85,7 @@ func GetPostsAPI(w http.ResponseWriter, r *http.Request) {
 	offset := (pageNum - 1) * limitNum
 
 	// Fetch posts from the database with pagination
-	posts, err := Database.GetPosts(offset, limitNum)
+	posts, err := Database.GetPosts(offset, limitNum, filters)
 	if err != nil {
 		log.Println("Erreur lors de la récupération des posts :", err)
 		http.Error(w, "Erreur interne du serveur", http.StatusInternalServerError)

@@ -1,3 +1,4 @@
+
 function toggleDiv() {
   var div = document.getElementById("myDiv");
   if (div.style.display === "block") {
@@ -63,9 +64,6 @@ function post() {
     dislikeValue++;
     dislikeCount.textContent = dislikeValue;
   });
-
-
-
   let currentPag= 0;
   const postsPerPag =1
   fetch(`/api/posts?page=${currentPag}&limit=${postsPerPag}`)
@@ -81,13 +79,6 @@ function post() {
           newDiv.appendChild(postElement);
         })
       })
-
-
-
-
-
-
-
   document.getElementById("description").value = "";
   document.getElementById("titre").value = "";
   document.getElementById("image").value = "";
@@ -95,59 +86,91 @@ function post() {
 
 
 
+
 let currentPage = 1;
 const postsPerPage = 25;
 
+$(document).ready(function() {
+  
+  var errorContainer = $('#errorContainer'); // Error message container
 
+  $('#filterform').submit(function(event) {
+    event.preventDefault(); // Prevent the default form submission
+    clearallpost();
+    currentPage = 1;
+    fetchPosts();
+    window.addEventListener('scroll', scrollListener);
+})});
 
-function fetchPosts() {
-
-
-  fetch(`/api/posts?page=${currentPage}&limit=${postsPerPage}`)
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        // Update the UI to display the posts
-        const postContainer = document.getElementById('postContainer');
-        data.forEach(post => {
-          const postElement = document.createElement('div');
-          postElement.className = 'div-item';
-          postElement.innerHTML = `
-          <h3 class="Post-Title">${post.Title}</h3>
-          <p class="Post-Desc">${post.Description}</p>
-          <img src="${post.ImagePath}" alt="Post Image" class="Post-IMG">
-                    <input type="hidden" value="${post.ID}">
-
-        `;
-          postContainer.appendChild(postElement);
-        });
-        // Increment the current page number
-        currentPage++;
-        // Check if there are more posts to load
-        if (data.length < postsPerPage) {
-          // Display the "The End" message
-          const endMessage = document.createElement('h2');
-          endMessage.textContent = 'The End';
-          postContainer.appendChild(endMessage);
-          // Remove the scroll listener since there are no more posts
-          window.removeEventListener('scroll', scrollListener);
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+function clearallpost() {
+  const postContainer = document.getElementById('postContainer');
+  postContainer.innerHTML = "";
 }
-// Function to check if the user has scrolled to the bottom of the page
-function isScrolledToBottom() {
-  return window.innerHeight + window.scrollY >= document.body.offsetHeight;
-}
-// Event listener for scroll events
+
 function scrollListener() {
   if (isScrolledToBottom()) {
     fetchPosts();
   }
 }
+
 // Attach the scroll listener to the window
-window.addEventListener('scroll', scrollListener);
+
+
+// Function to fetch posts from the server
+function fetchPosts() {
+  // Send a GET request to the server to retrieve the posts
+  var filters = [];
+  $('input[type="checkbox"]:checked').each(function() {
+    filters.push($(this).val());
+  });
+  console.log(filters)
+
+  fetch(`/api/posts?page=${currentPage}&limit=${postsPerPage}&filters=${filters}`)
+    .then(response => response.json())
+    .then(data => {
+      // Process the retrieved post data
+      console.log(data); // Print the data to the console as an example
+
+      // Update the UI to display the posts
+      const postContainer = document.getElementById('postContainer');
+      data.forEach(post => {
+        const postElement = document.createElement('div');
+        postElement.className = 'post';
+        postElement.innerHTML = `
+          <h3 class="Post-Title">${post.Title}</h3>
+          <p class="Post-Desc">${post.Description}</p>
+          <img src="${post.ImagePath}" alt="Post Image" class="Post-IMG">
+        `;
+        postContainer.appendChild(postElement);
+      });
+
+      // Increment the current page number
+      currentPage++;
+
+      // Check if there are more posts to load
+      if (data.length < postsPerPage) {
+        // Display the "The End" message
+        const endMessage = document.createElement('h2');
+        endMessage.textContent = 'The End';
+        postContainer.appendChild(endMessage);
+
+        // Remove the scroll listener since there are no more posts
+        window.removeEventListener('scroll', scrollListener);
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+}
+
+// Function to check if the user has scrolled to the bottom of the page
+function isScrolledToBottom() {
+  return window.innerHeight + window.scrollY >= document.body.offsetHeight;
+}
+
+// Event listener for scroll events
+
+
 // Initial call to fetch posts when the page loads
 fetchPosts();
+window.addEventListener('scroll', scrollListener);

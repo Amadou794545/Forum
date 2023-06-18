@@ -4,7 +4,43 @@
     <link rel="stylesheet" href="css/index.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-<body>
+<body class="backcolor2">
+  <div id="filterDiv" class="filter">
+    <form id="filterform">
+    <div class="filter-box backcolor1">
+      <input type="checkbox" id="cinema" name="cinema" value="1">
+      <label for="cinema"><img src="Pictures/Cinema.png" alt="cinema" class="icon">Cinema</label>
+    </div>
+    <div class="filter-box backcolor1">
+      <input type="checkbox" id="cuisine" name="cuisine" value="2">
+      <label for="cuisine"><img src="Pictures/Cuisine.png" alt="cuisine" class="icon">Cuisine</label>
+    </div>
+    <div class="filter-box backcolor1">
+      <input type="checkbox" id="informatique" name="informatique" value="3" >
+      <label for="informatique"><img src="Pictures/Informatique.png" alt="Informatique" class="icon">Informatique</label>
+    </div>
+    <div class="filter-box backcolor1">
+      <input type="checkbox" id="jeux" name="jeux" value="4">
+      <label for="jeux"><img src="Pictures/Jeux.png" alt="Jeux" class="icon">Jeux</label>
+    </div>
+    <div class="filter-box backcolor1">
+      <input type="checkbox" id="lecture" name="lecture" value="5">
+      <label for="lecture"><img src="Pictures/Lecture.png" alt="Lecture" class="icon">Lecture</label>
+    </div>
+    <div class="filter-box backcolor1">
+      <input type="checkbox" id="musique" name="musique" value="6">
+      <label for="musique"><img src="Pictures/musique.png" alt="musique" class="icon">Musique</label>
+    </div>
+    <div class="filter-box backcolor1">
+      <input type="checkbox" id="sport" name="sport" value="7">
+      <label for="sport"><img src="Pictures/sport.png" alt="sport" class="icon">Sport</label>
+    </div>
+
+    <input type="submit" value="Filtrer" >
+    </form>
+  </div>
+  
+
     <input type="button" id="myInput" value="Publier" onclick="toggleDiv()">
     <div id="myDiv" class="hidden">
         <form id="uploadForm">
@@ -15,8 +51,8 @@
             <div>
                 <input type="radio" id="sport" name="dada" value="1" checked>
                 <label for="sport">Sport</label>
-                <input type="radio" id="informatique" name="dada" value="2">
-                <label for="informatique">Informatique</label>
+                <input type="radio" id="Informatique" name="dada" value="2">
+                <label for="Informatique">Informatique</label>
                 <input type="radio" id="Cuisine" name="dada" value="3">
                 <label for="Cuisine">Cuisine</label>
                 <input type="radio" id="Cinema" name="dada" value="4">
@@ -40,13 +76,14 @@
     </form>
     <div class="postContainer" id="postContainer"></div>
     <script src="../java-script/post.js"></script>
+    <script src="../java-script/filtre.js"></script>
     <script>
         $(document).ready(function() {
             var errorContainer = $('#errorContainer'); // Error message container
           
             $('#uploadForm').submit(function(event) {
               event.preventDefault(); // Prevent the default form submission
-          
+
               // Get the form data
               var titre = $('#titre').val();
               var description = $('#description').val();
