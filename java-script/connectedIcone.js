@@ -6,22 +6,18 @@ window.addEventListener('DOMContentLoaded', () => {
     const sessionCookie = document.cookie.split(';').find(cookie => cookie.trim().startsWith('session'));
 
     if (sessionCookie) { // Utilisateur connecté
-        const profileImage = document.createElement('img');
-        profileImage.src = "picture/Profil/anonyme.jpg"; //TODO get user img by API
-        profileIcon.appendChild(profileImage);
+        const unconnectedSection = document.querySelector('.unconnected');
+        unconnectedSection.style.display = 'none';
+    
+        const connectedSection = document.querySelector('.connected');
+        connectedSection.style.display = 'block';
     } else { // Utilisateur non connecté
-        const registerButton = document.createElement('a');
-        registerButton.href = '/inscription';
-        registerButton.classList.add('button');
-        registerButton.textContent = "S'inscrire";
-        userSection.appendChild(registerButton);
-
-        const loginButton = document.createElement('a');
-        loginButton.href = '/login';
-        loginButton.classList.add('button');
-        loginButton.textContent = 'Se connecter';
-        userSection.appendChild(loginButton);
-    }
+        const connectedSection = document.querySelector('.connected');
+        connectedSection.style.display = 'none';
+    
+        const unconnectedSection = document.querySelector('.unconnected');
+        unconnectedSection.style.display = 'block';
+    }    
 });
 
 function toggleMenu() {

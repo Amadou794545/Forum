@@ -28,6 +28,10 @@ type InscriptionData struct {
 	ErrorMessage string
 }
 
+type ImgPathData struct {
+	ImgPath string
+}
+
 func main() {
 	http.HandleFunc("/api/posts", GetPostsAPI)
 
@@ -85,27 +89,38 @@ func GetPostsAPI(w http.ResponseWriter, r *http.Request) {
 }
 
 func handlerIndex(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path == "/" {
-		if cookies.CheckSessionCookie(r) {
-			cookie, err := r.Cookie("session")
-			if err != nil {
-				fmt.Println("Error retrieving session cookie:", err)
-				return
-			}
+	tmpl := template.Must(template.ParseFiles("./template/index.html"))
 
-			userID := cookie.Value
-			username, err := Database.GetUserUsername(userID)
-			if err != nil {
-				fmt.Println("Error retrieving username:", err)
-				return
-			}
+	imgPathDta := ImgPathData{
+		ImgPath: "",
+	}
 
-			cookies.UpdateSessionExpiration(w, r) // Reset la date de péremption du cookie
-			fmt.Println("Bienvenue", username)
+	if cookies.CheckSessionCookie(r) {
+		cookie, err := r.Cookie("session")
+		if err != nil {
+			fmt.Println("Error retrieving session cookie :", err)
+			return
 		}
 
-		http.ServeFile(w, r, "template/index.html")
+		userID := cookie.Value
+		username, err := Database.GetUserUsername(userID)
+		if err != nil {
+			fmt.Println("Error retrieving username :", err)
+			return
+		}
+
+		cookies.UpdateSessionExpiration(w, r) // Reset la date de péremption du cookie
+		fmt.Println("Bienvenue", username)
+
+		imgPathDta.ImgPath, err = Database.GetUserImg(userID)
+
+		if err != nil {
+			fmt.Println("Error retrieving imgPath :", err)
+			return
+		}
 	}
+
+	tmpl.Execute(w, imgPathDta)
 }
 
 func handlerInscription(w http.ResponseWriter, r *http.Request) {

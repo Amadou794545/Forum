@@ -11,6 +11,15 @@
     <header>
         <div id="user-section">
             <div class="profile-icon" onclick="toggleMenu()"></div>
+
+            <div class="unconnected">
+                <a class="button" href="/inscription">S'inscrire</a>
+                <a class="button" href="/login">Se connecter</a>
+            </div> 
+
+            <div class="connected" onclick="toggleMenu()">
+                <img src={{.ImgPath}}>
+            </div>
             <div id="menu" style="display:none;">
                 <ul>
                     <li><a href="/wall">Mon mur</a></li>
@@ -21,8 +30,6 @@
             </div>
         </div>
     </header>
-    
-    <h2>Hello</h2>
 
     <script src="../java-script/connectedIcone.js"></script>
 </body>

@@ -48,6 +48,23 @@ func GetUserUsername(userID string) (string, error) {
 	return username, nil
 }
 
+func GetUserImg(userID string) (string, error) {
+	var imgPath string
+
+	db, err := sql.Open("sqlite3", "./test.db")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	err = db.QueryRow("SELECT imgPath FROM Users WHERE id_user = ?", userID).Scan(&imgPath)
+	if err != nil {
+		return "", err
+	}
+
+	return imgPath, nil
+}
+
 func GetAllPosts() ([]Post, error) {
 	var db *sql.DB
 
