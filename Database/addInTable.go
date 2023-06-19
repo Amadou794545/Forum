@@ -58,7 +58,7 @@ func AddPost(title string, imagePath string, description string, userID int, hob
 	db.Close()
 }
 
-func AddComment(description string, userID int, postID int) {
+func AddComment(description string, userID int, postID string) {
 	var db *sql.DB
 
 	var err error

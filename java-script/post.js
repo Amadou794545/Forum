@@ -11,15 +11,30 @@ function post() {
   var description = document.getElementById("description").value;
   var titre = document.getElementById("titre").value;
   var image = document.getElementById("image").files[0];
+
   var Container = document.getElementById("postContainer");
+
+  // Création de la div principale
   var newDiv = document.createElement("div");
+
   var newTitre = document.createElement("h1");
   newTitre.className = 'Post-Title';
+
   var newDescription = document.createElement("p");
   newDescription.className = 'Post-Desc';
+
   var newImage = document.createElement("img");
   newTitre.textContent = "Titre : " + titre;
+
   newDescription.textContent = "Description : " + description;
+  // Création de la div newDivPost
+  var newDivPost = document.createElement("div");
+  newDivPost.classList.add("div-Post");
+  // Création de la div newDivComm
+  var newDivComm = document.createElement("div");
+  newDivComm.classList.add("div-Comm");
+  newDivComm.setAttribute("id","div-Comm")
+
   // Ajouter des classes CSS
   newTitre.classList.add("titre-style");
   newDiv.classList.add("div-item");
@@ -31,16 +46,16 @@ function post() {
           <span id="dislikeCount">0</span>
       </div>
   `;
-  newDiv.innerHTML = postContent;
-  newDiv.appendChild(newTitre);
-  newDiv.appendChild(newDescription);
+  newDivPost.innerHTML = postContent;
+  newDivPost.appendChild(newTitre);
+  newDivPost.appendChild(newDescription);
   // Redimensionner et afficher l'image
   if (image) {
     var reader = new FileReader();
     reader.onload = function (event) {
       newImage.src = event.target.result; // Définir la source de l'image
       newImage.classList.add("image-style"); // Ajouter une classe CSS pour styliser l'image
-      newDiv.appendChild(newImage); // Ajouter l'élément <img> à la div nouvellement créée
+      newDivPost.appendChild(newImage); // Ajouter l'élément <img> à la div nouvellement créée
     };
     reader.readAsDataURL(image); // Lire le fichier d'image en tant qu'URL de données
   }
@@ -48,20 +63,12 @@ function post() {
   Container.insertBefore(newDiv, firstDiv); // Insérer la nouvelle div avant le premier enfant existant
   Container.insertAdjacentHTML("beforeend", "<br>");
   // Gestionnaire d'événement pour le bouton "Like"
-  var likeButton = newDiv.querySelector("#likeButton");
-  var likeCount = newDiv.querySelector("#likeCount");
+  var likeButton = newDivPost.querySelector("#likeButton");
+  var likeCount = newDivPost.querySelector("#likeCount");
   var likeValue = 0;
   likeButton.addEventListener("click", function () {
     likeValue++;
     likeCount.textContent = likeValue;
-  });
-  // Gestionnaire d'événement pour le bouton "Dislike"
-  var dislikeButton = newDiv.querySelector("#dislikeButton");
-  var dislikeCount = newDiv.querySelector("#dislikeCount");
-  var dislikeValue = 0;
-  dislikeButton.addEventListener("click", function () {
-    dislikeValue++;
-    dislikeCount.textContent = dislikeValue;
   });
 
 
@@ -75,24 +82,89 @@ function post() {
         // Update the UI to display the posts
         data.forEach(post => {
           const postElement = document.createElement('div');
-          postElement.innerHTML = `
-          <input name="ID"  type="hidden" value="${post.ID}">
+          postElement.innerHTML = `<form id="idpost"> 
+<input name="ID"  type="hidden" value="${post.ID}">
+</form>
         `;
-          newDiv.appendChild(postElement);
+          newDivPost.appendChild(postElement);
         })
       })
 
+  $('#idpost').submit(function(event) {
+    event.preventDefault(); // Prevent the default form submission
+    //appel d'une ou plusieurs func en js
+  });
+//commentaire
+  var comContent = `
+    <div id="myDivCom" style="display: none;">
+        <input type="text" id="Comments" placeholder="Saisissez votre commentaire...">
+        <button onclick="displayComment()">Envoyer</button>
+    </div>
+  `;
+  newDivComm.innerHTML = comContent;
+
+  var commentButton = document.createElement("button");
+  commentButton.setAttribute("id", "commentButton");
+  commentButton.textContent = "Commentaire";
+  commentButton.addEventListener("click", toggleDivCom);
+  newDivComm.appendChild(commentButton);
 
 
 
-
-
+  newDiv.appendChild(newDivPost);
+  newDiv.appendChild(newDivComm);
 
   document.getElementById("description").value = "";
   document.getElementById("titre").value = "";
   document.getElementById("image").value = "";
 }
 
+
+
+function toggleDivCom() {
+  var div = document.getElementById("myDivCom");
+  var commentDivs = document.getElementsByClassName("comment-container");
+  if (div.style.display === "block") {
+    div.style.display = "none";
+    // Cacher toutes les div des commentaires
+    for (var i = 0; i < commentDivs.length; i++) {
+      commentDivs[i].style.display = "none";
+    }
+  } else {
+    div.style.display = "block";
+    document.getElementById("Comments"); // Placer le focus sur le champ de saisie "message"
+    // Afficher toutes les div des commentaires précédemment créées
+    for (var i = 0; i < commentDivs.length; i++) {
+      commentDivs[i].style.display = "block";
+    }
+  }
+}
+
+function displayComment() {
+  var commentInput = document.getElementById("Comments").value;
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", "/submit", true);
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+      console.log(xhr.responseText);
+    }
+  };
+  var data = JSON.stringify({ comment: commentInput });
+  xhr.send(data);
+  var commentInput = document.getElementById("Comments");
+  var comment =  commentInput.value;
+  if (comment) {
+    var commentContainer = document.createElement("div");
+    commentContainer.classList.add("comment-container"); // Ajouter la classe CSS
+    var commentText = document.createElement("p");
+    commentText.textContent = comment;
+    commentContainer.appendChild(commentText);
+    var postContainer = document.getElementById("div-Comm");
+    postContainer.appendChild(commentContainer);
+    commentInput.value = "";
+  }
+}
 
 
 let currentPage = 1;
