@@ -1,7 +1,4 @@
 window.addEventListener('DOMContentLoaded', () => {
-    const profileIcon = document.querySelector('.profile-icon');
-    const userSection = document.getElementById('user-section');
-
     // Vérifier la présence du cookie de session
     const sessionCookie = document.cookie.split(';').find(cookie => cookie.trim().startsWith('session'));
 

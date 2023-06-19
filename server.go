@@ -29,7 +29,8 @@ type InscriptionData struct {
 }
 
 type ImgPathData struct {
-	ImgPath string
+	ImgPath           string
+	UsernameAvailable bool
 }
 
 func main() {
@@ -205,7 +206,7 @@ func handlerUserPicture(w http.ResponseWriter, r *http.Request) {
 		// Generate the new filename
 		newFilename := fmt.Sprintf("Img-%d%s", uniqueNumber, extension)
 		// Get new path
-		filePath := filepath.Join("./Pictures/uploads", newFilename)
+		filePath := filepath.Join("./pictures/uploads", newFilename)
 		// Save the file on the server with the new filename
 		outFile, err := os.Create(filePath)
 		if err != nil {
@@ -214,7 +215,7 @@ func handlerUserPicture(w http.ResponseWriter, r *http.Request) {
 		}
 		defer outFile.Close()
 
-		imgPath := "Pictures/uploads/" + newFilename
+		imgPath := "pictures/uploads/" + newFilename
 		cookie, err := r.Cookie("session")
 		if err != nil {
 			fmt.Println("Error retrieving session cookie:", err)
@@ -292,5 +293,39 @@ func handlerLiked(w http.ResponseWriter, r *http.Request) {
 }
 
 func handlerSettings(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "template/settings.html")
+	tmpl := template.Must(template.ParseFiles("./template/settings.html"))
+
+	imgPathDta := ImgPathData{
+		ImgPath: "",
+	}
+
+	cookie, err := r.Cookie("session")
+	if err != nil {
+		fmt.Println("Error retrieving session cookie :", err)
+		return
+	}
+
+	userID := cookie.Value
+
+	imgPathDta.ImgPath, err = Database.GetUserImg(userID)
+	if err != nil {
+		fmt.Println("Error retrieving imgPath :", err)
+		return
+	}
+
+	username := r.FormValue("username")
+
+	if Database.CheckUsername(username) {
+		imgPathDta.UsernameAvailable = false
+	} else {
+		imgPathDta.UsernameAvailable = true
+		userIDInt, err := strconv.Atoi(userID)
+		if err != nil {
+			fmt.Println("Error convert from string to int :", err)
+			return
+		}
+		Database.UpdateUsername(username, userIDInt)
+	}
+
+	tmpl.Execute(w, imgPathDta)
 }
