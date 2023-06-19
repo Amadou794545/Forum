@@ -4,9 +4,10 @@ function toggleDiv() {
     div.style.display = "none";
   } else {
     div.style.display = "block";
-    document.getElementById("Description") // Placer le focus sur le champ de saisie "message"
+    document.getElementById("Description").focus(); // Placer le focus sur le champ de saisie "message"
   }
 }
+
 function post() {
   var description = document.getElementById("description").value;
   var titre = document.getElementById("titre").value;
@@ -20,20 +21,20 @@ function post() {
   var newImage = document.createElement("img");
   newTitre.textContent = "Titre : " + titre;
   newDescription.textContent = "Description : " + description;
-  // Ajouter des classes CSS
   newTitre.classList.add("titre-style");
   newDiv.classList.add("div-item");
   var postContent = `
-      <div id="post">
-          <button id="likeButton">Like</button>
-          <span id="likeCount">0</span>
-          <button id="dislikeButton">Dislike</button>
-          <span id="dislikeCount">0</span>
-      </div>
+    <div id="likes">
+      <button id="likeButton" onclick="toggleLikePost()">Like</button>
+      <span id="likeCount">0</span>
+      <button id="dislikeButton" onclick="toggleDislikePost()">Dislike</button>
+      <span id="dislikeCount">0</span>
+    </div>
   `;
   newDiv.innerHTML = postContent;
   newDiv.appendChild(newTitre);
   newDiv.appendChild(newDescription);
+  
   // Redimensionner et afficher l'image
   if (image) {
     var reader = new FileReader();
@@ -64,8 +65,6 @@ function post() {
     dislikeCount.textContent = dislikeValue;
   });
 
-
-
   let currentPag= 0;
   const postsPerPag =1
   fetch(`/api/posts?page=${currentPag}&limit=${postsPerPag}`)
@@ -82,27 +81,15 @@ function post() {
         })
       })
 
-
-
-
-
-
-
   document.getElementById("description").value = "";
   document.getElementById("titre").value = "";
   document.getElementById("image").value = "";
 }
 
-
-
 let currentPage = 1;
 const postsPerPage = 25;
 
-
-
 function fetchPosts() {
-
-
   fetch(`/api/posts?page=${currentPage}&limit=${postsPerPage}`)
       .then(response => response.json())
       .then(data => {

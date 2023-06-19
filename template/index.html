@@ -6,6 +6,7 @@
 </head>
 <body>
     <input type="button" id="myInput" value="Publier" onclick="toggleDiv()">
+
     <div id="myDiv" class="hidden">
         <form id="uploadForm">
             <label for="titre">Titre:</label><br>
@@ -27,7 +28,6 @@
                 <label for="Jeux">Jeux</label>
                 <input type="radio" id="Musique" name="dada" value="7">
                 <label for="Musique">Musique</label>
-
             </div>
             <label for="imageInput">Image:</label><br>
             <input type="file" id="image" name="image" accept="image/png, image/jpeg"><br><br>
@@ -35,10 +35,14 @@
             <input type="submit" value="Soumettre" >
         </form>
     </div>
+
     <form action="/login" method="post">
         <input type="submit" value="Se connecter">
     </form>
+
     <div class="postContainer" id="postContainer"></div>
+
+    <script src="../java-script/post.js"></script>
     <script src="../java-script/LikeDislike.js"></script>
 </body>
 </html>

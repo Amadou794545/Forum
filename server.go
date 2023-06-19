@@ -13,7 +13,6 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/gorilla/mux"
 	_ "github.com/lib/pq"
 
 	"forum/Database"
@@ -47,11 +46,6 @@ func main() {
 	http.HandleFunc("/created", handlerCreated)
 	http.HandleFunc("/api/user/posts", GetUserPostsAPI)
 
-	router := mux.NewRouter()
-
-	// Start the HTTP server
-	log.Fatal(http.ListenAndServe(":3030", router))
-
 	http.Handle("/css/", http.StripPrefix("/css", http.FileServer(http.Dir("css"))))
 
 	http.Handle("/java-script/", http.StripPrefix("/java-script", http.FileServer(http.Dir("java-script"))))
@@ -64,29 +58,6 @@ func main() {
 	if err != nil {
 		fmt.Println("Erreur :", err)
 	}
-	var table string
-	var likeColumn string
-	var action string
-	commentID := 1
-	like := true
-
-	if commentID != 0 {
-		table = "comments"
-		likeColumn = "comment_likes"
-	} else {
-		table = "posts"
-		likeColumn = "likes"
-	}
-
-	if like {
-		action = "like"
-	} else {
-		action = "dislike"
-	}
-
-	fmt.Println(table)
-	fmt.Println(likeColumn)
-	fmt.Println(action)
 }
 
 func GetPostsAPI(w http.ResponseWriter, r *http.Request) {
@@ -120,8 +91,6 @@ func GetPostsAPI(w http.ResponseWriter, r *http.Request) {
 }
 
 func uploadFile(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("test")
-
 	// Set the maximum file size to 10 MB
 	maxFileSize := int64(10 * 1024 * 1024)
 	err := r.ParseMultipartForm(maxFileSize)
@@ -258,7 +227,7 @@ func handlerIndex(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Bienvenue", username)
 	}
 
-	http.ServeFile(w, r, "/template/index.html")
+	http.ServeFile(w, r, "template/index.html")
 }
 
 func handlerInscription(w http.ResponseWriter, r *http.Request) {
@@ -307,8 +276,6 @@ func handlerConnexion(w http.ResponseWriter, r *http.Request) {
 
 	username := r.FormValue("username")
 	password := r.FormValue("password")
-	println(username)
-	println(password)
 
 	if username != "" && password != "" { //a retirer quand premier check ok en js
 		if Database.CheckLogin(username, password) {

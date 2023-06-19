@@ -40,7 +40,6 @@ func AddUser(email string, pseudo string, password string, imgPath string) {
 
 func AddPost(title string, imagePath string, description string, userID int, hobbieID int) {
 	var db *sql.DB
-	fmt.Println("testdb")
 	var err error
 	db, err = sql.Open("sqlite3", "./test.db")
 	if err != nil {
