@@ -50,7 +50,7 @@ func main() {
 	router := mux.NewRouter()
 
 	// Start the HTTP server
-	log.Fatal(http.ListenAndServe(":8080", router))
+	log.Fatal(http.ListenAndServe(":3030", router))
 
 	http.Handle("/css/", http.StripPrefix("/css", http.FileServer(http.Dir("css"))))
 
@@ -240,29 +240,25 @@ func GetUserPostsAPI(w http.ResponseWriter, r *http.Request) {
 }
 
 func handlerIndex(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path == "/" {
-		if cookies.CheckSessionCookie(r) {
-			cookie, err := r.Cookie("session")
-			if err != nil {
-				// Handle the error if needed
-				fmt.Println("Error retrieving session cookie:", err)
-				return
-			}
-
-			userID := cookie.Value
-			username, err := Database.GetUserUsername(userID)
-			if err != nil {
-				// Handle the error if needed
-				fmt.Println("Error retrieving username:", err)
-				return
-			}
-
-			cookies.UpdateSessionExpiration(w, r) // Reset la date de péremption du cookie
-			fmt.Println("Bienvenue", username)
+	if cookies.CheckSessionCookie(r) {
+		cookie, err := r.Cookie("session")
+		if err != nil {
+			fmt.Println("Error retrieving session cookie:", err)
+			return
 		}
 
-		http.ServeFile(w, r, "template/index.html")
+		userID := cookie.Value
+		username, err := Database.GetUserUsername(userID)
+		if err != nil {
+			fmt.Println("Error retrieving username:", err)
+			return
+		}
+
+		cookies.UpdateSessionExpiration(w, r) // Reset la date de péremption du cookie
+		fmt.Println("Bienvenue", username)
 	}
+
+	http.ServeFile(w, r, "/template/index.html")
 }
 
 func handlerInscription(w http.ResponseWriter, r *http.Request) {
