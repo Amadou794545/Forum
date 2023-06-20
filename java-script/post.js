@@ -191,6 +191,12 @@ function displayComment() {
   }
 }
 
+function scrollListener() {
+  if (isScrolledToBottom()) {
+    fetchPosts();
+  }
+}
+
 
 let currentPage = 1;
 const postsPerPage = 25;
@@ -286,9 +292,7 @@ commentForms.forEach((form) => {
     });
 }
 // Function to check if the user has scrolled to the bottom of the page
-function isScrolledToBottom() {
-  return window.innerHeight + window.scrollY >= document.body.offsetHeight;
-}
+
 
 
 function submitComment(postID, commentContent) {
@@ -318,7 +322,9 @@ function submitComment(postID, commentContent) {
 }
 
 // Event listener for scroll events
-
+function isScrolledToBottom() {
+  return window.innerHeight + window.scrollY >= document.body.offsetHeight;
+}
 
 // Initial call to fetch posts when the page loads
 fetchPosts();
