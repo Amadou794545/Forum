@@ -176,12 +176,24 @@ function fetchPosts() {
           <p class="Post-Desc">${post.Description}</p>
           <img src="${post.ImagePath}" alt="Post Image" class="Post-IMG">
           <div id="comments-${post.ID}" class="comments"></div> // Add comment section
+         
+        `;
+
+
+       data.forEach(comment => {
+         const commentElement = document.createElement('div');
+         commentElement.className = 'comment';
+        commentElement.innerHTML = `
           <form id="commentForm-${post.ID}" class="comment-form">
+          <p>${comment.description}</p>
             <input type="text" id="comment-${post.ID}" class="comment-input" placeholder="Add a comment">
             <input type="submit" class="comment-submit">
           </form>
         `;
+       })
+
           postContainer.appendChild(postElement);
+
         });
 
         const commentForms = document.querySelectorAll('.comment-form');
