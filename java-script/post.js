@@ -107,11 +107,7 @@ function clearallpost() {
   postContainer.innerHTML = "";
 }
 
-function scrollListener() {
-  if (isScrolledToBottom()) {
-    fetchPosts();
-  }
-}
+
 
 // Attach the scroll listener to the window
 
@@ -140,9 +136,31 @@ function fetchPosts() {
           <h3 class="Post-Title">${post.Title}</h3>
           <p class="Post-Desc">${post.Description}</p>
           <img src="${post.ImagePath}" alt="Post Image" class="Post-IMG">
+          <div id="comments-${post.ID}" class="comments"></div> // Add comment section
+          <form id="commentForm-${post.ID}" class="comment-form">
+            <input type="text" id="comment-${post.ID}" class="comment-input" placeholder="Add a comment">
+            <input type="submit" class="comment-submit">
+          </form>
         `;
         postContainer.appendChild(postElement);
       });
+
+      const commentForms = document.querySelectorAll('.comment-form');
+
+commentForms.forEach((form) => {
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const postID = form.id.split('-')[1];
+    const commentInput = document.getElementById(`comment-${postID}`);
+    const commentContent = commentInput.value;
+
+    // Call the function to send the comment to the server
+    submitComment(postID, commentContent);
+
+    // Reset the comment input field
+    commentInput.value = '';
+  });
+});
 
       // Increment the current page number
       currentPage++;
@@ -166,6 +184,33 @@ function fetchPosts() {
 // Function to check if the user has scrolled to the bottom of the page
 function isScrolledToBottom() {
   return window.innerHeight + window.scrollY >= document.body.offsetHeight;
+}
+
+
+function submitComment(postID, commentContent) {
+  const url = '/comment';
+  const data = {
+    postID: postID,
+    commentContent: commentContent,
+  };
+
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+    .then(response => {
+      if (response.ok) {
+        console.log('Comment submitted successfully');
+      } else {
+        console.error('Failed to submit comment');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
 }
 
 // Event listener for scroll events

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"html/template"
 	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -32,6 +33,7 @@ type InscriptionData struct {
 
 func main() {
 	http.HandleFunc("/api/posts", GetPostsAPI)
+	http.HandleFunc("/comment", getCommentAPI)
 
 	http.HandleFunc("/", handlerIndex)
 	http.HandleFunc("/inscription", handlerInscription)
@@ -58,13 +60,58 @@ func main() {
 	}
 }
 
+func getCommentAPI(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("test")
+
+	cookie, err := r.Cookie("session")
+	if err != nil {
+		// Handle the error if needed
+		fmt.Println("Error retrieving session cookie:", err)
+		http.Redirect(w, r, "/", http.StatusFound)
+	}
+
+	UserID, err := strconv.Atoi(cookie.Value)
+	if err != nil {
+		// Handle the error if needed
+		fmt.Println("Error retrieving cookie value:", err)
+		return
+	}
+
+	// Decode the request body
+	var data struct {
+		PostID         string `json:"postID"`
+		CommentContent string `json:"commentContent"`
+	}
+
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		fmt.Println("Error reading request body:", err)
+		http.Error(w, "Invalid request", http.StatusBadRequest)
+		return
+	}
+
+	err = json.Unmarshal(body, &data)
+	if err != nil {
+		fmt.Println("Error decoding request body:", err)
+		http.Error(w, "Invalid request", http.StatusBadRequest)
+		return
+	}
+
+	// Access the comment data
+	fmt.Println("Post ID:", data.PostID)
+	fmt.Println("Comment Content:", data.CommentContent)
+	PostID, err := strconv.Atoi(data.PostID)
+	if err != nil {
+		fmt.Println("error strconv PostID")
+		fmt.Println(err)
+	}
+	Database.AddComment(data.CommentContent, UserID, PostID)
+}
+
 func GetPostsAPI(w http.ResponseWriter, r *http.Request) {
 	page := r.URL.Query().Get("page")
 	limit := r.URL.Query().Get("limit")
 	filterValues := r.URL.Query().Get("filters")
-	fmt.Println("servertest")
-	fmt.Println(filterValues)
-	fmt.Println("servertest")
 
 	var filters []int
 	if filterValues != "" {
