@@ -291,8 +291,8 @@ function isScrolledToBottom() {
 }
 
 
-const postId = '60'; // Remplacez par l'ID du message souhaité
-fetch(`/api/comments?postId=${postId}`)
+//const postId = '60'; // Remplacez par l'ID du message souhaité
+fetch(`/api/comments?postId=post.ID`)
     .then(response => response.json())
     .then(comments => {
         // Les commentaires sont disponibles ici
