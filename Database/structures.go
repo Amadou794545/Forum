@@ -1,5 +1,10 @@
 package Database
 
+type Comments struct {
+	Description string
+	UserID      int
+	PostID      int
+}
 type Post struct {
 	ID          int
 	Title       string
@@ -7,10 +12,5 @@ type Post struct {
 	ImagePath   string
 	UserID      int
 	HobbieID    int
-}
-
-type Comments struct {
-	Description string
-	UserID      int
-	PostID      int
+	//description Comments
 }

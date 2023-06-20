@@ -171,8 +171,7 @@ func GetComment(postID string) ([]Comments, error) {
 		return nil, err
 	}
 	defer db.Close()
-
-	rows, err := db.Query("SELECT description , id_user, id_post FROM Comments WHERE id_Post = $1", postID)
+	rows, err := db.Query("SELECT description, id_user, id_post FROM Comments WHERE id_Post = $1", postID)
 	if err != nil {
 		return nil, err
 	}
@@ -181,14 +180,13 @@ func GetComment(postID string) ([]Comments, error) {
 	comments := []Comments{}
 	for rows.Next() {
 		var comment Comments
-		err := rows.Scan(&comment.Description, &comment.UserID, &comment.PostID)
-		if err != nil {
+		if err := rows.Scan(&comment.Description, &comment.UserID, &comment.PostID); err != nil {
 			return nil, err
 		}
 		comments = append(comments, comment)
 	}
 
-	if err = rows.Err(); err != nil {
+	if err := rows.Err(); err != nil {
 		return nil, err
 	}
 
