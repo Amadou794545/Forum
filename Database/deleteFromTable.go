@@ -9,7 +9,7 @@ func DeleteUser(userID int) error {
 	var db *sql.DB
 
 	var err error
-	db, err = sql.Open("sqlite3", "./test.db")
+	db, err = sql.Open("sqlite3", "./database.db")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -28,7 +28,7 @@ func DeletePost(postID int) error {
 	var db *sql.DB
 
 	var err error
-	db, err = sql.Open("sqlite3", "./test.db")
+	db, err = sql.Open("sqlite3", "./database.db")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -47,7 +47,7 @@ func DeleteComment(commentID int) error {
 	var db *sql.DB
 
 	var err error
-	db, err = sql.Open("sqlite3", "./test.db")
+	db, err = sql.Open("sqlite3", "./database.db")
 	if err != nil {
 		log.Fatal(err)
 	}

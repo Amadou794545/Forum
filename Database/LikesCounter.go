@@ -9,7 +9,7 @@ func CountLikesPost(postID int) (int, error) {
 	var db *sql.DB
 
 	var err error
-	db, err = sql.Open("sqlite3", "./test.db")
+	db, err = sql.Open("sqlite3", "./database.db")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -29,7 +29,7 @@ func CountDislikesPost(postID int) (int, error) {
 	var db *sql.DB
 
 	var err error
-	db, err = sql.Open("sqlite3", "./test.db")
+	db, err = sql.Open("sqlite3", "./database.db")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -49,7 +49,7 @@ func CountLikesComment(commentID int) (int, error) {
 	var db *sql.DB
 
 	var err error
-	db, err = sql.Open("sqlite3", "./test.db")
+	db, err = sql.Open("sqlite3", "./database.db")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -69,7 +69,7 @@ func CountDislikesComment(commentID int) (int, error) {
 	var db *sql.DB
 
 	var err error
-	db, err = sql.Open("sqlite3", "./test.db")
+	db, err = sql.Open("sqlite3", "./database.db")
 	if err != nil {
 		log.Fatal(err)
 	}
