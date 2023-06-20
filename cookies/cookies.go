@@ -2,13 +2,14 @@ package cookies
 
 import (
 	"net/http"
+	"strconv"
 	"time"
 )
 
-func HandlerCookie(w http.ResponseWriter, r *http.Request, userID string) {
+func HandlerSessionCookie(w http.ResponseWriter, r *http.Request, userID int) {
 	cookie := &http.Cookie{
 		Name:    "session",
-		Value:   userID,
+		Value:   strconv.Itoa(userID),
 		Expires: time.Now().Add(24 * time.Hour), //24h
 		Path:    "/",
 	}
@@ -32,10 +33,16 @@ func UpdateSessionExpiration(w http.ResponseWriter, r *http.Request) {
 		println("The cookie doesn't exist")
 		return
 	}
-
 	// Mise à jour expiration du cookie +24h à partir de l'heure actuelle
 	cookie.Expires = time.Now().Add(24 * time.Hour)
-
 	// Réécriture du cookie dans la réponse HTTP
 	http.SetCookie(w, cookie)
+}
+
+func DeleteAllCookies(w http.ResponseWriter, r *http.Request) {
+	cookies := r.Cookies()
+	for _, cookie := range cookies {
+		cookie.MaxAge = -1
+		http.SetCookie(w, cookie)
+	}
 }

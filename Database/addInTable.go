@@ -12,7 +12,7 @@ func AddUser(email string, pseudo string, password string, imgPath string) {
 	var db *sql.DB
 
 	var err error
-	db, err = sql.Open("sqlite3", "./test.db")
+	db, err = sql.Open("sqlite3", "./database.db")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -40,9 +40,8 @@ func AddUser(email string, pseudo string, password string, imgPath string) {
 
 func AddPost(title string, imagePath string, description string, userID int, hobbieID int) {
 	var db *sql.DB
-	fmt.Println("testdb")
 	var err error
-	db, err = sql.Open("sqlite3", "./test.db")
+	db, err = sql.Open("sqlite3", "./database.db")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -62,7 +61,7 @@ func AddComment(description string, userID int, postID string) {
 	var db *sql.DB
 
 	var err error
-	db, err = sql.Open("sqlite3", "./test.db")
+	db, err = sql.Open("sqlite3", "./database.db")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -82,7 +81,7 @@ func AddLike(userID int, postID int, commentID int, isLike int) {
 	var db *sql.DB
 
 	var err error
-	db, err = sql.Open("sqlite3", "./test.db")
+	db, err = sql.Open("sqlite3", "./database.db")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -111,7 +110,7 @@ func AddHobbie(imgPath string, description string) {
 	var db *sql.DB
 
 	var err error
-	db, err = sql.Open("sqlite3", "./test.db")
+	db, err = sql.Open("sqlite3", "./database.db")
 	if err != nil {
 		log.Fatal(err)
 	}
