@@ -1,4 +1,4 @@
-package cookies
+package main
 
 import (
 	"net/http"

@@ -1,74 +1,42 @@
 <!DOCTYPE html>
-<html lang="fr">
-
+<html>
 <head>
-    <meta charset="UTF-8">
     <link rel="stylesheet" href="css/index.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <title>Home</title>
 </head>
-
 <body class="backcolor2">
-  <header>
-    <div id="user-section">
-        <div class="profile-icon" onclick="toggleMenu()"></div>
-        <div class="unconnected">
-            <a class="button" href="/inscription">S'inscrire</a>
-            <a class="button" href="/login">Se connecter</a>
-        </div> 
-        <div class="connected" onclick="toggleMenu()">
-            <img src={{.ImgPath}}>
-        </div>
-        <div id="menu" style="display:none;">
-            <ul>
-                <li><a href="/created">Mon mur</a></li>
-                <li><a href="/liked">Mes posts likés</a></li>
-                <li><a href="/settings">Paramètres</a></li>
-                <li><a href="/deconnect">Se déconnecter</a></li>
-            </ul>
-        </div>
-    </div>
-  </header>
-
   <div id="filterDiv" class="filter">
     <form id="filterform">
+    <div class="filter-box backcolor1">
+      <input type="checkbox" id="cinema" name="cinema" value="1">
+      <label for="cinema"><img src="Pictures/Cinema.png" alt="cinema" class="icon">Cinema</label>
+    </div>
+    <div class="filter-box backcolor1">
+      <input type="checkbox" id="cuisine" name="cuisine" value="2">
+      <label for="cuisine"><img src="Pictures/Cuisine.png" alt="cuisine" class="icon">Cuisine</label>
+    </div>
+    <div class="filter-box backcolor1">
+      <input type="checkbox" id="informatique" name="informatique" value="3" >
+      <label for="informatique"><img src="Pictures/Informatique.png" alt="Informatique" class="icon">Informatique</label>
+    </div>
+    <div class="filter-box backcolor1">
+      <input type="checkbox" id="jeux" name="jeux" value="4">
+      <label for="jeux"><img src="Pictures/Jeux.png" alt="Jeux" class="icon">Jeux</label>
+    </div>
+    <div class="filter-box backcolor1">
+      <input type="checkbox" id="lecture" name="lecture" value="5">
+      <label for="lecture"><img src="Pictures/Lecture.png" alt="Lecture" class="icon">Lecture</label>
+    </div>
+    <div class="filter-box backcolor1">
+      <input type="checkbox" id="musique" name="musique" value="6">
+      <label for="musique"><img src="Pictures/musique.png" alt="musique" class="icon">Musique</label>
+    </div>
+    <div class="filter-box backcolor1">
+      <input type="checkbox" id="sport" name="sport" value="7">
+      <label for="sport"><img src="Pictures/sport.png" alt="sport" class="icon">Sport</label>
+    </div>
 
-      <div class="filter-box backcolor1">
-        <input type="checkbox" id="cinema" name="cinema" value="1">
-        <label for="cinema"><img src="Pictures/Dadas/Cinema.png" alt="cinema" class="icon">Cinema</label>
-      </div>
-
-      <div class="filter-box backcolor1">
-        <input type="checkbox" id="cuisine" name="cuisine" value="2">
-        <label for="cuisine"><img src="Pictures/Dadas/Cuisine.png" alt="cuisine" class="icon">Cuisine</label>
-      </div>
-
-      <div class="filter-box backcolor1">
-        <input type="checkbox" id="informatique" name="informatique" value="3" >
-        <label for="informatique"><img src="Pictures/Dadas/Informatique.png" alt="Informatique" class="icon">Informatique</label>
-      </div>
-
-      <div class="filter-box backcolor1">
-        <input type="checkbox" id="jeux" name="jeux" value="4">
-        <label for="jeux"><img src="Pictures/Dadas/Jeux.png" alt="Jeux" class="icon">Jeux</label>
-      </div>
-
-      <div class="filter-box backcolor1">
-        <input type="checkbox" id="lecture" name="lecture" value="5">
-        <label for="lecture"><img src="Pictures/Dadas/Lecture.png" alt="Lecture" class="icon">Lecture</label>
-      </div>
-
-      <div class="filter-box backcolor1">
-        <input type="checkbox" id="musique" name="musique" value="6">
-        <label for="musique"><img src="Pictures/Dadas/musique.png" alt="musique" class="icon">Musique</label>
-      </div>
-
-      <div class="filter-box backcolor1">
-        <input type="checkbox" id="sport" name="sport" value="7">
-        <label for="sport"><img src="Pictures/Dadas/sport.png" alt="sport" class="icon">Sport</label>
-      </div>
-
-      <input type="submit" value="Filtrer" >
+    <input type="submit" value="Filtrer" >
     </form>
   </div>
   
@@ -103,16 +71,12 @@
             <input type="submit" value="Soumettre" >
         </form>
     </div>
-
     <form action="/login" method="post">
         <input type="submit" value="Se connecter">
     </form>
-
     <div class="postContainer" id="postContainer"></div>
-
     <script src="../java-script/post.js"></script>
     <script src="../java-script/filtre.js"></script>
-    <script src="../java-script/connectedIcone.js"></script>
     <script>
         $(document).ready(function() {
             var errorContainer = $('#errorContainer'); // Error message container
@@ -170,6 +134,7 @@
                   post(); // Call the post() function to display the new post
                 },
                 error: function(xhr, status, error) {
+                  // Handle the error
                   console.log(error); // You can display an error message or perform other error handling
                 }
               });
@@ -200,6 +165,5 @@
             }
           });      
     </script>
-
-  </body>
+</body>
 </html>

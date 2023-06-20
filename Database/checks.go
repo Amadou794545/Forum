@@ -9,7 +9,7 @@ func CheckUsername(pseudo string) bool {
 	var db *sql.DB
 
 	var err error
-	db, err = sql.Open("sqlite3", "./database.db")
+	db, err = sql.Open("sqlite3", "./test.db")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -30,7 +30,7 @@ func CheckEmail(email string) bool {
 	var db *sql.DB
 
 	var err error
-	db, err = sql.Open("sqlite3", "./database.db")
+	db, err = sql.Open("sqlite3", "./test.db")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -51,7 +51,7 @@ func CheckLogin(identifier string, password string) bool {
 	var db *sql.DB
 
 	var err error
-	db, err = sql.Open("sqlite3", "./database.db")
+	db, err = sql.Open("sqlite3", "./test.db")
 	if err != nil {
 		log.Fatal(err)
 	}

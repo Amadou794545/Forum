@@ -9,7 +9,7 @@ func CreateUsersTable() {
 	var db *sql.DB
 
 	var err error
-	db, err = sql.Open("sqlite3", "./database.db")
+	db, err = sql.Open("sqlite3", "./test.db")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -34,7 +34,7 @@ func CreatePostsTable() {
 	var db *sql.DB
 
 	var err error
-	db, err = sql.Open("sqlite3", "./database.db")
+	db, err = sql.Open("sqlite3", "./test.db")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -64,7 +64,7 @@ func CreateCommentsTable() {
 	var db *sql.DB
 
 	var err error
-	db, err = sql.Open("sqlite3", "./database.db")
+	db, err = sql.Open("sqlite3", "./test.db")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -92,7 +92,7 @@ func CreateLikesTable() {
 	var db *sql.DB
 
 	var err error
-	db, err = sql.Open("sqlite3", "./database.db")
+	db, err = sql.Open("sqlite3", "./test.db")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -120,7 +120,7 @@ func CreateHobbiesTable() {
 	var db *sql.DB
 
 	var err error
-	db, err = sql.Open("sqlite3", "./database.db")
+	db, err = sql.Open("sqlite3", "./test.db")
 	if err != nil {
 		log.Fatal(err)
 	}
