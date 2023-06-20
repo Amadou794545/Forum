@@ -31,8 +31,9 @@ func main() {
 	http.HandleFunc("/api/posts", GetPostsAPI)
 	http.HandleFunc("/api/user/posts", GetUserPostsAPI)
 
-	fs := http.FileServer(http.Dir("/go/bin/CSS"))
-	http.Handle("/CSS/", http.StripPrefix("/CSS/", fs))
+	//voir si les modifs suivantes rajoutent le css au serveur quand il tourne via docker
+	//fs := http.FileServer(http.Dir("/go/bin/CSS"))
+	//http.Handle("/CSS/", http.StripPrefix("/CSS/", fs))
 	http.Handle("/css/", http.StripPrefix("/css", http.FileServer(http.Dir("css"))))
 	http.Handle("/java-script/", http.StripPrefix("/java-script", http.FileServer(http.Dir("java-script"))))
 
