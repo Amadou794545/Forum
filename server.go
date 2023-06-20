@@ -100,12 +100,7 @@ func getCommentAPI(w http.ResponseWriter, r *http.Request) {
 	// Access the comment data
 	fmt.Println("Post ID:", data.PostID)
 	fmt.Println("Comment Content:", data.CommentContent)
-	PostID, err := strconv.Atoi(data.PostID)
-	if err != nil {
-		fmt.Println("error strconv PostID")
-		fmt.Println(err)
-	}
-	Database.AddComment(data.CommentContent, UserID, PostID)
+	Database.AddComment(data.CommentContent, UserID, data.PostID)
 }
 
 func GetPostsAPI(w http.ResponseWriter, r *http.Request) {
