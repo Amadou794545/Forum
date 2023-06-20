@@ -175,7 +175,7 @@ function fetchPosts() {
           <h3 class="Post-Title">${post.Title}</h3>
           <p class="Post-Desc">${post.Description}</p>
           <img src="${post.ImagePath}" alt="Post Image" class="Post-IMG">
-          <div id="comments-${post.ID}" class="comments"></div> // Add comment section
+          <div id="comments-${post.ID}" class="comments"></div>
           <form id="commentForm-${post.ID}" class="comment-form">
             <input type="text" id="comment-${post.ID}" class="comment-input" placeholder="Add a comment">
             <input type="submit" class="comment-submit">

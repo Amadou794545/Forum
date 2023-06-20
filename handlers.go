@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-func handlerIndex(w http.ResponseWriter, r *http.Request) {
+func HandlerIndex(w http.ResponseWriter, r *http.Request) {
 	tmpl := template.Must(template.ParseFiles("./template/index.html"))
 	imgPathDta := ImgPathData{
 		ImgPath: "",
@@ -40,7 +40,7 @@ func handlerIndex(w http.ResponseWriter, r *http.Request) {
 	tmpl.Execute(w, imgPathDta)
 }
 
-func handlerInscription(w http.ResponseWriter, r *http.Request) {
+func HandlerInscription(w http.ResponseWriter, r *http.Request) {
 	tmpl := template.Must(template.ParseFiles("./template/inscription.html"))
 	InscriptionData := InscriptionData{
 		Username:     "",
@@ -105,11 +105,11 @@ func handlerInscription(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func handlerInscriptionPicture(w http.ResponseWriter, r *http.Request) {
+func HandlerInscriptionPicture(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "template/inscription_picture.html")
 }
 
-func handlerUserPicture(w http.ResponseWriter, r *http.Request) {
+func HandlerUserPicture(w http.ResponseWriter, r *http.Request) {
 	maxFileSize := int64(10 * 1024 * 1024)
 	err := r.ParseMultipartForm(maxFileSize)
 	if err != nil {
@@ -168,7 +168,7 @@ func handlerUserPicture(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusFound)
 }
 
-func handlerLogin(w http.ResponseWriter, r *http.Request) {
+func HandlerLogin(w http.ResponseWriter, r *http.Request) {
 	tmpl := template.Must(template.ParseFiles("./template/login.html"))
 	loginData := LoginData{
 		Username:     "",
@@ -205,12 +205,12 @@ func handlerLogin(w http.ResponseWriter, r *http.Request) {
 	tmpl.Execute(w, loginData)
 }
 
-func handlerDeconnect(w http.ResponseWriter, r *http.Request) {
+func HandlerDeconnect(w http.ResponseWriter, r *http.Request) {
 	cookies.DeleteAllCookies(w, r)
 	http.Redirect(w, r, "/", http.StatusFound)
 }
 
-func handlerCreated(w http.ResponseWriter, r *http.Request) {
+func HandlerCreated(w http.ResponseWriter, r *http.Request) {
 	if cookies.CheckSessionCookie(r) {
 		_, err := r.Cookie("session")
 		if err != nil {
@@ -221,11 +221,11 @@ func handlerCreated(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "template/userPage.html")
 }
 
-func handlerLiked(w http.ResponseWriter, r *http.Request) {
+func HandlerLiked(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "template/liked.html")
 }
 
-func handlerSettings(w http.ResponseWriter, r *http.Request) {
+func HandlerSettings(w http.ResponseWriter, r *http.Request) {
 	tmpl := template.Must(template.ParseFiles("./template/settings.html"))
 	imgPathDta := ImgPathData{
 		ImgPath: "",
