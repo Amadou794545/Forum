@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"strings"
 )
 
 func GetUserID(identifier string) (string, error) {
@@ -109,17 +110,37 @@ func GetUserPosts(user_id int) ([]Post, error) {
 	return posts, nil
 }
 
-func GetPosts(offset, limit int) ([]Post, error) {
+func GetPosts(offset, limit int, filters []int) ([]Post, error) {
 	db, err := sql.Open("sqlite3", "./test.db")
 	if err != nil {
 		return nil, err
 	}
 	defer db.Close()
 
-	// Construct the SQL query with pagination
-	query := fmt.Sprintf("SELECT id_post, title, description, imgPath, id_user, id_hobbie FROM Posts ORDER BY id_post DESC LIMIT %d OFFSET %d", limit, offset)
+	// Construct the base SQL query with pagination
+	query := "SELECT id_post, title, description, imgPath, id_user, id_hobbie FROM Posts"
 
-	rows, err := db.Query(query)
+	// Create a placeholder string for the filter values
+	filterPlaceholders := make([]string, len(filters))
+	filterArgs := make([]interface{}, len(filters))
+	for i, filter := range filters {
+		filterPlaceholders[i] = "?"
+		filterArgs[i] = filter
+	}
+
+	// Add WHERE clause to filter by selected hobbies if filters are provided
+	if len(filters) > 0 {
+		// Join the filter placeholders with commas
+		filterValues := strings.Join(filterPlaceholders, ", ")
+
+		// Add the WHERE clause to the query
+		query += " WHERE id_hobbie IN (" + filterValues + ")"
+	}
+
+	// Add ORDER BY and LIMIT/OFFSET clauses for pagination
+	query += fmt.Sprintf(" ORDER BY id_post DESC LIMIT %d OFFSET %d", limit, offset)
+
+	rows, err := db.Query(query, filterArgs...)
 	if err != nil {
 		return nil, err
 	}
@@ -138,7 +159,6 @@ func GetPosts(offset, limit int) ([]Post, error) {
 	}
 
 	if err = rows.Err(); err != nil {
-		fmt.Println("test ko")
 		return nil, err
 	}
 
