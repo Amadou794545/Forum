@@ -30,10 +30,6 @@ function post() {
   // Création de la div newDivPost
   var newDivPost = document.createElement("div");
   newDivPost.classList.add("div-Post");
-  // Création de la div newDivComm
-  var newDivComm = document.createElement("div");
-  newDivComm.classList.add("div-Comm");
-  newDivComm.setAttribute("id","div-Comm")
 
   // Ajouter des classes CSS
   newTitre.classList.add("titre-style");
@@ -86,58 +82,16 @@ function post() {
 <form id="ID">  
 <input name="ID"  id="input" type="hidden" value="${post.ID}">
 </form>
-      
         `;
           newDivPost.appendChild(postElement);
         })
       })
 
 
-  $('#ID').submit(function(event) {
-    event.preventDefault(); // Prevent the default form submission
-    //appel d'une ou plusieurs func en js
-
-    var formData = new FormData();
-    // Add form data to FormData object
-    var value =$('input').value
-
-    formData.append('ID', value);
-
-    $.ajax(({
-      url: '/comment', // Update the URL to your server endpoint
-      type: 'POST',
-      data: formData,
-      processData: false,
-      contentType: false,
-
-    }))
-
-  })
-//commentaire
-  var comContent = `
-    <div id="myDivCom" style="display: none;">
-        <input type="text" id="Comments" placeholder="Saisissez votre commentaire...">
-        <button onclick="displayComment()">Envoyer</button>
-    </div>
-    
-  `;
-  newDivComm.innerHTML = comContent;
-
-  var commentButton = document.createElement("button");
-  commentButton.setAttribute("id", "commentButton");
-  commentButton.textContent = "Commentaire";
-  commentButton.addEventListener("click", toggleDivCom);
-  newDivComm.appendChild(commentButton);
-
-  $('#com').submit(function(event) {
-    event.preventDefault(); // Empêcher la soumission du formulaire par défaut
-    // Appeler votre fonction de traitement des commentaires ici
-  });
 
 
 
   newDiv.appendChild(newDivPost);
-  newDiv.appendChild(newDivComm);
 
   document.getElementById("description").value = "";
   document.getElementById("titre").value = "";
@@ -164,32 +118,6 @@ function toggleDivCom() {
   }
 }
 
-function displayComment() {
-  var commentInput = document.getElementById("Comments").value;
-  var xhr = new XMLHttpRequest();
-  xhr.open("POST", "/submit", true);
-  xhr.setRequestHeader("Content-Type", "application/json");
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-      console.log(xhr.responseText);
-    }
-  };
-  var data = JSON.stringify({ comment: commentInput });
-  xhr.send(data);
-
-  var commentInput = document.getElementById("Comments");
-  var comment =  commentInput.value;
-  if (comment) {
-    var commentContainer = document.createElement("div");
-    commentContainer.classList.add("comment-container"); // Ajouter la classe CSS
-    var commentText = document.createElement("p");
-    commentText.textContent = comment;
-    commentContainer.appendChild(commentText);
-    var postContainer = document.getElementById("div-Comm");
-    postContainer.appendChild(commentContainer);
-    commentInput.value = "";
-  }
-}
 
 
 let currentPage = 1;
@@ -227,17 +155,17 @@ function fetchPosts() {
   console.log(filters)
 
   fetch(`/api/posts?page=${currentPage}&limit=${postsPerPage}&filters=${filters}`)
-    .then(response => response.json())
-    .then(data => {
-      // Process the retrieved post data
-      console.log(data); // Print the data to the console as an example
+      .then(response => response.json())
+      .then(data => {
+        // Process the retrieved post data
+        console.log(data); // Print the data to the console as an example
 
-      // Update the UI to display the posts
-      const postContainer = document.getElementById('postContainer');
-      data.forEach(post => {
-        const postElement = document.createElement('div');
-        postElement.className = 'post';
-        postElement.innerHTML = `
+        // Update the UI to display the posts
+        const postContainer = document.getElementById('postContainer');
+        data.forEach(post => {
+          const postElement = document.createElement('div');
+          postElement.className = 'post';
+          postElement.innerHTML = `
           <h3 class="Post-Title">${post.Title}</h3>
           <p class="Post-Desc">${post.Description}</p>
           <img src="${post.ImagePath}" alt="Post Image" class="Post-IMG">
@@ -247,44 +175,84 @@ function fetchPosts() {
             <input type="submit" class="comment-submit">
           </form>
         `;
-        postContainer.appendChild(postElement);
+          postContainer.appendChild(postElement);
+        });
+
+        const commentForms = document.querySelectorAll('.comment-form');
+
+        commentForms.forEach((form) => {
+          form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const postID = form.id.split('-')[1];
+            const commentInput = document.getElementById(`comment-${postID}`);
+            const commentContent = commentInput.value;
+
+            // Call the function to send the comment to the server
+            submitComment(postID, commentContent);
+
+            // Reset the comment input field
+            commentInput.value = '';
+
+            // Display the comment
+            displayComment(postID, commentContent);
+          });
+        });
+
+        // Increment the current page number
+        currentPage++;
+
+        // Check if there are more posts to load
+        if (data.length < postsPerPage) {
+          // Display the "The End" message
+          const endMessage = document.createElement('h2');
+          endMessage.textContent = 'The End';
+          postContainer.appendChild(endMessage);
+
+          // Remove the scroll listener since there are no more posts
+          window.removeEventListener('scroll', scrollListener);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
       });
+}
+function displayComment(postID, commentContent) {
+  if (commentContent) {
+    const commentContainer = document.createElement("div");
+    commentContainer.classList.add("comment-container"); // Ajouter la classe CSS
+    const commentText = document.createElement("p");
+    commentText.textContent = commentContent;
+    commentContainer.appendChild(commentText);
+    const postCommentsContainer = document.getElementById(`comments-${postID}`);
+    postCommentsContainer.appendChild(commentContainer);
 
-      const commentForms = document.querySelectorAll('.comment-form');
+    // Ajouter le commentaire au stockage local
+    const commentsKey = `comments_${postID}`;
+    const existingComments = localStorage.getItem(commentsKey);
+    const updatedComments = existingComments ? JSON.parse(existingComments) : [];
+    updatedComments.push(commentContent);
+    localStorage.setItem(commentsKey, JSON.stringify(updatedComments));
+  }
+}
 
-commentForms.forEach((form) => {
-  form.addEventListener('submit', (event) => {
-    event.preventDefault();
+// Au chargement de la page
+window.addEventListener('load', () => {
+  // Récupérer et afficher les commentaires depuis le stockage local
+  const commentForms = document.querySelectorAll('.comment-form');
+  commentForms.forEach((form) => {
     const postID = form.id.split('-')[1];
-    const commentInput = document.getElementById(`comment-${postID}`);
-    const commentContent = commentInput.value;
-
-    // Call the function to send the comment to the server
-    submitComment(postID, commentContent);
-
-    // Reset the comment input field
-    commentInput.value = '';
+    const commentsKey = `comments_${postID}`;
+    const existingComments = localStorage.getItem(commentsKey);
+    if (existingComments) {
+      const comments = JSON.parse(existingComments);
+      comments.forEach((comment) => {
+        displayComment(postID, comment);
+      });
+    }
   });
 });
 
-      // Increment the current page number
-      currentPage++;
 
-      // Check if there are more posts to load
-      if (data.length < postsPerPage) {
-        // Display the "The End" message
-        const endMessage = document.createElement('h2');
-        endMessage.textContent = 'The End';
-        postContainer.appendChild(endMessage);
-
-        // Remove the scroll listener since there are no more posts
-        window.removeEventListener('scroll', scrollListener);
-      }
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
-}
 // Function to check if the user has scrolled to the bottom of the page
 function isScrolledToBottom() {
   return window.innerHeight + window.scrollY >= document.body.offsetHeight;

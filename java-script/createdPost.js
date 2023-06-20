@@ -1,5 +1,5 @@
 fetch('/api/user/posts?id_user=USER_ID')
-
+//juste les post du user
     .then(response => response.json())
     .then(posts => {
         const postsContainer = document.getElementById('posts');
