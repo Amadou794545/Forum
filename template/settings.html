@@ -12,7 +12,7 @@
             <form action="/settings" method="POST" name="change-username-form">
                 <label for="username">Nouveau nom d'utilisateur :</label>
                 <input type="text" id="username" name="username">
-                <p class="username-message" data-username-available="{{if .UsernameAvailable}}true{{else}}false{{end}}"></p>
+                <p class="usernameMessage">{{.UsernameMessage}}</p>
             
                 <input type="submit" value="Modifier">
             </form>

@@ -29,8 +29,8 @@ type InscriptionData struct {
 }
 
 type ImgPathData struct {
-	ImgPath           string
-	UsernameAvailable bool
+	ImgPath         string
+	UsernameMessage string
 }
 
 func main() {
@@ -315,10 +315,12 @@ func handlerSettings(w http.ResponseWriter, r *http.Request) {
 
 	username := r.FormValue("username")
 
-	if Database.CheckUsername(username) {
-		imgPathDta.UsernameAvailable = false
+	if username == "" {
+		imgPathDta.UsernameMessage = "Entrez un pseudo pour lancer la vérification"
+	} else if Database.CheckUsername(username) {
+		imgPathDta.UsernameMessage = "Pseudo déjà utilisé"
 	} else {
-		imgPathDta.UsernameAvailable = true
+		imgPathDta.UsernameMessage = "Pseudo modifié avec succès"
 		userIDInt, err := strconv.Atoi(userID)
 		if err != nil {
 			fmt.Println("Error convert from string to int :", err)
