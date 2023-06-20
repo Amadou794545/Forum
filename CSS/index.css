@@ -1,7 +1,41 @@
 
+
+
 .hidden {
     display: none;
 }
+
+.filter{
+    display: block;
+}
+
+.filter-box{
+    display: block;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon{
+    height: 10%;
+    width: 10%;
+}
+
+.backcolor1{
+    background-color: #D2B48C;
+}
+
+.backcolor2{
+    background-color:#EBE4DA;
+}
+
+
+.filterDiv{
+    display: flex;
+    position: relative;
+}
+
+
+
 .Post-Desc{
     width: 300px;
     height: 100px;

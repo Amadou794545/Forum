@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"html/template"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -36,13 +35,12 @@ func main() {
 	http.HandleFunc("/", handlerIndex)
 	http.HandleFunc("/inscription", handlerInscription)
 	http.HandleFunc("/login", handlerConnexion)
-	http.HandleFunc("/submit", handleCommentSubmit)
+	http.HandleFunc("/comment", handlePostsRequest)
 
 	http.HandleFunc("/upload", uploadFile)
 
 	http.HandleFunc("/created", handlerCreated)
 	http.HandleFunc("/api/user/posts", GetUserPostsAPI)
-	http.HandleFunc("/api/comment/posts", handlePostsRequest)
 
 	http.Handle("/css/", http.StripPrefix("/css", http.FileServer(http.Dir("css"))))
 
@@ -58,53 +56,21 @@ func main() {
 	}
 }
 
-func handleCommentSubmit(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		http.Error(w, "Error reading request body", http.StatusInternalServerError)
-		return
-	}
-	// Parse the JSON data
-	type Comment struct {
-		Text string `json:"comment"`
-	}
-	var comment Comment
-	err = json.Unmarshal(body, &comment)
-	if err != nil {
-		http.Error(w, "Error parsing JSON data", http.StatusBadRequest)
-		return
-	}
-	fmt.Println("Comment:", comment)
-
-	// Send a response to the browser
-	fmt.Fprint(w, "Comment submitted successfully!")
-
-}
-
 func handlePostsRequest(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("test1")
 
-	fmt.Println("test11")
+	fmt.Println("test2")
 
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		http.Error(w, "Erreur lors de la lecture du corps de la requête", http.StatusInternalServerError)
-		return
-	}
-	fmt.Println("test111")
+	//body, err := ioutil.ReadAll(r.Body)
+	//if err != nil {
+	//	http.Error(w, "Erreur lors de la lecture du corps de la requête", http.StatusInternalServerError)
+	//	return
+	//}
+	fmt.Println("test3")
 
-	er := r.ParseForm()
-	if er != nil {
-		http.Error(w, "Erreur lors de la lecture des données du formulaire", http.StatusBadRequest)
-		return
-	}
-	fmt.Println("test1111")
-
+	fmt.Println("test4")
 	postID := r.FormValue("ID")
+	fmt.Println(postID)
 	// Utilisez la valeur récupérée selon vos besoins
 	cookie, err := r.Cookie("session")
 	if err != nil {
@@ -112,7 +78,7 @@ func handlePostsRequest(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Error retrieving session cookie:", err)
 		return
 	}
-	fmt.Println("test11111")
+	fmt.Println("test5")
 
 	userId, err := strconv.Atoi(cookie.Value)
 	if err != nil {
@@ -120,20 +86,23 @@ func handlePostsRequest(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Error retrieving cookie value:", err)
 		return
 	}
-	fmt.Println("test111111")
+	fmt.Println("test6")
 
 	type Comment struct {
 		Text string `json:"comment"`
 	}
-	var comment Comment
-	err = json.Unmarshal(body, &comment)
-	if err != nil {
-		http.Error(w, "Error parsing JSON data", http.StatusBadRequest)
-		return
-	}
-	fmt.Println("test1111111")
+	//var comment Comment
+	//err = json.Unmarshal(body, &comment)
+	//if err != nil {
+	//	fmt.Println(err) // Afficher l'erreur dans la console pour le débogage
+	//	http.Error(w, "Error parsing JSON data", http.StatusBadRequest)
+	//	return
+	//}
+	fmt.Println("test7")
+	//fmt.Println(comment.Text)
 
-	Database.AddComment("comment", userId, postID)
+	//	var comments string = comment.Text
+	Database.AddComment("comments", userId, postID)
 	// Réponse au client
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("Données traitées avec succès"))
