@@ -97,6 +97,22 @@ func getCommentAPI(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	comments, err := Database.GetComment(data.PostID)
+	if err != nil {
+		log.Println("Erreur lors de la récupération des posts :", err)
+		http.Error(w, "Erreur interne du serveur", http.StatusInternalServerError)
+		return
+	}
+
+	jsonData, err := json.Marshal(comments)
+	if err != nil {
+		log.Println("Erreur lors de la conversion en JSON :", err)
+		http.Error(w, "Erreur interne du serveur", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(jsonData)
 	// Access the comment data
 	fmt.Println("Post ID:", data.PostID)
 	fmt.Println("Comment Content:", data.CommentContent)

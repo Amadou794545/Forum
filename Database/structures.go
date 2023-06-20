@@ -8,3 +8,9 @@ type Post struct {
 	UserID      int
 	HobbieID    int
 }
+
+type Comments struct {
+	Description string
+	UserID      int
+	PostID      int
+}
