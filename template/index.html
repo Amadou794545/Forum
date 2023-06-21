@@ -27,6 +27,7 @@
                 <li><a href="/deconnect">Se déconnecter</a></li>
             </ul>
         </div>
+      </div>
     </div>
   </header>
 
@@ -34,23 +35,23 @@
     <form id="filterform">
 
       <div class="filter-box backcolor1">
-        <input type="checkbox" id="cinema" name="cinema" value="1">
-        <label for="cinema"><img src="Pictures/Dadas/Cinema.png" alt="cinema" class="icon">Cinema</label>
+        <input type="checkbox" id="sport" name="sport" value="1">
+        <label for="sport"><img src="Pictures/Dadas/Sport.png" alt="sport" class="icon">Sport</label>
       </div>
 
       <div class="filter-box backcolor1">
-        <input type="checkbox" id="cuisine" name="cuisine" value="2">
-        <label for="cuisine"><img src="Pictures/Dadas/Cuisine.png" alt="cuisine" class="icon">Cuisine</label>
-      </div>
-
-      <div class="filter-box backcolor1">
-        <input type="checkbox" id="informatique" name="informatique" value="3" >
+        <input type="checkbox" id="informatique" name="informatique" value="2" >
         <label for="informatique"><img src="Pictures/Dadas/Informatique.png" alt="Informatique" class="icon">Informatique</label>
       </div>
 
       <div class="filter-box backcolor1">
-        <input type="checkbox" id="jeux" name="jeux" value="4">
-        <label for="jeux"><img src="Pictures/Dadas/Jeux.png" alt="Jeux" class="icon">Jeux</label>
+        <input type="checkbox" id="cuisine" name="cuisine" value="3">
+        <label for="cuisine"><img src="Pictures/Dadas/Cuisine.png" alt="cuisine" class="icon">Cuisine</label>
+      </div>
+
+      <div class="filter-box backcolor1">
+        <input type="checkbox" id="cinema" name="cinema" value="4">
+        <label for="cinema"><img src="Pictures/Dadas/Cinema.png" alt="cinema" class="icon">Cinema</label>
       </div>
 
       <div class="filter-box backcolor1">
@@ -59,13 +60,13 @@
       </div>
 
       <div class="filter-box backcolor1">
-        <input type="checkbox" id="musique" name="musique" value="6">
-        <label for="musique"><img src="Pictures/Dadas/musique.png" alt="musique" class="icon">Musique</label>
+        <input type="checkbox" id="jeux" name="jeux" value="6">
+        <label for="jeux"><img src="Pictures/Dadas/Jeux.png" alt="Jeux" class="icon">Jeux</label>
       </div>
 
       <div class="filter-box backcolor1">
-        <input type="checkbox" id="sport" name="sport" value="7">
-        <label for="sport"><img src="Pictures/Dadas/sport.png" alt="sport" class="icon">Sport</label>
+        <input type="checkbox" id="musique" name="musique" value="7">
+        <label for="musique"><img src="Pictures/Dadas/Musique.png" alt="musique" class="icon">Musique</label>
       </div>
 
       <input type="submit" value="Filtrer" >
@@ -81,7 +82,7 @@
             <label for="Description">Description:</label><br>
             <textarea class="description" id="description" name="description" autofocus></textarea><br><br>
             <div>
-                <input type="radio" id="sport" name="dada" value="1" checked>
+                <input type="radio" id="Sport" name="dada" value="1" checked>
                 <label for="sport">Sport</label>
                 <input type="radio" id="Informatique" name="dada" value="2">
                 <label for="Informatique">Informatique</label>
@@ -109,6 +110,7 @@
     <script src="../java-script/post.js"></script>
     <script src="../java-script/filtre.js"></script>
     <script src="../java-script/connectedIcone.js"></script>
+    <script src="../java-script/menu.js"></script>
     <script>
         $(document).ready(function() {
             var errorContainer = $('#errorContainer'); // Error message container
@@ -163,7 +165,7 @@
                 success: function(response) {
                   // Handle the response from the server
                   console.log(response); // You can do further processing or display a success message
-                  post(); // Call the post() function to display the new post
+                  Post(); // Display the new post
                 },
                 error: function(xhr, status, error) {
                   console.log(error); // You can display an error message or perform other error handling

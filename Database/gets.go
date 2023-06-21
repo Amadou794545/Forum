@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"strconv"
 	"strings"
 )
 
@@ -145,8 +146,54 @@ func GetUserPosts(user_id int) ([]Post, error) {
 	return posts, nil
 }
 
+func GetUserLikedPosts(user_id int) ([]Post, error) {
+	db, err := sql.Open("sqlite3", "./database.db")
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+	rows, err := db.Query("SELECT id_post FROM PostsLikes WHERE id_user = $1", user_id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var likedPosts []int
+	for rows.Next() {
+		var id_post int
+		if err := rows.Scan(&id_post); err != nil {
+			return nil, err
+		}
+		likedPosts = append(likedPosts, id_post)
+	}
+
+	// Query the posts using the likedPosts IDs
+	var likedPostIDs []string
+	for _, id := range likedPosts {
+		likedPostIDs = append(likedPostIDs, strconv.Itoa(id))
+	}
+
+	query := fmt.Sprintf("SELECT * FROM Posts WHERE id IN (%s)", strings.Join(likedPostIDs, ","))
+	rows, err = db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var likedPostsList []Post
+	for rows.Next() {
+		var post Post
+		if err := rows.Scan(&post.ID, &post.Title, &post.Description, &post.ImagePath, &post.UserID, &post.HobbieID); err != nil {
+			return nil, err
+		}
+		likedPostsList = append(likedPostsList, post)
+	}
+
+	return likedPostsList, nil
+}
+
 func GetComment(postID string) ([]Comments, error) {
-	db, err := sql.Open("sqlite3", "./test.db")
+	db, err := sql.Open("sqlite3", "./database.db")
 	if err != nil {
 		return nil, err
 	}
@@ -169,10 +216,11 @@ func GetComment(postID string) ([]Comments, error) {
 	}
 	return comments, nil
 }
+
 func GetPostLikedByUser(userID int) {
 	var db *sql.DB
 	var err error
-	db, err = sql.Open("sqlite3", "./test.db")
+	db, err = sql.Open("sqlite3", "./database.db")
 	if err != nil {
 		log.Fatal(err)
 	}
