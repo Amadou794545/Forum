@@ -1,5 +1,5 @@
-/* Styles généraux */
-html, body, #container {
+/*__________________________________ Styles généraux __________________________________*/
+html, body {
     margin: 0;
     padding: 0;
     width: 100%;
@@ -7,38 +7,102 @@ html, body, #container {
 }
 
 body {
-    background-color: #EBE4DA;
+    background: linear-gradient(#BAA17F, #D2B48C);
     font-family: Arial, sans-serif;
-    color: #000;
 }
 
-#container, .pseudo_container, .picture_container {
+.pseudo_container, .picture_container {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
+    margin: 3vh;
 }
 
 h2 {
-    color: #aa906d;
+    color: #3d3527;
 }
 
-/* Formulaire de changement de pseudo */
+/*__________________________________ Header __________________________________*/
+header {
+    background: linear-gradient(#74644c, #ccb18c);
+    height: 15vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    padding-left: 15vh;
+    padding-right: 8vh;
+}
+
+.logo {
+    font-size: 60px;
+    text-transform: uppercase;
+    font-weight: bolder;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.103);
+}
+
+.gradient-text {
+    background-image: linear-gradient(to right, #fc942d, #e7c52e);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}  
+
+.profile-icon, .profile-icon img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    margin-left: 0;
+}
+
+#menu {
+    position: absolute;
+    right: 3vw;
+    background-color: #EBE4DA;
+    padding: 10px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+}
+
+#menu ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#menu li {
+    padding: 5px;
+}
+
+#menu a {
+    text-decoration: none;
+    color: #5c4f39;
+    font-weight: bold;
+}
+
+#menu a:hover {
+    color: #be8437;
+}
+
+/*__________________________________ Formulaire de changement de pseudo __________________________________*/
 form[name="change-username-form"] {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-#label_new_username {
-    color: #c2a279;
+#label_new_username, .usernameMessage {
+    color: #5c4f39;
 }
 
-input[type="text"] {
+#username {
+    background-color: #EBE4DA;
     width: 90%;
     padding: 5px;
-    border: 1px solid #D2B48C;
-    border-radius: 3px;
+    border: 1px solid #b3946b;
+    border-radius: 7px;
 }
 
 #username:focus {
@@ -46,20 +110,7 @@ input[type="text"] {
     outline: none;
 }
 
-.usernameMessage {
-    color: #c2a279;
-}
-
-input[type="submit"] {
-    background-color: #D2B48C;
-    color: #fff;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 3px;
-    cursor: pointer;
-}
-
-/* Section de changement de photo de profil */
+/*__________________________________ Section de changement de photo de profil __________________________________*/
 #profileForm {
     display: flex;
     flex-direction: column;
@@ -80,11 +131,19 @@ input[type="submit"] {
 }
 
 .picture_choice {
-    width: 50px;
-    height: 50px;
+    width: 70px;
+    height: 70px;
     border-radius: 50%;
     margin: 5px;
     cursor: pointer;
+}
+
+.picture_choice:hover {
+    opacity: 70%;
+}
+
+.picture_choice:active {
+    opacity: 30%;
 }
 
 #uploadInput {
@@ -92,26 +151,41 @@ input[type="submit"] {
     margin: 2vh;
 }
 
-#sendButton {
-    background-color: #D2B48C;
-    color: #fff;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 3px;
-    cursor: pointer;
-}
-
-/* FAQ icône */
+/*__________________________________ FAQ icône __________________________________*/
 .faq {
     color: #000;
-    font-size: 200%;
+    font-size: 300%;
     position: absolute;
     bottom: 20px;
     right: 20px;
     cursor: pointer;
 }
 
-/* Médias interrogatifs */
 .fa-circle-question {
-color: #D2B48C;
+    color: #77562b;
+}
+
+.fa-circle-question:hover {
+    color: #77562ba4;
+}
+
+/*__________________________________ Commun __________________________________*/
+input[type="submit"], #sendButton {
+    background: linear-gradient(90deg, #fc942d, #e7c52e);
+    width: 10vw;
+    font-size: 15px;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 25px;
+    cursor: pointer;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+}
+
+input[type="submit"]:hover, #sendButton:hover {
+    background: linear-gradient(90deg, #e7c52e, #fc942d);
+}
+
+input[type="submit"]:active, #sendButton:active {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
 }

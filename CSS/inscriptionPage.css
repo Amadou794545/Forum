@@ -7,7 +7,6 @@ html {
     padding: 0;
     font-family: sans-serif;
     background: linear-gradient(#BAA17F, #D2B48C);
-    background-color: #EBE4DA;
   }
   
   h2 {
@@ -17,7 +16,7 @@ html {
     letter-spacing: 0.5em;
     text-transform: uppercase;
     text-align: center;
-    margin-top: 20px;
+    margin-top: 5%;
     color: #fff;
   }
   

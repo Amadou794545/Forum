@@ -117,9 +117,6 @@ func addCommentAPI(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Requête invalide", http.StatusBadRequest)
 		return
 	}
-	// Accéder aux données du commentaire
-	fmt.Println("ID de publication :", data.PostID)
-	fmt.Println("Contenu du commentaire :", data.CommentContent)
 	// Ajouter le commentaire à la base de données
 	Database.AddComment(data.CommentContent, UserID, data.PostID)
 	// Envoyer la réponse avec les commentaires au format JSON

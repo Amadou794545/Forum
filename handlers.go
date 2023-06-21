@@ -177,8 +177,6 @@ func HandlerLogin(w http.ResponseWriter, r *http.Request) {
 
 	username := r.FormValue("username")
 	password := r.FormValue("password")
-	println(username)
-	println(password)
 
 	if username != "" && password != "" {
 		if Database.CheckLogin(username, password) {

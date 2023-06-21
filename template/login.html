@@ -5,7 +5,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie-edge">
-        <title>DADA</title>
+        <title>Connexion</title>
         <link rel="stylesheet" href="/css/LoginPage.css">
     </head>
 
@@ -18,10 +18,10 @@
 
         <section id="login">
             <form action="/login" method="POST" name="login-form" onsubmit="return validatePassword(event)">
-                <label for="username">Nom d'utilisateur:</label>
+                <label for="username">Nom d'utilisateur :</label>
                 <input type="text" id="username" name="username" value="{{.Username}}"><br>
                 <p class="error username-error"></p>
-                <label for="password">Mot de passe:</label>
+                <label for="password">Mot de passe :</label>
                 <input type="password" id="password" name="password"><br>
                 <p class="error password-error"></p>
                 <input type="submit" value="Se connecter">

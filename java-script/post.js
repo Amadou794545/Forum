@@ -132,8 +132,6 @@ function fetchPosts() {
   fetch(`/api/posts?page=${currentPage}&limit=${postsPerPage}&filters=${filters}`)
       .then(response => response.json())
       .then(data => {
-          // Process the retrieved post data
-          console.log(data); // Print the data to the console as an example
           // Update the UI to display the posts
           const postContainer = document.getElementById('postContainer');
           data.forEach(post => {
