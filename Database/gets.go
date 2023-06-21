@@ -146,7 +146,7 @@ func GetUserPosts(user_id int) ([]Post, error) {
 }
 
 func GetComment(postID string) ([]Comments, error) {
-	db, err := sql.Open("sqlite3", "./test.db")
+	db, err := sql.Open("sqlite3", "./database.db")
 	if err != nil {
 		return nil, err
 	}
@@ -172,7 +172,7 @@ func GetComment(postID string) ([]Comments, error) {
 func GetPostLikedByUser(userID int) {
 	var db *sql.DB
 	var err error
-	db, err = sql.Open("sqlite3", "./test.db")
+	db, err = sql.Open("sqlite3", "./database.db")
 	if err != nil {
 		log.Fatal(err)
 	}

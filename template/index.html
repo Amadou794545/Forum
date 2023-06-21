@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="/CSS/index.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>Home</title>
 </head>
@@ -60,12 +60,12 @@
 
       <div class="filter-box backcolor1">
         <input type="checkbox" id="musique" name="musique" value="6">
-        <label for="musique"><img src="Pictures/Dadas/musique.png" alt="musique" class="icon">Musique</label>
+        <label for="musique"><img src="Pictures/Dadas/Musique.png" alt="musique" class="icon">Musique</label>
       </div>
 
       <div class="filter-box backcolor1">
         <input type="checkbox" id="sport" name="sport" value="7">
-        <label for="sport"><img src="Pictures/Dadas/sport.png" alt="sport" class="icon">Sport</label>
+        <label for="sport"><img src="Pictures/Dadas/Sport.png" alt="sport" class="icon">Sport</label>
       </div>
 
       <input type="submit" value="Filtrer" >
@@ -163,7 +163,7 @@
                 success: function(response) {
                   // Handle the response from the server
                   console.log(response); // You can do further processing or display a success message
-                  post(); // Call the post() function to display the new post
+                  Post(); // Call the post() function to display the new post
                 },
                 error: function(xhr, status, error) {
                   console.log(error); // You can display an error message or perform other error handling

@@ -1,17 +1,17 @@
 FROM golang:1.20
 
 # Copie du code source
-WORKDIR /go/src/app
+WORKDIR /app
 COPY . .
 
 # Compilation de l'application Go
-RUN go build -o /go/bin/app
+RUN go build -o run
 
 # Exposition du port sur lequel le serveur web écoute
 EXPOSE 3030
 
 # Démarrage de l'application
-CMD ["/go/bin/app"]
+CMD ["/app/run"]
 
 
 # Build docker img
