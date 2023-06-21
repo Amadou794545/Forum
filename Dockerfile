@@ -24,7 +24,9 @@ CMD ["/go/bin/app"]
 
 
 # Build docker img
-    # $ docker build -t forum .
+    # docker build -t forum .
+# Check si l'img a été crée
+    # docker images
 # Run docker img
     # docker run -p 3030:3030 --name my-forum forum
 # Run docker img sous forme de montage de volume (pour mise à jour auto du container)
