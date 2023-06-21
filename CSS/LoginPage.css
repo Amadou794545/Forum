@@ -1,0 +1,94 @@
+html {
+    height: 100%;
+  }
+  
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    background: linear-gradient(#BAA17F, #D2B48C);
+  }
+  
+  h1 {
+    font-family: Oswald, sans-serif;
+    font-size: 40px;
+    font-weight: 200;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: #fff;
+    margin-top: 5%;
+    text-align: center;
+  }
+  
+  form {
+    width: 400px;
+    margin: 0 auto;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 40px;
+    box-sizing: border-box;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+    border-radius: 10px;
+    top: 50%;
+    position: fixed;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  label {
+    color: #fff;
+    font-size: 16px;
+  }
+  
+  input[type="submit"],
+  input[type="password"] {
+    width: 100%;
+    padding: 10px 0;
+    font-size: 16px;
+    color: #fff;
+    margin-bottom: 30px;
+    border: none;
+    border-bottom: 1px solid #fff;
+    outline: none;
+    background: transparent;
+  }
+  input[type="text"],
+  input[type="password"] {
+    width: 100%;
+    padding: 10px 0;
+    font-size: 16px;
+    color: #fff;
+    margin-bottom: 30px;
+    border: none;
+    border-bottom: 1px solid #fff;
+    outline: none;
+    background: transparent;
+  }
+  
+  .error {
+    color: #ff0000;
+    margin-bottom: 10px;
+  }
+  
+  .error-message {
+    color: #ff0000;
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  input[type="submit"] {
+    display: block;
+    width: 100%;
+    padding: 10px 0;
+    font-size: 16px;
+    color: #fff;
+    background: linear-gradient(90deg, #f0c300, #ff8000);
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    outline: none;
+  }
+  
+  input[type="submit"]:hover {
+    background: linear-gradient(90deg, #ff8000, #f0c300);
+  }
+  

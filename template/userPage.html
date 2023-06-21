@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+    </head>
+    <body>
+        <header>
+            <div class="logo">
+                <p class="gradient-text">Dada</p>
+            </div>
+            <div id="user-section">
+                <div class="profile-icon" onclick="toggleMenu()" title="Menu">
+                    <img src={{.ImgPath}}>
+                </div>
+                <div id="menu" style="display:none;">
+                    <ul>
+                        <li><a href="/created">Mon mur</a></li>
+                        <li><a href="/liked">Mes posts likés</a></li>
+                        <li><a href="/settings">Paramètres</a></li>
+                        <li><a href="/deconnect">Se déconnecter</a></li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+
+        <h1>Created Post</h1>
+        <div id="posts"></div>
+    </body>
+
+    <script src="../java-script/createdPost.js"></script>
+    <script src="../java-script/connectedIcone.js"></script>
+    
+</html>
