@@ -23,11 +23,11 @@ func init() {
 	CreatePostsTable()
 	CreateHobbiesTable()
 
-	AddHobbie("../pictures/Dadas/cinema.png", "Cinema")
-	AddHobbie("../pictures/Dadas/cuisine.png", "Cuisine")
-	AddHobbie("../pictures/Dadas/informatique.png", "Informatique")
-	AddHobbie("../pictures/Dadas/jeux.png", "Jeux")
-	AddHobbie("../pictures/Dadas/lecture.png", "Lecture")
-	AddHobbie("../pictures/Dadas/musique.png", "Musique")
-	AddHobbie("../pictures/Dadas/sport.png", "Sport")
+	AddHobbie("../Pictures/Dadas/cinema.png", "Cinema")
+	AddHobbie("../Pictures/Dadas/cuisine.png", "Cuisine")
+	AddHobbie("../Pictures/Dadas/informatique.png", "Informatique")
+	AddHobbie("../Pictures/Dadas/jeux.png", "Jeux")
+	AddHobbie("../Pictures/Dadas/lecture.png", "Lecture")
+	AddHobbie("../Pictures/Dadas/musique.png", "Musique")
+	AddHobbie("../Pictures/Dadas/sport.png", "Sport")
 }

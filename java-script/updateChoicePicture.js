@@ -1,5 +1,5 @@
 function selectDefaultPicture(filename) {
-  var newPictureSrc = "pictures/Profil/" + filename;
+  var newPictureSrc = "Pictures/Profil/" + filename;
   // Update 'profile picture'
   var profilePicture = document.getElementById('profile_picture');
   profilePicture.src = newPictureSrc;

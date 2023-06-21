@@ -130,7 +130,7 @@ func HandlerUserPicture(w http.ResponseWriter, r *http.Request) {
 		// Generate the new filename
 		newFilename := fmt.Sprintf("Img-%d%s", uniqueNumber, extension)
 		// Get new path
-		filePath := filepath.Join("./pictures/uploads", newFilename)
+		filePath := filepath.Join("./Pictures/uploads", newFilename)
 		// Save the file on the server with the new filename
 		outFile, err := os.Create(filePath)
 		if err != nil {
