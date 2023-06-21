@@ -85,70 +85,41 @@ func GetUserPostsAPI(w http.ResponseWriter, r *http.Request) {
 	w.Write(jsonData)
 }
 
-func addCommentAPI(w http.ResponseWriter, r *http.Request) {
+func GetCommentAPI(w http.ResponseWriter, r *http.Request) {
 	cookie, err := r.Cookie("session")
 	if err != nil {
-		// Gérer l'erreur si nécessaire
-		fmt.Println("Erreur lors de la récupération du cookie de session :", err)
+		fmt.Println("Error retrieving session cookie:", err)
 		http.Redirect(w, r, "/", http.StatusFound)
-		return
 	}
+
 	UserID, err := strconv.Atoi(cookie.Value)
 	if err != nil {
-		// Gérer l'erreur si nécessaire
-		fmt.Println("Erreur lors de la récupération de la valeur du cookie :", err)
-		http.Error(w, "Requête invalide", http.StatusBadRequest)
+		fmt.Println("Error retrieving cookie value:", err)
 		return
 	}
-	// Décoder le corps de la requête
+
+	// Decode the request body
 	var data struct {
 		PostID         string `json:"postID"`
 		CommentContent string `json:"commentContent"`
 	}
+
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		fmt.Println("Erreur lors de la lecture du corps de la requête :", err)
-		http.Error(w, "Requête invalide", http.StatusBadRequest)
+		fmt.Println("Error reading request body:", err)
+		http.Error(w, "Invalid request", http.StatusBadRequest)
 		return
 	}
+
 	err = json.Unmarshal(body, &data)
 	if err != nil {
-		fmt.Println("Erreur lors du décodage du corps de la requête :", err)
-		http.Error(w, "Requête invalide", http.StatusBadRequest)
+		fmt.Println("Error decoding request body:", err)
+		http.Error(w, "Invalid request", http.StatusBadRequest)
 		return
 	}
-	// Accéder aux données du commentaire
-	fmt.Println("ID de publication :", data.PostID)
-	fmt.Println("Contenu du commentaire :", data.CommentContent)
-	// Ajouter le commentaire à la base de données
+
+	// Access the comment data
+	fmt.Println("Post ID:", data.PostID)
+	fmt.Println("Comment Content:", data.CommentContent)
 	Database.AddComment(data.CommentContent, UserID, data.PostID)
-	// Envoyer la réponse avec les commentaires au format JSON
-	sendCommentsResponse(w, data.PostID)
-}
-
-func getCommentsAPI(w http.ResponseWriter, r *http.Request) {
-	postID := r.URL.Query().Get("postId")
-	if postID == "" {
-		http.Error(w, "Paramètre postId manquant", http.StatusBadRequest)
-		return
-	}
-	sendCommentsResponse(w, postID)
-}
-
-func sendCommentsResponse(w http.ResponseWriter, postID string) {
-	comments, err := Database.GetComment(postID)
-	fmt.Println(Database.GetComment(postID))
-	if err != nil {
-		log.Println("Erreur lors de la récupération des commentaires :", err)
-		http.Error(w, "Erreur interne du serveur", http.StatusInternalServerError)
-		return
-	}
-	jsonData, err := json.MarshalIndent(comments, "", "  ")
-	if err != nil {
-		log.Println("Erreur lors de la conversion en JSON :", err)
-		http.Error(w, "Erreur interne du serveur", http.StatusInternalServerError)
-		return
-	}
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(jsonData)
 }
