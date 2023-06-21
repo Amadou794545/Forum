@@ -25,7 +25,8 @@ func main() {
 	http.HandleFunc("/liked", HandlerLiked)
 	http.HandleFunc("/settings", HandlerSettings)
 
-	http.HandleFunc("/comment", GetCommentAPI)
+	http.HandleFunc("/comment", addCommentAPI)
+	http.HandleFunc("/api/comments", getCommentsAPI)
 	http.HandleFunc("/upload", uploadFile)
 
 	http.HandleFunc("/api/posts", GetPostsAPI)
