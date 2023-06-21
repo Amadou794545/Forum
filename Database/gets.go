@@ -28,6 +28,64 @@ func GetUserID(identifier string) (string, error) {
 	return userID, nil
 }
 
+func GetPostsDislikes(PostID int) (int, error) {
+	db, err := sql.Open("sqlite3", "./database.db")
+	if err != nil {
+		return 0, err
+	}
+	defer db.Close()
+	var counter int
+	err = db.QueryRow("SELECT COUNT(*) FROM PostsDislikes WHERE id_post = $1", PostID).Scan(&counter)
+	if err != nil {
+		return 0, err
+	}
+	return counter, nil
+}
+
+func GetCommentsLikes(PostID int) (int, error) {
+	db, err := sql.Open("sqlite3", "./database.db")
+	if err != nil {
+		return 0, err
+	}
+	defer db.Close()
+	var counter int
+	err = db.QueryRow("SELECT COUNT(*) FROM CommentsLikes WHERE id_comment = $1", PostID).Scan(&counter)
+	if err != nil {
+		return 0, err
+	}
+	return counter, nil
+}
+
+func GetCommentsDislikes(PostID int) (int, error) {
+	db, err := sql.Open("sqlite3", "./database.db")
+	if err != nil {
+		return 0, err
+	}
+	defer db.Close()
+	var counter int
+	err = db.QueryRow("SELECT COUNT(*) FROM CommentsDislikes WHERE id_comment = $1", PostID).Scan(&counter)
+	if err != nil {
+		return 0, err
+	}
+	return counter, nil
+}
+
+func GetPostsLikes(PostID int) (int, error) {
+	db, err := sql.Open("sqlite3", "./database.db")
+	if err != nil {
+		return 0, err
+	}
+	defer db.Close()
+
+	var counter int
+	err = db.QueryRow("SELECT COUNT(*) FROM PostsLikes WHERE id_post = $1", PostID).Scan(&counter)
+	if err != nil {
+		return 0, err
+	}
+
+	return counter, nil
+}
+
 func GetUserUsername(userID string) (string, error) {
 	var db *sql.DB
 	var err error

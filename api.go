@@ -42,6 +42,29 @@ func GetPostsAPI(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Iterate through each post and retrieve the like and dislike counts
+	for i := range posts {
+		post := &posts[i]
+		post.Likes, err = Database.GetPostsLikes(post.ID)
+		if err != nil {
+			log.Println("Erreur lors de la récupération du nombre de likes :", err)
+			http.Error(w, "Erreur interne du serveur", http.StatusInternalServerError)
+			return
+		}
+		fmt.Println("postId : " + strconv.Itoa(post.ID))
+		fmt.Print("like:")
+		fmt.Println(Database.GetPostsLikes(post.ID))
+		fmt.Println("ttttttttttttttttttttteeeeeeeeeeeeeeeeeeessssssssssssttttt")
+		post.Dislikes, err = Database.GetPostsDislikes(post.ID)
+		if err != nil {
+			log.Println("Erreur lors de la récupération du nombre de dislikes :", err)
+			http.Error(w, "Erreur interne du serveur", http.StatusInternalServerError)
+			return
+		}
+		fmt.Print("dislike:")
+		fmt.Println(Database.GetPostsDislikes(post.ID))
+	}
+
 	jsonData, err := json.Marshal(posts)
 	if err != nil {
 		log.Println("Erreur lors de la conversion en JSON :", err)
@@ -294,12 +317,29 @@ func sendCommentsResponse(w http.ResponseWriter, postID string) {
 		http.Error(w, "Erreur interne du serveur", http.StatusInternalServerError)
 		return
 	}
+	for i := range comments {
+		comment := &comments[i]
+		comment.Likes, err = Database.GetCommentsLikes(comment.CommentID)
+		if err != nil {
+			log.Println("Erreur lors de la récupération du nombre de likes :", err)
+			http.Error(w, "Erreur interne du serveur", http.StatusInternalServerError)
+			return
+		}
+		comment.Dislikes, err = Database.GetCommentsDislikes(comment.CommentID)
+		if err != nil {
+			log.Println("Erreur lors de la récupération du nombre de dislikes :", err)
+			http.Error(w, "Erreur interne du serveur", http.StatusInternalServerError)
+			return
+		}
+	}
+
 	jsonData, err := json.MarshalIndent(comments, "", "  ")
 	if err != nil {
 		log.Println("Erreur lors de la conversion en JSON :", err)
 		http.Error(w, "Erreur interne du serveur", http.StatusInternalServerError)
 		return
 	}
+
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(jsonData)
 }

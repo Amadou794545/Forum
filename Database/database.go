@@ -19,6 +19,10 @@ func init() {
 
 	CreateUsersTable()
 	CreateCommentsTable()
+	CreateCommentsDislikesTable()
+	CreateCommentsLikesTable()
+	CreatePostDislikesTable()
+	CreatePostLikesTable()
 	CreateLikesTable()
 	CreatePostsTable()
 	CreateHobbiesTable()

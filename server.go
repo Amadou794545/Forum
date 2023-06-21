@@ -35,11 +35,11 @@ func main() {
 	http.HandleFunc("/api/user/posts", GetUserPostsAPI)
 	http.HandleFunc("/api/user/likedposts", GetUserlikedPostsAPI)
 
-	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("/go/src/app/CSS"))))
-	http.Handle("/java-script/", http.StripPrefix("/java-script", http.FileServer(http.Dir("/go/src/app/java-script"))))
+	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("CSS"))))
+	http.Handle("/java-script/", http.StripPrefix("/java-script", http.FileServer(http.Dir("java-script"))))
 
-	http.Handle("/images/", http.StripPrefix("/images", http.FileServer(http.Dir("/go/src/app/uploads"))))
-	http.Handle("/Pictures/", http.StripPrefix("/Pictures", http.FileServer(http.Dir("/go/src/app/Pictures"))))
+	http.Handle("/images/", http.StripPrefix("/images", http.FileServer(http.Dir("uploads"))))
+	http.Handle("/Pictures/", http.StripPrefix("/Pictures", http.FileServer(http.Dir("Pictures"))))
 
 	port := ":3030"
 	fmt.Printf("Serveur en cours d'exécution sur le port %s\n", port)
@@ -102,7 +102,7 @@ func uploadFile(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		imagePath = "/go/src/app/" + newFilename
+		imagePath = "images/" + newFilename
 	}
 
 	cookie, err := r.Cookie("session")
