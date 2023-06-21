@@ -135,7 +135,6 @@ $(document).ready(function () {
         clearallpost();
         currentPage = 1;
         fetchPosts();
-        window.addEventListener('scroll', scrollListener);
     })
 });
 
