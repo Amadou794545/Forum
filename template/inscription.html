@@ -3,23 +3,24 @@
 
   <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/inscriptionPage.css">
     <title>Inscription</title>
   </head>
 
   <body>
-    <h2>Page d'inscription</h2>
+    <h2>Inscription</h2>
 
     <form action="/inscription" method="POST" name="register-form" onsubmit="return validatePassword(event)">
-      <label for="username">Nom d'utilisateur:</label>
+      <label for="username">Nom d'utilisateur :</label>
       <input type="text" id="username" name="username" value="{{.Username}}"><br>
       <p class="error username-error"></p>
-      <label for="email">Email:</label>
+      <label for="email">Email :</label>
       <input type="text" id="email" name="email" value="{{.Email}}"><br>
       <p class="error email-error"></p>
-      <label for="password">Mot de passe:</label>
+      <label for="password">Mot de passe :</label>
       <input type="password" id="password" name="password"><br>
       <p class="error password-error"></p>
-      <label for="confirm-password">Confirmer le mot de passe:</label>
+      <label for="confirm-password">Confirmer le mot de passe :</label>
       <input type="password" id="confirm-password" name="confirm-password"><br>
       <p class="error confirm-password-error"></p>
       <p class="error-message">{{.ErrorMessage}}</p>

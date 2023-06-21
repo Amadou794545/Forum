@@ -25,15 +25,15 @@ func main() {
 	http.HandleFunc("/liked", HandlerLiked)
 	http.HandleFunc("/settings", HandlerSettings)
 
-	http.HandleFunc("/comment", GetCommentAPI)
+	http.HandleFunc("/comment", addCommentAPI)
+	http.HandleFunc("/api/comments", getCommentsAPI)
 	http.HandleFunc("/upload", uploadFile)
 
 	http.HandleFunc("/api/posts", GetPostsAPI)
 	http.HandleFunc("/api/user/posts", GetUserPostsAPI)
 
-	fs := http.FileServer(http.Dir("/go/bin/CSS"))
-	http.Handle("/CSS/", http.StripPrefix("/CSS/", fs))
-	http.Handle("/java-script/", http.StripPrefix("/java-script", http.FileServer(http.Dir("java-script"))))
+	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("/go/src/app/CSS"))))
+	http.Handle("/java-script/", http.StripPrefix("/java-script", http.FileServer(http.Dir("/go/src/app/java-script"))))
 
 	http.Handle("/images/", http.StripPrefix("/images", http.FileServer(http.Dir("uploads"))))
 	http.Handle("/Pictures/", http.StripPrefix("/Pictures", http.FileServer(http.Dir("Pictures"))))

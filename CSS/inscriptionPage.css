@@ -9,26 +9,29 @@ html {
     background: linear-gradient(#BAA17F, #D2B48C);
   }
   
-  h1 {
+  h2 {
     font-family: Oswald, sans-serif;
     font-size: 40px;
     font-weight: 200;
     letter-spacing: 0.5em;
     text-transform: uppercase;
-    color: #fff;
-    margin-top: 5%;
     text-align: center;
+    margin-top: 5%;
+    color: #fff;
   }
   
   form {
     width: 400px;
     margin: 0 auto;
     background: rgba(0, 0, 0, 0.5);
+    background-position: 50%;
     padding: 40px;
     box-sizing: border-box;
     box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
     border-radius: 10px;
+    position: relative;
     top: 50%;
+    transform: translateY(-50%);
     position: fixed;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -39,25 +42,13 @@ html {
     font-size: 16px;
   }
   
-  input[type="submit"],
-  input[type="password"] {
-    width: 100%;
-    padding: 10px 0;
-    font-size: 16px;
-    color: #fff;
-    margin-bottom: 30px;
-    border: none;
-    border-bottom: 1px solid #fff;
-    outline: none;
-    background: transparent;
-  }
   input[type="text"],
   input[type="password"] {
     width: 100%;
     padding: 10px 0;
     font-size: 16px;
     color: #fff;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     border: none;
     border-bottom: 1px solid #fff;
     outline: none;
@@ -92,3 +83,4 @@ html {
     background: linear-gradient(90deg, #ff8000, #f0c300);
   }
   
+

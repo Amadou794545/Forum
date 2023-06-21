@@ -1,32 +1,191 @@
-body {
-    background-color: #EBE4DA;
+/*__________________________________ Styles généraux __________________________________*/
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
 }
 
-/*________________________________ Username part ________________________________*/
+body {
+    background: linear-gradient(#BAA17F, #D2B48C);
+    font-family: Arial, sans-serif;
+}
 
+.pseudo_container, .picture_container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    margin: 3vh;
+}
 
+h2 {
+    color: #3d3527;
+}
 
-/*________________________________ Pictures part ________________________________*/
+/*__________________________________ Header __________________________________*/
+header {
+    background: linear-gradient(#74644c, #ccb18c);
+    height: 15vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    padding-left: 15vh;
+    padding-right: 8vh;
+}
+
+.logo {
+    font-size: 60px;
+    text-transform: uppercase;
+    font-weight: bolder;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.103);
+}
+
+.gradient-text {
+    background-image: linear-gradient(to right, #fc942d, #e7c52e);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}  
+
+.profile-icon, .profile-icon img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    margin-left: 0;
+}
+
+#menu {
+    position: absolute;
+    right: 3vw;
+    background-color: #EBE4DA;
+    padding: 10px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+}
+
+#menu ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#menu li {
+    padding: 5px;
+}
+
+#menu a {
+    text-decoration: none;
+    color: #5c4f39;
+    font-weight: bold;
+}
+
+#menu a:hover {
+    color: #be8437;
+}
+
+/*__________________________________ Formulaire de changement de pseudo __________________________________*/
+form[name="change-username-form"] {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#label_new_username, .usernameMessage {
+    color: #5c4f39;
+}
+
+#username {
+    background-color: #EBE4DA;
+    width: 90%;
+    padding: 5px;
+    border: 1px solid #b3946b;
+    border-radius: 7px;
+}
+
+#username:focus {
+    border-color: #be8437;
+    outline: none;
+}
+
+/*__________________________________ Section de changement de photo de profil __________________________________*/
+#profileForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
 #profile_picture {
-    height: 250px;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
 }
 
 #profile_picture_choices {
     display: flex;
-    justify-content: space-evenly;
     flex-wrap: wrap;
+    justify-content: center;
+    margin: 2vh;
 }
 
 .picture_choice {
-    width: 150px;
-    height: 150px;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    margin: 5px;
+    cursor: pointer;
 }
 
 .picture_choice:hover {
-    border: 5px green solid;
+    opacity: 70%;
 }
 
 .picture_choice:active {
-    border: 5px rgb(69, 173, 69) solid;
+    opacity: 30%;
+}
+
+#uploadInput {
+    text-align: center;
+    margin: 2vh;
+}
+
+/*__________________________________ FAQ icône __________________________________*/
+.faq {
+    color: #000;
+    font-size: 300%;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    cursor: pointer;
+}
+
+.fa-circle-question {
+    color: #77562b;
+}
+
+.fa-circle-question:hover {
+    color: #77562ba4;
+}
+
+/*__________________________________ Commun __________________________________*/
+input[type="submit"], #sendButton {
+    background: linear-gradient(90deg, #fc942d, #e7c52e);
+    width: 10vw;
+    font-size: 15px;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 25px;
+    cursor: pointer;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+}
+
+input[type="submit"]:hover, #sendButton:hover {
+    background: linear-gradient(90deg, #e7c52e, #fc942d);
+}
+
+input[type="submit"]:active, #sendButton:active {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
 }

@@ -8,16 +8,38 @@
     </head>
     
     <body>
-        <h2>Changer le pseudo</h2>
+        <header>
+            <div class="logo">
+                <p class="gradient-text">Dada</p>
+            </div>
+            <div id="user-section">
+                <div class="profile-icon" onclick="toggleMenu()" title="Menu">
+                    <img src={{.ImgPath}}>
+                </div>
+                <div id="menu" style="display:none;">
+                    <ul>
+                        <li><a href="/created">Mon mur</a></li>
+                        <li><a href="/liked">Mes posts likés</a></li>
+                        <li><a href="/settings">Paramètres</a></li>
+                        <li><a href="/deconnect">Se déconnecter</a></li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+
+        <div class="pseudo_container">
+            <h2>Changer le pseudo</h2>
             <form action="/settings" method="POST" name="change-username-form">
-                <label for="username">Nouveau nom d'utilisateur :</label>
+                <label id="label_new_username" for="username">Nouveau nom d'utilisateur :</label>
                 <input type="text" id="username" name="username">
                 <p class="usernameMessage">{{.UsernameMessage}}</p>
             
                 <input type="submit" value="Modifier">
             </form>
+        </div>
 
-        <h2>Changer la photo de profil</h2>
+        <div class="picture_container">
+            <h2>Changer la photo de profil</h2>
             <img id="profile_picture" src="{{.ImgPath}}" alt="Current profile picture">
 
             <form id="profileForm" action="/userPicture" method="POST" enctype="multipart/form-data">
@@ -40,11 +62,15 @@
                 <input type="hidden" id="selectedPicture" name="selectedPicture" value="">
             
                 <button id="sendButton" type="submit">Send</button>
-            </form>  
+            </form>
+        </div>
 
-        <i class="faq fa-solid fa-circle-question"></i>
-
-        <script src="../java-script/updateChoicePicture.js"></script>
-        <script src="../java-script/changeUsername.js"></script>
+        <i class="faq fa-solid fa-circle-question" title="FAQ"></i>
     </body>
+
+    <script src="../java-script/updateChoicePicture.js"></script>
+    <script src="../java-script/changeUsername.js"></script>
+    <script src="../java-script/settings.js"></script>
+    <script src="../java-script/menu.js"></script>
+
 </html>
