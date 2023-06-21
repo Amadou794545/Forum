@@ -38,8 +38,8 @@ func main() {
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("/go/src/app/CSS"))))
 	http.Handle("/java-script/", http.StripPrefix("/java-script", http.FileServer(http.Dir("/go/src/app/java-script"))))
 
-	http.Handle("/images/", http.StripPrefix("/images", http.FileServer(http.Dir("uploads"))))
-	http.Handle("/Pictures/", http.StripPrefix("/Pictures", http.FileServer(http.Dir("Pictures"))))
+	http.Handle("/images/", http.StripPrefix("/images", http.FileServer(http.Dir("/go/src/app/uploads"))))
+	http.Handle("/Pictures/", http.StripPrefix("/Pictures", http.FileServer(http.Dir("/go/src/app/Pictures"))))
 
 	port := ":3030"
 	fmt.Printf("Serveur en cours d'exécution sur le port %s\n", port)
@@ -50,6 +50,7 @@ func main() {
 }
 
 func uploadFile(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("testpict2")
 	maxFileSize := int64(10 * 1024 * 1024) // Set the maximum file size to 10 MB
 	err := r.ParseMultipartForm(maxFileSize)
 	if err != nil {
@@ -101,7 +102,7 @@ func uploadFile(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		imagePath = "images/" + newFilename
+		imagePath = "/go/src/app/" + newFilename
 	}
 
 	cookie, err := r.Cookie("session")
