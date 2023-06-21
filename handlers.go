@@ -209,6 +209,8 @@ func HandlerDeconnect(w http.ResponseWriter, r *http.Request) {
 }
 
 func HandlerCreated(w http.ResponseWriter, r *http.Request) {
+	tmpl := template.Must(template.ParseFiles("./template/userPage.html"))
+
 	if cookies.CheckSessionCookie(r) {
 		_, err := r.Cookie("session")
 		if err != nil {
@@ -216,15 +218,7 @@ func HandlerCreated(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, "/", http.StatusFound)
 		}
 	}
-	http.ServeFile(w, r, "template/userPage.html")
-}
 
-func HandlerLiked(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "template/liked.html")
-}
-
-func HandlerSettings(w http.ResponseWriter, r *http.Request) {
-	tmpl := template.Must(template.ParseFiles("./template/settings.html"))
 	imgPathDta := ImgPathData{
 		ImgPath: "",
 	}
@@ -239,6 +233,48 @@ func HandlerSettings(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Error retrieving imgPath :", err)
 		return
 	}
+
+	tmpl.Execute(w, imgPathDta)
+}
+
+func HandlerLiked(w http.ResponseWriter, r *http.Request) {
+	tmpl := template.Must(template.ParseFiles("./template/liked.html"))
+
+	imgPathDta := ImgPathData{
+		ImgPath: "",
+	}
+	cookie, err := r.Cookie("session")
+	if err != nil {
+		fmt.Println("Error retrieving session cookie :", err)
+		return
+	}
+	userID := cookie.Value
+	imgPathDta.ImgPath, err = Database.GetUserImg(userID)
+	if err != nil {
+		fmt.Println("Error retrieving imgPath :", err)
+		return
+	}
+	tmpl.Execute(w, imgPathDta)
+}
+
+func HandlerSettings(w http.ResponseWriter, r *http.Request) {
+	tmpl := template.Must(template.ParseFiles("./template/settings.html"))
+
+	imgPathDta := ImgPathData{
+		ImgPath: "",
+	}
+	cookie, err := r.Cookie("session")
+	if err != nil {
+		fmt.Println("Error retrieving session cookie :", err)
+		return
+	}
+	userID := cookie.Value
+	imgPathDta.ImgPath, err = Database.GetUserImg(userID)
+	if err != nil {
+		fmt.Println("Error retrieving imgPath :", err)
+		return
+	}
+
 	username := r.FormValue("username")
 	if username == "" {
 		imgPathDta.UsernameMessage = "Entrez un pseudo pour lancer la vérification"
@@ -253,5 +289,6 @@ func HandlerSettings(w http.ResponseWriter, r *http.Request) {
 		}
 		Database.UpdateUsername(username, userIDInt)
 	}
+
 	tmpl.Execute(w, imgPathDta)
 }

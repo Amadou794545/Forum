@@ -1,5 +1,3 @@
-// script.js
-
 function updateUsernameMessageColor() {
     var usernameMessage = document.querySelector('.usernameMessage');
     

@@ -6,6 +6,28 @@
     </head>
     
     <body>
+        <header>
+            <div class="logo">
+                <p class="gradient-text">Dada</p>
+            </div>
+            <div id="user-section">
+                <div class="profile-icon" onclick="toggleMenu()" title="Menu">
+                    <img src={{.ImgPath}}>
+                </div>
+                <div id="menu" style="display:none;">
+                    <ul>
+                        <li><a href="/created">Mon mur</a></li>
+                        <li><a href="/liked">Mes posts likés</a></li>
+                        <li><a href="/settings">Paramètres</a></li>
+                        <li><a href="/deconnect">Se déconnecter</a></li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+
         <h2>Les posts que j'aime :</h2>
     </body>
+
+    <script src="../java-script/menu.js"></script>
+    
 </html>
