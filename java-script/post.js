@@ -27,15 +27,6 @@ function Post() {
     // Ajouter des classes CSS
     newTitre.classList.add("titre-style");
     newDiv.classList.add("div-item");
-    var postContent = `
-      <div id="post">
-          <button id="likeButton">Like</button>
-          <span id="likeCount">0</span>
-          <button id="dislikeButton">Dislike</button>
-          <span id="dislikeCount">0</span>
-      </div>
-  `;
-    newDivPost.innerHTML = postContent;
     newDivPost.appendChild(newTitre);
     newDivPost.appendChild(newDescription);
     // Redimensionner et afficher l'image
@@ -51,14 +42,7 @@ function Post() {
     var firstDiv = Container.firstChild;
     Container.insertBefore(newDiv, firstDiv); // Insérer la nouvelle div avant le premier enfant existant
     Container.insertAdjacentHTML("beforeend", "<br>");
-    // Gestionnaire d'événement pour le bouton "Like"
-    var likeButton = newDivPost.querySelector("#likeButton");
-    var likeCount = newDivPost.querySelector("#likeCount");
-    var likeValue = 0;
-    likeButton.addEventListener("click", function () {
-        likeValue++;
-        likeCount.textContent = likeValue;
-    });
+
     let currentPag = 0;
     const postsPerPag = 1
     fetch(`/api/posts?page=${currentPag}&limit=${postsPerPag}`)
@@ -68,6 +52,7 @@ function Post() {
             // Update the UI to display the posts
             data.forEach(post => {
                 const postElement = document.createElement('div');
+                postElement.className = 'Post';
                 postElement.innerHTML = `
 <form id="ID">  
 <input name="ID"  id="input" type="hidden" value="${post.ID}">
@@ -143,12 +128,18 @@ function fetchPosts() {
     <h3 class="Post-Title">${post.Title}</h3>
     <p class="Post-Desc">${post.Description}</p>
     <img src="${post.ImagePath}" alt="Post Image" class="Post-IMG">
-    <div id="comments-${post.ID}" class="comments"></div> 
-    <form id="commentForm-${post.ID}" class="comment-form">
-      <input type="text" id="comment-${post.ID}" class="comment-input" placeholder="Add a comment">
-      <input type="submit" class="comment-submit">
-    </form>
-  `;
+   
+   <form id="commentForm-${post.ID}" class="comment-form">
+            <input type="text" id="comment-${post.ID}" class="comment-input" placeholder="Ajouter un commentaire">
+            <input type="submit" class="comment-submit">
+        </form> 
+    <div id="comments-${post.ID}" class="comments">  
+      
+         
+     
+    </div>
+`;
+
                 postContainer.appendChild(postElement);
                 // Appeler la fonction pour afficher les commentaires pour chaque publication
                 displayPostComments(post.ID);
@@ -168,16 +159,7 @@ function fetchPosts() {
                     displayComment(postID, commentContent);
                 });
             });
-            // fetch("/api/comments")
-            //     .then(response => response.json())
-            //     .then(data => {
-            //         const postContainer = document.getElementById('postContainer');
-            //         data.forEach(comment => {
-            //             const commentElement = document.createElement('div');
-            //             commentElement.innerHTML = `<div>${comment.Description}</div>`;
-            //             postContainer.appendChild(commentElement);
-            //         });
-            //     });
+
             // Increment the current page number
             currentPage++;
             // Check if there are more posts to load

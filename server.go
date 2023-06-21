@@ -32,7 +32,7 @@ func main() {
 	http.HandleFunc("/api/posts", GetPostsAPI)
 	http.HandleFunc("/api/user/posts", GetUserPostsAPI)
 
-	http.Handle("/CSS/", http.StripPrefix("/CSS", http.FileServer(http.Dir("CSS"))))
+	http.Handle("/css/", http.StripPrefix("/css", http.FileServer(http.Dir("CSS"))))
 	http.Handle("/java-script/", http.StripPrefix("/java-script", http.FileServer(http.Dir("java-script"))))
 
 	http.Handle("/images/", http.StripPrefix("/images", http.FileServer(http.Dir("uploads"))))
