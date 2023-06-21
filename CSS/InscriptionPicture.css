@@ -1,0 +1,22 @@
+#profile_picture {
+    height: 350px;
+}
+
+#profile_picture_choices {
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+.picture_choice {
+    width: 150px;
+    height: 150px;
+}
+
+.picture_choice:hover {
+    border: 5px green solid;
+}
+
+.picture_choice:active {
+    border: 5px rgb(69, 173, 69) solid;
+}
