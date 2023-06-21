@@ -15,7 +15,7 @@ CMD ["/go/bin/app"]
 
 
 # Build docker img
-    # $ docker build -t forum .
+    # docker build -t forum .
 # Check si docker img bien créée
     # docker images
 # Run docker img (utiliser commande suivante à la place)
