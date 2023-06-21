@@ -13,7 +13,8 @@ EXPOSE 3030
 # Démarrage de l'application
 CMD ["/go/bin/app"]
 
-
+# Supprimer tous les containers et toutes les images
+    # docker system prune -a
 # Build docker img
     # docker build -t forum .
 # Check si docker img bien créée
