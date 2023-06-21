@@ -23,9 +23,11 @@ EXPOSE 3030
 CMD ["/go/bin/app"]
 
 
-# Lancer le serveur via docker
+# Build docker img
+    # $ docker build -t forum .
+# Run docker img
     # docker run -p 3030:3030 --name my-forum forum
-# Lancer le serveur via docker sous forme de montage de volume (pour mise à jour auto du container)
+# Run docker img sous forme de montage de volume (pour mise à jour auto du container)
 	# docker run -p 3030:3030 -v C:/Users/fanny/Desktop/Forum:/go/src/app --name my-forum forum
 # Logs de notre container
     # docker logs my-forum
