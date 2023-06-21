@@ -25,12 +25,15 @@ func main() {
 	http.HandleFunc("/liked", HandlerLiked)
 	http.HandleFunc("/settings", HandlerSettings)
 
+	http.HandleFunc("/api/commentlike", CommentLikeDislike)
 	http.HandleFunc("/comment", addCommentAPI)
 	http.HandleFunc("/api/comments", getCommentsAPI)
 	http.HandleFunc("/upload", uploadFile)
 
+	http.HandleFunc("/api/like", PostLikeDislike)
 	http.HandleFunc("/api/posts", GetPostsAPI)
 	http.HandleFunc("/api/user/posts", GetUserPostsAPI)
+	http.HandleFunc("/api/user/likedposts", GetUserlikedPostsAPI)
 
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("/go/src/app/CSS"))))
 	http.Handle("/java-script/", http.StripPrefix("/java-script", http.FileServer(http.Dir("/go/src/app/java-script"))))
