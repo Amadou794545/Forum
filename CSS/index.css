@@ -1,6 +1,39 @@
 .hidden {
     display: none;
 }
+.Publier{
+    background: linear-gradient(90deg, #fc942d, #e7c52e);
+    width: 10vw;
+    font-size: 15px;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 25px;
+    cursor: pointer;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+}
+
+.Publier:hover{
+    background: linear-gradient(90deg, #e7c52e, #fc942d);
+}
+
+
+.filtre{
+    background: linear-gradient(90deg, #fc942d, #e7c52e);
+    width: 10vw;
+    font-size: 15px;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 25px;
+    cursor: pointer;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+}
+.filtre{
+    background: linear-gradient(90deg, #e7c52e, #fc942d);
+
+}
+
 .filter {
     display: flex;
     flex-direction:initial ;
@@ -12,6 +45,7 @@
     display: block;
     justify-content: center;
     align-items: center;
+    /*padding-inline: ;*/
 }
 .icon{
     height: 50px;
@@ -73,7 +107,7 @@ button {
     height: 500px;
 }
 .backcolor2{
-    background: linear-gradient(#F5F5DC, #D2B48C);
+    background-color:#F5F5DC;
 }
 /*POST*/
 .post {
