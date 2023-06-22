@@ -4,6 +4,9 @@
 .filter {
     display: flex;
     flex-direction:initial ;
+    position: relative;
+    left: 240px;
+    top: 10px;
 }
 .filter-box{
     display: block;
