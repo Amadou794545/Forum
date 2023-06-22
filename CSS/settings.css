@@ -43,10 +43,13 @@ header {
 }
 
 .gradient-text {
+    background-image: -webkit-linear-gradient(right, #fc942d, #e7c52e);
     background-image: linear-gradient(to right, #fc942d, #e7c52e);
+    -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-}  
+    color: transparent;
+}
 
 .profile-icon, .profile-icon img {
     width: 60px;
