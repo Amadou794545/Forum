@@ -1,5 +1,21 @@
+body,html{
+      margin: 0;
+    padding: 0;
+}
+
+
+
+
 .hidden {
     display: none;
+}
+.gradient-text {
+    background-image: -webkit-linear-gradient(right, #fc942d, #e7c52e);
+    background-image: linear-gradient(to right, #fc942d, #e7c52e);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
 }
 .Publier{
     background: linear-gradient(90deg, #fc942d, #e7c52e);
@@ -38,8 +54,12 @@
     display: flex;
     flex-direction:initial ;
     position: relative;
-    left: 240px;
     top: 10px;
+  justify-content: center;
+    padding: 20px;
+    width: 50%;
+    border-radius: 10px;
+    left: 20%;
 }
 .filter-box{
     display: block;
@@ -147,11 +167,15 @@ button {
     margin-right: 10px;
 }
 .post .comment-submit {
-    padding: 8px 16px;
-    background-color: #007bff;
+    background: linear-gradient(90deg, #fc942d, #e7c52e);
+    width: 10vw;
+    font-size: 15px;
     color: #fff;
     border: none;
+    padding: 10px;
+    border-radius: 25px;
     cursor: pointer;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
 }
 .post .comments {
     margin-bottom: 20px;
@@ -164,15 +188,15 @@ button {
 }
 /*header*/
 header {
-    background: linear-gradient(#74644c, #ccb18c);
-    height: 15vh;
+    background-color:#dac09f;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-sizing: border-box;
-    padding-left: 15vh;
-    padding-right: 8vh;
+    height: 90px;
+    padding: 20px;
+
 }
+
 .logo {
     font-size: 60px;
     text-transform: uppercase;
@@ -199,7 +223,7 @@ header {
     cursor: pointer;
     position: absolute;
     right: 13px;
-    top: 50px;
+    top: 3%;
 }
 #menu {
     position: absolute;
