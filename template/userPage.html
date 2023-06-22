@@ -3,13 +3,15 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        
+        <link rel="stylesheet" href="/css/mur.css">
     </head>
     <body>
         <header>
-            <div class="logo">
-                <p class="gradient-text">Dada</p>
-            </div>
+            <a id="redirecHome" href="/index">
+                <div class="logo">
+                    <p class="gradient-text">Dada</p>
+                </div>
+            </a>
             <div id="user-section">
                 <div class="profile-icon" onclick="toggleMenu()" title="Menu">
                     <img src={{.ImgPath}}>
@@ -17,7 +19,6 @@
                 <div id="menu" style="display:none;">
                     <ul>
                         <li><a href="/created">Mon mur</a></li>
-                        <li><a href="/liked">Mes posts likés</a></li>
                         <li><a href="/settings">Paramètres</a></li>
                         <li><a href="/deconnect">Se déconnecter</a></li>
                     </ul>
@@ -25,11 +26,13 @@
             </div>
         </header>
 
-        <h1>Created Post</h1>
+        <h1>MON MUR</h1>
         <div id="posts"></div>
-    </body>
+        <button id="created-posts-button" onclick="createdPost()">Created Posts</button>
+        <button id="liked-button" onclick="likedPost()">Liked Posts</button>
+       
 
-    <script src="../java-script/createdPost.js"></script>
-    <script src="../java-script/connectedIcone.js"></script>
-    
+        <script src="../java-script/createdPost.js"></script>
+        <script src="../java-script/connectedIcone.js"></script>
+    </body>
 </html>
