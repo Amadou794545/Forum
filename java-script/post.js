@@ -137,23 +137,22 @@ function fetchPosts() {
         const postElement = document.createElement('div');
         postElement.className = 'post';
         postElement.innerHTML = `
-            <h3 class="Post-Title">${post.Title}</h3>
-            <p class="Post-Desc">${post.Description}</p>
-            <img src="${post.ImagePath}" alt="Post Image" class="Post-IMG">
-            <input type="button" value="likes" name="Likes-${post.ID}" onclick="handleRadioClick(this)">
-            <input type="button" value="Dislikes" name="Dislikes-${post.ID}" onclick="handleRadioClickDislike(this)">
-            <input type="radio" id="Likes-${post.ID}" class="hidden" name="radio-${post.ID}" value="1">
-            <input type="radio" id="Dislikes-${post.ID}" class="hidden" name="radio-${post.ID}" value="-1">
-            <input type="radio" id="neutral-${post.ID}" class="hidden" name="radio-${post.ID}" value="0" checked>
-            <p> Likes : ${post.Likes}</p>
-            <p> Dislikes : ${post.Dislikes}</p>
-             <form id="commentForm-${post.ID}" class="comment-form">
-              <input type="text" id="comment-${post.ID}" class="comment-input" placeholder="Add a comment">
-              <input type="submit" class="comment-submit">
-            </form>
-            <div id="comments-${post.ID}" class="comments"></div> 
-            
-  `;
+    <h3 class="Post-Title">${post.Title}</h3>
+    <p class="Post-Desc">${post.Description}</p>
+    ${post.ImagePath ? `<img src="${post.ImagePath}" alt="Post Image" class="Post-IMG">` : ''}
+    <input type="button" value="likes" name="Likes-${post.ID}" onclick="handleRadioClick(this)">
+    <input type="button" value="Dislikes" name="Dislikes-${post.ID}" onclick="handleRadioClickDislike(this)">
+    <input type="radio" id="Likes-${post.ID}" class="hidden" name="radio-${post.ID}" value="1">
+    <input type="radio" id="Dislikes-${post.ID}" class="hidden" name="radio-${post.ID}" value="-1">
+    <input type="radio" id="neutral-${post.ID}" class="hidden" name="radio-${post.ID}" value="0" checked>
+    <p> Likes: ${post.Likes}</p>
+    <p> Dislikes: ${post.Dislikes}</p>
+    <form id="commentForm-${post.ID}" class="comment-form">
+      <input type="text" id="comment-${post.ID}" class="comment-input" placeholder="Add a comment">
+      <input type="submit" class="comment-submit">
+    </form>
+    <div id="comments-${post.ID}" class="comments"></div> 
+`;
         postContainer.appendChild(postElement);
         // Appeler la fonction pour afficher les commentaires pour chaque publication
         displayPostComments(post.ID);
