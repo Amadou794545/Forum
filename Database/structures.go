@@ -19,9 +19,3 @@ type Comments struct {
 	Likes       int
 	Dislikes    int
 }
-
-type Comments struct {
-	Description string
-	UserID      int
-	PostID      int
-}

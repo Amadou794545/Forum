@@ -26,106 +26,7 @@
                 <li><a href="/deconnect">Se déconnecter</a></li>
             </ul>
         </div>
-      </div>
     </div>
-<<<<<<< HEAD
-  </header>
-
-  <div id="filterDiv" class="filter">
-    <form id="filterform">
-
-      <div class="filter-box backcolor1">
-        <input type="checkbox" id="sport" name="sport" value="1">
-        <label for="sport"><img src="Pictures/Dadas/Sport.png" alt="sport" class="icon">Sport</label>
-      </div>
-
-      <div class="filter-box backcolor1">
-        <input type="checkbox" id="informatique" name="informatique" value="2" >
-        <label for="informatique"><img src="Pictures/Dadas/Informatique.png" alt="Informatique" class="icon">Informatique</label>
-      </div>
-
-      <div class="filter-box backcolor1">
-        <input type="checkbox" id="cuisine" name="cuisine" value="3">
-        <label for="cuisine"><img src="Pictures/Dadas/Cuisine.png" alt="cuisine" class="icon">Cuisine</label>
-      </div>
-
-      <div class="filter-box backcolor1">
-        <input type="checkbox" id="cinema" name="cinema" value="4">
-        <label for="cinema"><img src="Pictures/Dadas/Cinema.png" alt="cinema" class="icon">Cinema</label>
-      </div>
-
-      <div class="filter-box backcolor1">
-        <input type="checkbox" id="lecture" name="lecture" value="6">
-        <label for="lecture"><img src="Pictures/Dadas/Lecture.png" alt="Lecture" class="icon">Lecture</label>
-      </div>
-
-      <div class="filter-box backcolor1">
-        <input type="checkbox" id="jeux" name="jeux" value="7">
-        <label for="jeux"><img src="Pictures/Dadas/Jeux.png" alt="Jeux" class="icon">Jeux</label>
-      </div>
-
-      <div class="filter-box backcolor1">
-        <input type="checkbox" id="musique" name="musique" value="8">
-        <label for="musique"><img src="Pictures/Dadas/Musique.png" alt="musique" class="icon">Musique</label>
-      </div>
-
-      <input type="submit" value="Filtrer" >
-    </form>
-  </div>
-  
-
-    <input type="button" id="myInput" value="Publier" onclick="toggleDiv()">
-    <div id="myDiv" class="hidden">
-        <form id="uploadForm">
-            <label for="titre">Titre:</label><br>
-            <input type="text" id="titre" name="titre"><br><br>
-            <label for="Description">Description:</label><br>
-            <textarea class="description" id="description" name="description" autofocus></textarea><br><br>
-            <div>
-                <input type="radio" id="Sport" name="dada" value="1" checked>
-                <label for="sport">Sport</label>
-                <input type="radio" id="Informatique" name="dada" value="2">
-                <label for="Informatique">Informatique</label>
-                <input type="radio" id="Cuisine" name="dada" value="3">
-                <label for="Cuisine">Cuisine</label>
-                <input type="radio" id="Cinema" name="dada" value="4">
-                <label for="Cinema">Cinema</label>
-                <input type="radio" id="Lecture" name="dada" value="5">
-                <label for="Lecture">Lecture</label>
-                <input type="radio" id="Jeux" name="dada" value="6">
-                <label for="Jeux">Jeux</label>
-                <input type="radio" id="Musique" name="dada" value="7">
-                <label for="Musique">Musique</label>
-
-            </div>
-            <label for="imageInput">Image:</label><br>
-            <input type="file" id="image" name="image" accept="image/png, image/jpeg"><br><br>
-            <div id="errorContainer" class="error-container"></div>
-            <input type="submit" value="Soumettre" >
-        </form>
-    </div>
-
-    <div class="postContainer" id="postContainer"></div>
-
-    <script src="../java-script/post.js"></script>
-    <script src="../java-script/filtre.js"></script>
-    <script src="../java-script/connectedIcone.js"></script>
-    <script src="../java-script/menu.js"></script>
-    <script>
-        $(document).ready(function() {
-            var errorContainer = $('#errorContainer'); // Error message container
-          
-            $('#uploadForm').submit(function(event) {
-              event.preventDefault(); // Prevent the default form submission
-
-              // Get the form data
-              var titre = $('#titre').val();
-              var description = $('#description').val();
-              var dada = $('input[name=dada]:checked').val();
-              var image = $('#image').prop('files')[0];
-            
-              if (!checkSessionCookie()) {
-=======
     </div>
 </header>
 <div id="filterDiv" class="filter">
@@ -206,7 +107,6 @@
             var dada = $('input[name=dada]:checked').val();
             var image = $('#image').prop('files')[0];
             if (!checkSessionCookie()) {
->>>>>>> 38d9ecbcf868f56be88f6cdd6c27dccd2a8cf89e
                 alert("You have to be connected to post. Please login.");
                 // Create a form dynamically
                 var form = $('<form>');
@@ -240,15 +140,9 @@
                 processData: false,
                 contentType: false,
                 success: function(response) {
-<<<<<<< HEAD
-                  // Handle the response from the server
-                  console.log(response); // You can do further processing or display a success message
-                  Post(); // Display the new post
-=======
                     // Handle the response from the server
                     console.log(response); // You can do further processing or display a success message
                     Post(); // Display the new post
->>>>>>> 38d9ecbcf868f56be88f6cdd6c27dccd2a8cf89e
                 },
                 error: function(xhr, status, error) {
                     console.log(error); // You can display an error message or perform other error handling

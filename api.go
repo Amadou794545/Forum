@@ -292,39 +292,6 @@ func addCommentAPI(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println("Erreur lors du décodage du corps de la requête :", err)
 		http.Error(w, "Requête invalide", http.StatusBadRequest)
-<<<<<<< HEAD
-		return
-	}
-	// Ajouter le commentaire à la base de données
-	Database.AddComment(data.CommentContent, UserID, data.PostID)
-	// Envoyer la réponse avec les commentaires au format JSON
-	sendCommentsResponse(w, data.PostID)
-}
-
-func getCommentsAPI(w http.ResponseWriter, r *http.Request) {
-	postID := r.URL.Query().Get("postId")
-	if postID == "" {
-		http.Error(w, "Paramètre postId manquant", http.StatusBadRequest)
-		return
-	}
-	sendCommentsResponse(w, postID)
-}
-
-func sendCommentsResponse(w http.ResponseWriter, postID string) {
-	comments, err := Database.GetComment(postID)
-	fmt.Println(Database.GetComment(postID))
-	if err != nil {
-		log.Println("Erreur lors de la récupération des commentaires :", err)
-		http.Error(w, "Erreur interne du serveur", http.StatusInternalServerError)
-		return
-	}
-	jsonData, err := json.MarshalIndent(comments, "", "  ")
-	if err != nil {
-		log.Println("Erreur lors de la conversion en JSON :", err)
-		http.Error(w, "Erreur interne du serveur", http.StatusInternalServerError)
-		return
-	}
-=======
 		return
 	}
 	// Ajouter le commentaire à la base de données
@@ -373,7 +340,6 @@ func sendCommentsResponse(w http.ResponseWriter, postID string) {
 		return
 	}
 
->>>>>>> 38d9ecbcf868f56be88f6cdd6c27dccd2a8cf89e
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(jsonData)
 }

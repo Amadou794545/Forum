@@ -204,8 +204,6 @@ func GetUserPosts(user_id int) ([]Post, error) {
 	return posts, nil
 }
 
-<<<<<<< HEAD
-=======
 func GetUserLikedPosts(user_id int) ([]Post, error) {
 	db, err := sql.Open("sqlite3", "./database.db")
 	if err != nil {
@@ -252,7 +250,6 @@ func GetUserLikedPosts(user_id int) ([]Post, error) {
 	return likedPostsList, nil
 }
 
->>>>>>> 38d9ecbcf868f56be88f6cdd6c27dccd2a8cf89e
 func GetComment(postID string) ([]Comments, error) {
 	db, err := sql.Open("sqlite3", "./database.db")
 	if err != nil {
