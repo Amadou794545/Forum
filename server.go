@@ -25,15 +25,26 @@ func main() {
 	http.HandleFunc("/liked", HandlerLiked)
 	http.HandleFunc("/settings", HandlerSettings)
 
+<<<<<<< HEAD
+=======
+	http.HandleFunc("/api/commentlike", CommentLikeDislike)
+>>>>>>> 38d9ecbcf868f56be88f6cdd6c27dccd2a8cf89e
 	http.HandleFunc("/comment", addCommentAPI)
 	http.HandleFunc("/api/comments", getCommentsAPI)
 	http.HandleFunc("/upload", uploadFile)
 
+	http.HandleFunc("/api/like", PostLikeDislike)
 	http.HandleFunc("/api/posts", GetPostsAPI)
 	http.HandleFunc("/api/user/posts", GetUserPostsAPI)
+	http.HandleFunc("/api/user/likedposts", GetUserlikedPostsAPI)
 
+<<<<<<< HEAD
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("/go/src/app/CSS"))))
 	http.Handle("/java-script/", http.StripPrefix("/java-script", http.FileServer(http.Dir("/go/src/app/java-script"))))
+=======
+	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("CSS"))))
+	http.Handle("/java-script/", http.StripPrefix("/java-script", http.FileServer(http.Dir("java-script"))))
+>>>>>>> 38d9ecbcf868f56be88f6cdd6c27dccd2a8cf89e
 
 	http.Handle("/images/", http.StripPrefix("/images", http.FileServer(http.Dir("uploads"))))
 	http.Handle("/Pictures/", http.StripPrefix("/Pictures", http.FileServer(http.Dir("Pictures"))))
@@ -47,6 +58,7 @@ func main() {
 }
 
 func uploadFile(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("testpict2")
 	maxFileSize := int64(10 * 1024 * 1024) // Set the maximum file size to 10 MB
 	err := r.ParseMultipartForm(maxFileSize)
 	if err != nil {

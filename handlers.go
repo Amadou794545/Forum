@@ -5,6 +5,7 @@ import (
 	"forum/Database"
 	"forum/cookies"
 	"html/template"
+	"io"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -110,6 +111,7 @@ func HandlerInscriptionPicture(w http.ResponseWriter, r *http.Request) {
 }
 
 func HandlerUserPicture(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("test1Pict")
 	maxFileSize := int64(10 * 1024 * 1024)
 	err := r.ParseMultipartForm(maxFileSize)
 	if err != nil {
@@ -121,6 +123,7 @@ func HandlerUserPicture(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Error retrieving the file", http.StatusBadRequest)
 		return
 	}
+	fmt.Println("test2Pict")
 	if file != nil { //img uplodée
 		defer file.Close()
 		// Unique nbr
@@ -138,6 +141,13 @@ func HandlerUserPicture(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		defer outFile.Close()
+
+		_, err = io.Copy(outFile, file)
+		if err != nil {
+			http.Error(w, "Error saving the file", http.StatusInternalServerError)
+			return
+		}
+
 		imgPath := "Pictures/uploads/" + newFilename
 		cookie, err := r.Cookie("session")
 		if err != nil {

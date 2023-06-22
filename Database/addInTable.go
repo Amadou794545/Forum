@@ -106,6 +106,86 @@ func AddLike(userID int, postID int, commentID int, isLike int) {
 	db.Close()
 }
 
+func AddLikeComment(userID int, postID int) {
+	var db *sql.DB
+
+	var err error
+	db, err = sql.Open("sqlite3", "./database.db")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	_, err = db.Exec(`
+		INSERT INTO CommentsLikes (id_user, id_comment) VALUES ($1, $2);
+	`, userID, postID)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	db.Close()
+}
+
+func AddDislikecomment(userID int, postID int) {
+	var db *sql.DB
+
+	var err error
+	db, err = sql.Open("sqlite3", "./database.db")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	_, err = db.Exec(`
+		INSERT INTO CommentsDislikes (id_user, id_comment) VALUES ($1, $2);
+	`, userID, postID)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	db.Close()
+}
+
+func AddDislikePost(userID int, postID int) {
+	var db *sql.DB
+
+	var err error
+	db, err = sql.Open("sqlite3", "./database.db")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	_, err = db.Exec(`
+		INSERT INTO PostsDislikes (id_user, id_post) VALUES ($1, $2);
+	`, userID, postID)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	db.Close()
+}
+
+func AddLikePost(userID int, postID int) {
+	var db *sql.DB
+
+	var err error
+	db, err = sql.Open("sqlite3", "./database.db")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	_, err = db.Exec(`
+		INSERT INTO PostsLikes (id_user, id_post) VALUES ($1, $2);
+	`, userID, postID)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	db.Close()
+}
+
 func AddHobbie(imgPath string, description string) {
 	var db *sql.DB
 

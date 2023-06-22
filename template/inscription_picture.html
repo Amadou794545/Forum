@@ -12,7 +12,7 @@
         <p>Aperçu de la photo de profil :</p>
         <img id="profile_picture" src="Pictures/Profil/anonyme.jpg" alt="Current profile picture">
   
-        <form id="profileForm" action="/userPicture" method="POST" enctype="multipart/form-data">
+        <form id="profileForm" action="/userPicture" method="POST">
 
             <div id="profile_picture_choices">
                 <img class="picture_choice" src="Pictures/Profil/woman1.png" alt="Femme 1" onclick="selectDefaultPicture('woman1.png')">
@@ -27,7 +27,7 @@
                 <img class="picture_choice" src="Pictures/Profil/man5.png" alt="Homme 5" onclick="selectDefaultPicture('man5.png')">
             </div>
 
-            <input type="file" id="uploadInput" name="uploadInput" accept="image/*" onchange="fileUpload(this)">
+            <input type="file" id="uploadInput" name="uploadInput" accept="image/png, image/jpeg">
 
             <input type="hidden" id="selectedPicture" name="selectedPicture" value="">
         
